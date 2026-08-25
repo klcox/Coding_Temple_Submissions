@@ -10,7 +10,7 @@ Data cleaning includes:
 
 (Rows with missing values [NaN/NaT] in any column except for Employee ID are preserved as the remaining data in the row may still prove useful for various analyses.)
 
-## Setup
+## Set-up
 
 1. Clone this repo
 2. Ensure the employee survey data is located at data/messy_employee_survey.csv
