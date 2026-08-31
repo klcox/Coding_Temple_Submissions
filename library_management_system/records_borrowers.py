@@ -7,8 +7,20 @@ from datetime import date
 # Helper functions
 
 
+def validate_borrower_id(borrower_id: int):
+    """Validates a Borrower ID. If successful, returns the validated Borrower ID."""
+
+    if borrower_id is None:
+        raise ValueError("Cannot proceed. Borrower ID is required.")
+
+    if type(borrower_id) != int:
+        raise TypeError("Cannot proceed. Borrower ID must be an integer.")  
+     
+    return borrower_id
+
+
 def validate_borrower_email(email: str): 
-    """Validation of a Borrower email address. If successful, returns the validated email address."""
+    """Validates a Borrower email address. If successful, returns the validated email address."""
 
     if email is None:
             raise ValueError("Cannot proceed. Email is required.")
@@ -31,21 +43,30 @@ def validate_borrower_email(email: str):
     return email
 
 
-def check_if_email_exists(email: str):  # Separated from validate_borrower_email due to different usage across two primary functions below
-    """Check if the email address provided already belongs to another borrower in the database as email addresses must be unique. If cleared, returns the email address."""
+def check_if_borrower_id_exists(session, borrower_id: int):  # Separated from validate_borrower_id() so as to prevent multiple sessions from being opened in the related functions below
+    """Check whether the Borrower ID exists in the database so as to locate the borrower. If cleared, returns the Borrower object."""  
+
+    borrower = session.get(Borrower, borrower_id)
     
-    with Session(engine) as session:
+    if borrower is None:
+        raise ValueError(f"Cannot proceed. Borrower ID {borrower_id} does not exist.")
 
-        test_borrower = session.query(Borrower).filter_by(email_address=email).first() 
+    return borrower
 
-        if test_borrower is not None:
-            raise ValueError(f"Cannot proceed. Email address {email} already exists for another borrower (ID: {test_borrower.id}) in the database.")
-      
+
+def check_if_email_exists(session, email: str):  # Separated from validate_borrower_email() so as to prevent multiple sessions from being opened in the related functions below
+    """Check whether the email address provided already belongs to another Borrower in the database as email addresses must be unique. If cleared, returns the email address."""    
+    
+    test_borrower = session.query(Borrower).filter_by(email_address=email).first() 
+
+    if test_borrower is not None:
+        raise ValueError(f"Cannot proceed. Email address {email} already exists for another borrower (ID: {test_borrower.id}) in the database.")
+    
     return email
 
 
 def normalize_borrower_phone(phone: str): 
-    """Normalization of a Borrower phone number; occurs in add_borrower(), before adding the Borrower to the database. Returns the cleaned, normalized phone number."""
+    """Normalizes a Borrower phone number; occurs in add_borrower(), before adding the Borrower to the database. Returns the cleaned, normalized phone number."""
 
     phone = phone.strip()
 
@@ -64,77 +85,7 @@ def normalize_borrower_phone(phone: str):
     return phone
 
 
-def validate_borrower_id(borrower_id: int):
-    """Validation of a Borrower ID. If successful, returns the validated Borrower ID."""
-
-    if borrower_id is None:
-        raise ValueError("Cannot proceed. Borrower ID is required.")
-
-    if type(borrower_id) != int:
-        raise TypeError("Cannot proceed. Borrower ID must be an integer.") 
-    
-    
-    # Test to see if the ID exists in the database
-    with Session(engine) as session:
-    
-        borrower = session.get(Borrower, borrower_id)
-
-        if borrower is None:
-            raise ValueError(f"Cannot proceed. Borrower ID {borrower_id} does not exist.")
-
-    return borrower_id
-
-
 # Primary functions
-
-
-def add_borrower(name: str, email: str, phone: str = None):
-    """Add a new Borrower. Returns the created Borrower object."""
-        
-    # Data Validation - Name
-    if name is None:
-        raise ValueError("Cannot add borrower. Name is required.")
-
-    if type(name) != str:
-        raise TypeError("Cannot add borrower. Name must be a string.")
-
-    if name.strip() == "":
-        raise ValueError("Cannot add borrower. Name cannot be empty.")   
-
-    name = name.strip().title()
-
-
-    # Data Validation - Email    
-    email = validate_borrower_email(email)   
-    email = check_if_email_exists(email)
-   
-
-    # Data Validation - Phone 
-    if phone is not None:
-        if type(phone) != str:
-            raise TypeError("Cannot add borrower. Phone Number must be a string.")
-    
-        if phone.strip() == "":
-            raise ValueError("Cannot add borrower. Phone Number can be None but cannot be an empty string.")
-        
-        phone = normalize_borrower_phone(phone)
-            
-    
-    with Session(engine) as session:      
-        
-        # If no errors above persist, create Borrower and add to the database
-        new_borrower = Borrower(name=name, email_address=email, phone=phone)
-
-        try:
-            session.add(new_borrower)
-            session.commit()
-            session.refresh(new_borrower)  # Populates the auto-generated id
-            return new_borrower
-        
-        except Exception:
-            session.rollback()
-            print("Error adding borrower to the database. Borrower not added. Please try again. ")
-            raise
 
 
 def list_all_borrowers():
@@ -144,20 +95,16 @@ def list_all_borrowers():
 
         borrowers = session.query(Borrower).order_by(Borrower.name).all()
 
-        if not borrowers:
-            print("Currently, there are no borrowers in the database.")
+        if not borrowers:            
             return []
 
-        results = []
-        
-        for borrower in borrowers:            
-            results.append((borrower.id, borrower.name, borrower.email_address))
-
-        return results
+        results = [(borrower.id, borrower.name, borrower.email_address) for borrower in borrowers]       
+       
+        return results  
 
 
 def update_borrower_email(borrower_id: int, new_email: str):
-    """Update a Borrower's email address. Returns the Borrower object."""
+    """Update a Borrower's email address. Returns None if successful."""
 
     # Data Validation - Borrower ID
     borrower_id = validate_borrower_id(borrower_id)
@@ -166,28 +113,30 @@ def update_borrower_email(borrower_id: int, new_email: str):
     new_email = validate_borrower_email(new_email)    
    
 
-    with Session(engine) as session:
-    
-        borrower = session.get(Borrower, borrower_id)      
-         
+    with Session(engine) as session:   
+        
+        # Check whether the Borrower ID exists in the database
+        borrower = check_if_borrower_id_exists(session, borrower_id)
+
+        # Check whether the new email address is already in the database 
         if new_email == borrower.email_address:
             raise ValueError("Cannot update borrower email. The new email address provided is the same as the current email address on file.") 
 
-        new_email = check_if_email_exists(new_email)
+        new_email = check_if_email_exists(session, new_email)
                    
 
         # If no errors above persist, update the Borrower email address
         borrower.email_address = new_email        
         
         try:            
-            session.commit()
-            session.refresh(borrower)  # Populates the auto-generated id
-            return borrower
-        
+            session.commit()            
+                    
         except Exception:
             session.rollback()
             print("Error updating borrower email in the database. Borrower email address not updated. Please try again. ")
             raise
+
+        print(f"Updated email address for {borrower.name} (Borrower ID: {borrower.id}) to {borrower.email_address}.")
 
 
 def get_checkouts_by_borrower(borrower_id: int):
@@ -196,13 +145,12 @@ def get_checkouts_by_borrower(borrower_id: int):
     # Data Validation - Borrower ID
     borrower_id = validate_borrower_id(borrower_id)
 
-
     with Session(engine) as session:
-    
-        borrower = session.get(Borrower, borrower_id)       
 
-        if not borrower.checkouts:
-            print(f"Borrower with ID {borrower_id} does not have any checkout activity.")
+        # Check whether the Borrower ID exists in the database
+        borrower = check_if_borrower_id_exists(session, borrower_id) 
+
+        if not borrower.checkouts:            
             return []
         
         results = []
@@ -225,8 +173,7 @@ def get_overdue_books():
         
         overdue_checkouts = session.query(Checkout).filter(Checkout.due_date < today, Checkout.return_date.is_(None)).order_by(Checkout.due_date).all()
 
-        if not overdue_checkouts:
-            print("No books currently overdue.")
+        if not overdue_checkouts:            
             return []
         
         results = []
@@ -236,7 +183,59 @@ def get_overdue_books():
             results.append((checkout.id, checkout.book.title, checkout.borrower.id, checkout.due_date, days_late.days))
 
         return results
+
+
+def add_borrower(name: str, email: str, phone: str = None):
+    """Add a new Borrower. Returns None if successful."""
+        
+    # Data Validation - Name
+    if name is None:
+        raise ValueError("Cannot add borrower. Name is required.")
+
+    if type(name) != str:
+        raise TypeError("Cannot add borrower. Name must be a string.")
+
+    if name.strip() == "":
+        raise ValueError("Cannot add borrower. Name cannot be empty.")   
+
+    name = name.strip().title()
+
+
+    # Data Validation - Email    
+    email = validate_borrower_email(email)       
+
+
+    # Data Validation - Phone 
+    if phone is not None:
+        if type(phone) != str:
+            raise TypeError("Cannot add borrower. Phone Number must be a string.")
     
+        if phone.strip() == "":
+            raise ValueError("Cannot add borrower. Phone Number can be None but cannot be an empty string.")
+        
+        phone = normalize_borrower_phone(phone)
+            
+    
+    with Session(engine) as session:    
+
+        # Check whether email address already exists in the database
+        email = check_if_email_exists(session, email)  
+
+        
+        # If no errors above persist, create Borrower and add to the database
+        new_borrower = Borrower(name=name, email_address=email, phone=phone)
+
+        try:
+            session.add(new_borrower)
+            session.commit()            
+        
+        except Exception:
+            session.rollback()
+            print("Error adding borrower to the database. Borrower not added. Please try again. ")
+            raise
+
+        print(f"Added: {new_borrower}")
+
 
 def delete_borrower(borrower_id: int):
     """Delete a Borrower if they do not currently have any active Checkouts. Returns True if successful; returns False if there is an active checkout preventing the deletion."""
@@ -247,24 +246,26 @@ def delete_borrower(borrower_id: int):
 
     with Session(engine) as session:
     
-        borrower = session.get(Borrower, borrower_id)  
+        # Check whether the Borrower ID exists in the database
+        borrower = check_if_borrower_id_exists(session, borrower_id)
 
+
+        # Check whether there are any active Checkouts
         for checkout in borrower.checkouts:
             if checkout.return_date is None:
                 print(f"Cannot delete borrower as they currently have a book checked out.")
                 return False
+            
 
         # If no errors above persist, delete the Borrower from the database
         try:            
             session.delete(borrower)
-            session.commit()
-            print(f"Deleted borrower with ID {borrower_id} from the database.")
-            return True
+            session.commit()            
         
         except Exception:
             session.rollback()
             print("Error deleting borrower from the database. Borrower not deleted. Please try again. ")
             raise
         
-
-       
+        print(f"Deleted borrower with ID {borrower_id} from the database.")
+        return True       

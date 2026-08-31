@@ -1,10 +1,10 @@
 from records_books import list_all_authors
 from records_borrowers import list_all_borrowers
-from search_checkout_return import (list_available_books)
+from search_checkout_return import list_available_books
 
 
 def retry_or_return():
-    """In the event of an error, prompts user to try again (re-run the function) or to return to the main CLI menu."""
+    """In the event of an error, prompts the user to try again (re-run the function) or to exit the current function. Ultimately, exiting the current function will return to the main menu as handled in menu_functions.py. Returns True if the user would like to try again; returns False if the user would like to exit."""
 
     while True:
 
@@ -14,14 +14,14 @@ def retry_or_return():
            return True  # Re-runs the associated function loop
 
         elif retry == "N":
-            return False # Exits the associated function loop and ultimately returns to the main CLI menu
+            return False # Exits the associated function loop
 
         else:
-            print("Invalid entry. Response for the previous question must be Y or N.")  # Continues the loop until a valid response is received
+            print("That is not a valid selection. Response for the previous question must be Y or N.")  # Continues the loop until a valid response is received
 
 
 def collect_author_id():
-    """Determines how the user would like to provide the Author ID - either directly or by selecting from a list. Collects and returns the Author ID."""
+    """Determines how the user would like to provide the Author ID - either directly or by selecting from a list. Collects and returns the Author ID. Returns None if there are no Authors in the database or if the user chooses to exit."""
 
     while True:
 
@@ -34,7 +34,7 @@ def collect_author_id():
                 author_id = int(input("What is the author's ID number? ").strip())               
 
             except ValueError:
-                print("Cannot proceed. Author ID must be an integer.")
+                print("That is not a valid entry. Author ID must be an integer.")
 
                 if retry_or_return():
                     continue  # Re-run the function
@@ -65,7 +65,7 @@ def collect_author_id():
 
 
             try:
-                selected_author_id = int(input("Please enter the selected Author ID: "))                
+                selected_author_id = int(input("Please enter the selected Author ID: ").strip())        
 
             except ValueError:
                 print("That is not a valid selection. Author ID must be an integer.")
@@ -91,7 +91,7 @@ def collect_author_id():
 
 
         else:  # Catches the case where the user does not respond Y/N to knowing the Author ID
-            print("Cannot proceed. Response for the previous question must be Y or N.")
+            print("That is not a valid selection. Response for the previous question must be Y or N.")
 
             if retry_or_return():
                 continue  # Re-run the function
@@ -101,7 +101,7 @@ def collect_author_id():
             
 
 def collect_book_id():
-    """Determine how the user would like to provide the Book ID - either directly or by selecting from a list of available books. Collects and returns the Book ID."""
+    """Determine how the user would like to provide the Book ID - either directly or by selecting from a list of available books. Collects and returns the Book ID. Returns None if there are no Books in the database or if the user chooses to exit."""
 
     while True:
 
@@ -111,10 +111,10 @@ def collect_book_id():
         if know_book_id == "Y":  # If YES, collect the Book ID
             
             try:
-                book_id = int(input("What is the book's ID number? "))
+                book_id = int(input("What is the book's ID number? ").strip())
 
             except ValueError:
-                print("Cannot proceed. Book ID must be an integer.")
+                print("That is not a valid entry. Book ID must be an integer.")
 
                 if retry_or_return():
                     continue  # Re-run the function
@@ -145,7 +145,7 @@ def collect_book_id():
 
 
             try:
-                selected_book_id = int(input("Please enter the selected Book ID: "))                
+                selected_book_id = int(input("Please enter the selected Book ID: ").strip())                
 
             except ValueError:
                 print("That is not a valid selection. Book ID must be an integer.")
@@ -171,7 +171,7 @@ def collect_book_id():
 
 
         else:  # Catches the case where the user does not respond Y/N to knowing the Book ID
-            print("Cannot proceed. Response for the previous question must be Y or N.")
+            print("That is not a valid selection. Response for the previous question must be Y or N.")
 
             if retry_or_return():
                 continue  # Re-run the function
@@ -181,7 +181,7 @@ def collect_book_id():
 
 
 def collect_borrower_id():
-    """Determine how the user would like to provide the Borrower ID - either directly or by selecting from a list. Collects and returns the Borrower ID."""
+    """Determine how the user would like to provide the Borrower ID - either directly or by selecting from a list. Collects and returns the Borrower ID. Returns None if there are no Borrowers in the database or if the user chooses to exit."""
 
     while True:
 
@@ -191,10 +191,10 @@ def collect_borrower_id():
         if know_borrower_id == "Y":  # If YES, collect the Borrower ID
             
             try:
-                borrower_id = int(input("What is the borrower's ID number? "))
+                borrower_id = int(input("What is the borrower's ID number? ").strip())
 
             except ValueError:
-                print("Cannot proceed. Borrower ID must be an integer.")
+                print("That is not a valid entry. Borrower ID must be an integer.")
 
                 if retry_or_return():
                     continue  # Re-run the function
@@ -225,7 +225,7 @@ def collect_borrower_id():
 
 
             try:
-                selected_borrower_id = int(input("Please enter the selected Borrower ID: "))                
+                selected_borrower_id = int(input("Please enter the selected Borrower ID: ").strip())                
 
             except ValueError:
                 print("That is not a valid selection. Borrower ID must be an integer.")
@@ -251,7 +251,7 @@ def collect_borrower_id():
 
 
         else:  # Catches the case where the user does not respond Y/N to knowing the Borrower ID
-            print("Cannot proceed. Response for the previous question must be Y or N.")
+            print("That is not a valid selection. Response for the previous question must be Y or N.")
 
             if retry_or_return():
                 continue  # Re-run the function

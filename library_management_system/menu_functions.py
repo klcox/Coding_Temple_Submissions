@@ -1,6 +1,6 @@
 from datetime import date
 
-from helper_menu_functions import(
+from helper_menu_functions import (
     retry_or_return, collect_author_id, collect_book_id, collect_borrower_id
 )
 
@@ -33,6 +33,7 @@ def menu_list_all_authors():
     authors = list_all_authors()
 
     if not authors:
+        print("Currently, there are no authors in the database.")
         print("Returning to the main menu...")
         return  # To main CLI menu
 
@@ -53,6 +54,7 @@ def menu_list_all_books():
     books = list_all_books()
 
     if not books:
+        print("Currently, there are no books in the database.")
         print("Returning to the main menu...")
         return  # To main CLI menu
 
@@ -82,7 +84,7 @@ def menu_add_author():
         print("Attempting to add author to the database...")
 
         try:
-            author = add_author(name, bio)            
+            add_author(name, bio)            
 
         except Exception as error_message:  # Exception includes all error types from the add_author() function
             print(error_message) 
@@ -92,9 +94,7 @@ def menu_add_author():
 
             else:
                 print("Returning to the main menu...")
-                return  # To main CLI menu
-
-        print(f"Added: {author}")
+                return  # To main CLI menu        
         
         print("Returning to the main menu...")
         return  # To main CLI menu
@@ -114,7 +114,7 @@ def menu_add_book():
 
         # Year Published
         try:
-            year_published = int(input("What year was the book originally published? (Use a negative number for BCE) "))
+            year_published = int(input("What year was the book originally published? (Use a negative number for BCE) ").strip())
 
         except ValueError:
             print("Cannot attempt to add book. Year published must be an integer.")
@@ -201,7 +201,7 @@ def menu_add_book():
         print("Attempting to add book to the database...")
 
         try:
-            book = add_book(title, isbn, year_published, author_ids, available_copies)           
+            add_book(title, isbn, year_published, author_ids, available_copies)           
 
         except Exception as error_message:
             print(error_message) 
@@ -211,9 +211,7 @@ def menu_add_book():
 
             else:
                 print("Returning to the main menu...")
-                return  # To main CLI menu
-
-        print(f"Added: {book}")
+                return  # To main CLI menu       
         
         print("Returning to the main menu...")     
         return  # To main CLI menu 
@@ -251,7 +249,7 @@ def menu_delete_book():
             print("Returning to the main menu...")      
             return  # To main CLI menu 
 
-        else:
+        else:  # Covers the case where the Book cannot be deleted due to an active Checkout
             if retry_or_return():
                 continue  # Re-run the function
 
@@ -273,6 +271,7 @@ def menu_list_all_borrowers():
     borrowers = list_all_borrowers()
 
     if not borrowers:
+        print("Currently, there are no borrowers in the database.")
         print("Returning to the main menu...")
         return  # To main CLI menu
 
@@ -304,7 +303,7 @@ def menu_update_borrower_email():
         print("Attempting to update borrower profile...")
 
         try:
-            updated_borrower_profile = update_borrower_email(borrower_id, new_email)            
+            update_borrower_email(borrower_id, new_email)            
 
         except Exception as error_message:
             print(error_message) 
@@ -314,9 +313,7 @@ def menu_update_borrower_email():
 
             else:
                 print("Returning to the main menu...")
-                return  # To main CLI menu
-
-        print(f"Updated email address for {updated_borrower_profile.name} (Borrower ID: {borrower_id}) to {updated_borrower_profile.email_address}.")
+                return  # To main CLI menu        
                     
         print("Returning to the main menu...")
         return  # To main CLI menu
@@ -350,6 +347,8 @@ def menu_get_checkouts_by_borrower():
                 return  # To main CLI menu      
 
         if not checkout_history:
+            print(f"Borrower with ID {borrower_id} does not have any checkout activity.")
+
             if retry_or_return():
                 continue  # Re-run the function
 
@@ -357,8 +356,7 @@ def menu_get_checkouts_by_borrower():
                 print("Returning to the main menu...")
                 return  # To main CLI menu
 
-        print(f"Checkout history for borrower with ID {borrower_id}:")
-        
+        print(f"Checkout history for borrower with ID {borrower_id}:")        
         print(f"{'Checkout ID':<5}|{'Book Title':<55}|{'Checkout Date':<15}|{'Due Date':<15}|{'Return Date':<15}|{'Late Status':<10}")
         print("-" * 100)
         for item in checkout_history:
@@ -376,11 +374,11 @@ def menu_get_overdue_books():
     overdue_checkouts = get_overdue_books() 
 
     if not overdue_checkouts:
+        print("No books currently overdue.")
         print("Returning to the main menu...")
         return  # To main CLI menu       
 
     print("Overdue checkouts:")
-
     print(f"{'Checkout ID':<5}|{'Book Title':<55}|{'Borrower ID':<5}|{'Due Date':<15}|{'Days Late':<5}")
     print("-" * 90)
     for item in overdue_checkouts:
@@ -408,7 +406,7 @@ def menu_add_borrower():
         print("Attempting to add borrower to the database...")
 
         try:
-            borrower = add_borrower(name, email, phone)            
+            add_borrower(name, email, phone)            
 
         except Exception as error_message:
             print(error_message) 
@@ -418,16 +416,14 @@ def menu_add_borrower():
 
             else:
                 print("Returning to the main menu...")
-                return  # To main CLI menu
-
-        print(f"Added: {borrower}")
+                return  # To main CLI menu        
         
         print("Returning to the main menu...")            
         return  # To main CLI menu
 
 
 def menu_delete_borrower():
-    """Prompts for Borrower name and deletes them from the database (if they do not have any active checkouts)."""
+    """Prompts for Borrower ID and deletes them from the database (if they do not have any active checkouts)."""
     
     while True:
 
@@ -459,7 +455,7 @@ def menu_delete_borrower():
             print("Returning to the main menu...")
             return  # To main CLI menu             
 
-        else:
+        else:  # Covers the case where the Borrower cannot be deleted due to an active Checkout
             if retry_or_return():
                 continue  # Re-run the function
 
@@ -481,6 +477,7 @@ def menu_list_available_books():
     books = list_available_books()    
     
     if not books:
+        print("No books currently available.")
         print("Returning to the main menu...")
         return  # To main CLI menu
 
@@ -499,12 +496,12 @@ def menu_find_books_by_author():
    
     while True:
 
-        name = input("Please enter the author name you would like to search: ")
+        author_name = input("Please enter the author name you would like to search: ")
 
         print("Searching for books with matching author name...")
 
         try:
-            results = find_books_by_author(name)       
+            results = find_books_by_author(author_name)       
                     
         except Exception as error_message:
             print(error_message)
@@ -517,6 +514,8 @@ def menu_find_books_by_author():
                 return  # To main CLI menu
 
         if not results:
+            print(f"No books found with author name(s) containing '{author_name}'.")
+
             if retry_or_return():
                 continue  # Re-run the function
 
@@ -524,7 +523,7 @@ def menu_find_books_by_author():
                 print("Returning to the main menu...")
                 return  # To main CLI menu 
 
-        print(f"Books by authors whose name contains '{name}':")    
+        print(f"Books by authors whose name contains '{author_name}':")    
         print(f"{'ID':<5}|{'Author(s)':<50}|{'Title':<55}")
         print("-" * 100)        
         for item in results:
@@ -557,6 +556,8 @@ def menu_find_books_by_keyword():
                 return  # To main CLI menu
 
         if not results:
+            print(f"No book titles found containing '{keyword}'.")
+
             if retry_or_return():
                 continue  # Re-run the function
 
@@ -596,6 +597,8 @@ def menu_find_books_by_era():
                 return  # To main CLI menu        
         
         if not results:
+            print(f"No books found from this era: {era}.")
+
             if retry_or_return():
                 continue  # Re-run the function
 
@@ -614,7 +617,7 @@ def menu_find_books_by_era():
 
 
 def menu_checkout_book():
-    """Prompts for Book ID, Borrower ID, and Checkout date, then checks out the book."""
+    """Prompts for Book ID, Borrower ID, and Checkout date, then checks out the Book."""
 
     while True:
 
@@ -636,8 +639,7 @@ def menu_checkout_book():
         # Determine if Checkout Date is Today
         checkout_is_today = input("Is the checkout date today? (Y/N) ").strip().upper()
 
-        if checkout_is_today == "Y":  # If YES, None will become "today" in checkout_book()
-            print("Thank you for confirming the checkout date is today.")
+        if checkout_is_today == "Y":  # If YES, None will become "today" in checkout_book()            
             checkout_date = None  
 
         elif checkout_is_today == "N":  # If NO, prompt for the date
@@ -647,8 +649,7 @@ def menu_checkout_book():
             print("Verifying checkout date...")       
             
             try:
-                checkout_date = date.fromisoformat(selected_date)
-                print("Checkout date confirmed.")
+                checkout_date = date.fromisoformat(selected_date)                
 
             except ValueError:
                 print("Cannot attempt to checkout book. Checkout date must match the format YYYY-MM-DD.")
@@ -659,6 +660,8 @@ def menu_checkout_book():
                 else:
                     print("Returning to the main menu...")                                
                     return  # To main CLI menu  
+
+            print("Checkout date confirmed.")
 
         else:  # Catches the case where the user does not respond Y/N to verifying the Checkout date
             print("Cannot attempt to checkout book. Response for the previous question must be Y or N.")
@@ -675,7 +678,7 @@ def menu_checkout_book():
         print("Attempting to checkout book...")
 
         try:
-            checkout = checkout_book(book_id, borrower_id, checkout_date)            
+            checkout_book(book_id, borrower_id, checkout_date)            
 
         except Exception as error_message:
             print(error_message)
@@ -685,16 +688,14 @@ def menu_checkout_book():
 
             else:
                 print("Returning to the main menu...")                                
-                return  # To main CLI menu
-
-        print(f"Checkout confirmed. Checkout ID: {checkout.id}, Due Date: {checkout.due_date}")
+                return  # To main CLI menu        
 
         print("Returning to the main menu...")                                
         return  # To main CLI menu
 
 
 def menu_return_book():
-    """Prompts for the checkout ID and returns the book."""
+    """Prompts for the Checkout ID and returns the Book."""
 
     while True:
 
@@ -706,7 +707,7 @@ def menu_return_book():
         if know_checkout_id == "Y":  # If YES, collect the Checkout ID
         
             try:
-                checkout_id = int(input("What is the checkout ID number? "))
+                checkout_id = int(input("What is the checkout ID number? ").strip())
 
             except ValueError:
                 print("Cannot attempt to return book. Checkout ID must be an integer.")
@@ -754,11 +755,11 @@ def menu_return_book():
             print(f"{'Checkout ID':<5}|{'Book Title':<55}|{'Checkout Date':<15}|{'Due Date':<15}")
             print("-" * 100)
             for item in checkouts:
-                print(f"{item[0]:<5} {item[1]:<55} {item[2]:<15} {item[3]:<15}")
+                print(f"{item[0]:<5} {item[1]:<55} {item[2]:<15} {item[3]:<15}")            
 
         
             try:
-                selected_checkout_id = int(input("Please enter the selected checkout ID for the book you are returning: "))                
+                selected_checkout_id = int(input("Please enter the selected checkout ID for the book you are returning: ").strip())                
 
             except ValueError:
                 print("That is not a valid selection. Checkout ID must be an integer.")
@@ -813,7 +814,7 @@ def menu_return_book():
            print("Returning to the main menu...")                                
            return  # To main CLI menu
 
-        else:
+        else:  # Covers the case where the Book cannot be returned since it was already returned
             if retry_or_return():
                 continue  # Re-run the function
 

@@ -10,8 +10,7 @@ def list_available_books():
     
         books = session.query(Book).filter(Book.available_copies >= 1).order_by(Book.title).all()
 
-        if not books:
-            print("No books currently available.")
+        if not books:            
             return []
         
         results = []
@@ -43,12 +42,11 @@ def find_books_by_author(author_name: str):
 
         authors = session.query(Author).filter(Author.name.ilike(f"%{author_name}%")).order_by(Author.name).all()
 
-        if not authors:
-            print(f"No books found with author name(s) containing '{author_name}'.")
+        if not authors:            
             return []
 
         results = []
-        seen_books = set()
+        seen_books = set()  # Prevents the same book from being displayed twice if there are multiple authors whose name matches author_name
 
         for author in authors:
             for book in author.books:
@@ -80,8 +78,7 @@ def find_books_by_keyword(keyword: str):
 
         books = session.query(Book).filter(Book.title.ilike(f"%{keyword}%")).order_by(Book.title).all()
 
-        if not books:
-            print(f"No book titles found containing '{keyword}'.")
+        if not books:            
             return []
 
         results = []
@@ -108,7 +105,7 @@ def find_books_by_era(era: str):
 
     era = era.strip().upper()
 
-    if era != "BCE" and era != "CE":
+    if era not in ("BCE", "CE"):
         raise ValueError("Cannot search books. Era must be either 'BCE' or 'CE'.")
 
     
@@ -116,8 +113,7 @@ def find_books_by_era(era: str):
 
         books = session.query(Book).filter_by(era=era).order_by(Book.title).all()
         
-        if not books:
-            print(f"No books found from this era: {era}.")
+        if not books:            
             return []
 
         results = []
@@ -130,7 +126,7 @@ def find_books_by_era(era: str):
 
 
 def checkout_book(book_id: int, borrower_id: int, checkout_date: date = None):
-    """Check out a book. Reduces the number of available copies by 1. Returns the created Checkout object."""
+    """Check out a book. Reduces the number of available copies by 1. Returns None if successful."""
 
     # Data Validation - Book ID
     if book_id is None:
@@ -192,14 +188,14 @@ def checkout_book(book_id: int, borrower_id: int, checkout_date: date = None):
         
         try:
             session.add(new_checkout)
-            session.commit()
-            session.refresh(new_checkout)  # Populates the auto-generated id
-            return new_checkout
+            session.commit()        
         
         except Exception:
             session.rollback()
             print("Error adding checkout to the database. Book not checked out. Please try again. ")
             raise   
+
+        print(f"Checkout confirmed. Checkout ID: {new_checkout.id}, Due Date: {new_checkout.due_date}")
 
 
 def return_book(checkout_id: int):
@@ -226,6 +222,7 @@ def return_book(checkout_id: int):
             print(f"Cannot return book. '{checkout.book.title}' (Checkout ID:{checkout_id}) was returned on {checkout.return_date}.")
             return False
 
+
         # If no errors above persist, update the return date and the available copies             
         checkout.return_date = today
         checkout.book.available_copies += 1  
@@ -243,6 +240,4 @@ def return_book(checkout_id: int):
         if checkout.due_date < today: 
             print("**Note: Your book was returned after the scheduled due date. Late fees may apply.**")
             
-        return True
-        
-        
+        return True      

@@ -2,8 +2,42 @@ from models import engine, Author, Book
 from sqlalchemy.orm import Session
 
 
+def list_all_authors():
+    """Get all Authors currently in the database, ordered by name. Returns a list of tuples containing the Author ID and Author name; returns an empty list if no Authors exist."""
+    
+    with Session(engine) as session:
+
+        authors = session.query(Author).order_by(Author.name).all()
+
+        if not authors:            
+            return []
+
+        results = [(author.id, author.name) for author in authors]
+        
+        return results
+
+
+def list_all_books():
+    """Get all Books currently in the database, ordered by title. Returns a list of tuples containing the Book ID, Book title, and Author name(s); returns an empty list if no Books exist."""
+    
+    with Session(engine) as session:
+
+        books = session.query(Book).order_by(Book.title).all()
+
+        if not books:            
+            return []
+
+        results = []
+        
+        for book in books:
+            authors = ", ".join(author.name for author in book.authors) 
+            results.append((book.id, book.title, authors))
+
+        return results
+    
+
 def add_author(name: str, bio: str = None):
-    """Add a new Author. Returns the created Author object."""
+    """Add a new Author. Returns None if successful."""
 
     # Data Validation - Name
     if name is None:
@@ -36,20 +70,19 @@ def add_author(name: str, bio: str = None):
 
         try:
             session.add(new_author)
-            session.commit()
-            session.refresh(new_author)  # Populates the auto-generated id
-            return new_author
+            session.commit()                      
         
         except Exception:
             session.rollback()
             print("Error adding author to the database. Author not added. Please try again. ")
             raise
-            
 
+        print(f"Added: {new_author}")        
+            
 
 def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], available_copies: int = 1):
     """
-    Add a new Book. Returns the created Book object. 
+    Add a new Book. Returns None if successful.
     author_ids is a list because Author and Books have a many-to-many relationship - authors can write many books, and books can have many authors.
     """
 
@@ -88,7 +121,8 @@ def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], 
     
     if type(year_published) != int:
         raise TypeError("Cannot add book. Year Published must be an integer.")  
-      
+
+    # Era assigned based on Year Published 
     if year_published > 0:
         era = "CE"
     
@@ -126,9 +160,13 @@ def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], 
 
         existing_book = session.query(Book).filter_by(isbn=isbn).first()
 
+
+        # Check whether Book (ISBN) already exists
         if existing_book is not None:
-            raise ValueError(f"Cannot add book. ISBN {isbn} already exists in the database.")      
-        
+            raise ValueError(f"Cannot add book. ISBN {isbn} already exists in the database.")  
+
+            
+        # Check whether all Author IDs exist
         authors = []
         nonexistent_author_ids = []
 
@@ -146,60 +184,22 @@ def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], 
 
         elif len(nonexistent_author_ids) > 0:
             raise ValueError(f"Cannot add book. One or more Author IDs do not exist: {nonexistent_author_ids}")
+        
 
         # If no errors above persist, create Book and add to the database
         new_book = Book(title=title, isbn=isbn, year_published=year_published, era=era, available_copies=available_copies, authors=authors) 
 
         try:
             session.add(new_book)
-            session.commit()
-            session.refresh(new_book)  # Populates the auto-generated id
-            return new_book
+            session.commit()                       
         
         except Exception:
             session.rollback()
             print("Error adding book to the database. Book not added. Please try again. ")
             raise
 
-
-def list_all_authors():
-    """Get all Authors currently in the database, ordered by name. Returns a list of tuples containing the Author ID and Author name; returns an empty list if no Authors exist."""
+        print(f"Added: {new_book}")        
     
-    with Session(engine) as session:
-
-        authors = session.query(Author).order_by(Author.name).all()
-
-        if not authors:
-            print("Currently, there are no authors in the database.")
-            return []
-
-        results = []
-        
-        for author in authors:            
-            results.append((author.id, author.name))
-
-        return results
-
-
-def list_all_books():
-    """Get all Books currently in the database, ordered by title. Returns a list of tuples containing the Book ID, Book title, and Author name(s); returns an empty list if no Books exist."""
-    
-    with Session(engine) as session:
-
-        books = session.query(Book).order_by(Book.title).all()
-
-        if not books:
-            print("Currently, there are no books in the database.")
-            return []
-
-        results = []
-        
-        for book in books:
-            authors = ", ".join(author.name for author in book.authors) 
-            results.append((book.id, book.title, authors))
-
-        return results
-
 
 def delete_book(book_id: int):
     """Delete a Book if it is not currently checked out. Returns True if successful; returns False if there is an active checkout preventing the deletion."""
@@ -213,25 +213,30 @@ def delete_book(book_id: int):
 
 
     with Session(engine) as session:
-    
+        
         book = session.get(Book, book_id)
-    
+
+        # Check whether Book exists
         if book is None:
             raise ValueError(f"Cannot delete book. Book ID {book_id} does not exist in the database.")
 
+
+        # Check whether there are any active Checkouts
         for checkout in book.checkouts:
             if checkout.return_date is None:
                 print("Cannot delete book as it currently has an active checkout.")
                 return False
+            
 
         # If no errors above persist, delete the Book from the database
         try:
             session.delete(book)
-            session.commit()
-            print(f"Deleted book with ID {book_id} from the database.")
-            return True
+            session.commit()            
 
         except Exception:
             session.rollback()
             print("Error deleting book from the database. Book not deleted. Please try again.")
             raise
+
+        print(f"Deleted book with ID {book_id} from the database.")
+        return True

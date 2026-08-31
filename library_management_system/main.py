@@ -1,6 +1,6 @@
 # Library Management System, CLI (Command-Line Interface)
 
-from menu_functions import(
+from menu_functions import (
     menu_add_author, menu_add_book, menu_list_all_authors, menu_list_all_books, menu_delete_book,
     menu_add_borrower, menu_list_all_borrowers, menu_update_borrower_email, menu_get_checkouts_by_borrower, menu_get_overdue_books, menu_delete_borrower,
     menu_list_available_books, menu_find_books_by_author, menu_find_books_by_keyword, menu_find_books_by_era, menu_checkout_book, menu_return_book    
@@ -10,7 +10,7 @@ from menu_functions import(
 def main():
     
     while True:
-        print(f"\n{'=' * 5} Library Management System {'=' * 5}")
+        print(f"\n{'=' * 10} Library Management System {'=' * 10}")
 
         print(f"\n{'-' * 5} Book Records {'-' * 5}")        
         print("1. List all authors")
@@ -45,7 +45,7 @@ def main():
             menu_list_all_authors()
         elif choice == "2":
             menu_list_all_books()        
-        if choice == "3":
+        elif choice == "3":
             menu_add_author()
         elif choice == "4":
             menu_add_book()        
@@ -85,7 +85,7 @@ def main():
             print("Exiting program.")
             break
         else:
-            print("Invalid choice. Please enter a number 1-17 or X.")
+            print("That is not a valid selection. Please enter a number 1-17 or X.")
 
 
 # BEFORE RUNNING: Ensure that data is seeded via seed_data.py
