@@ -35,20 +35,13 @@ ERD Visualization:
 | File | Purpose | Contents
 |---|---|---|
 | `models.py` | Establishes the models and relationships noted above | `Author`, `Book`, `Borrower`, `Checkout` |
-
 | `records_books.py` | Underlying functions related to books and authors | `list_all_authors`, `list_all_books`, `add_author`, `add_book`, `delete_book` |
-
 | `records_borrowers.py` | Underlying functions related to borrowers | `list_all_borrowers`, `update_borrower_email`, `get_checkouts_by_borrower`, `get_overdue_books`, `add_borrower`, `delete_borrower`, and any helper functions |
-
 | `search_checkout_return.py` | Underlying functions related to searches, checkouts, and returns | `list_available_books`, `find_books_by_author`, `find_books_by_keyword`, `find_books_by_era`, `checkout_book`, `return_book` |
-
-| `seed_data.py` | Initializes the database (creates the tables) and adds seed data | Seed data (various authors, books, borrowers, and checkouts) to enable a user to test the database
-
-| `menu_functions.py` | Menu functions which translate/transfer user input to the underlying functions | Naming follows the convention of `menu_` + function name above
-
+| `seed_data.py` | Initializes the database (creates the tables) and adds seed data | Seed data (various authors, books, borrowers, and checkouts) to enable a user to test the database |
+| `menu_functions.py` | Menu functions which translate/transfer user input to the underlying functions | Naming follows the convention of `menu_` + function name above |
 | `helper_menu_functions.py` | Functions that assist in directing the flow of the menu and collecting user input; separated for readability | `retry_or_return`, `collect_author_id`, `collect_book_id`, `collect_borrower_id` |
-
-| `main.py` | CLI | 17 menu options, along with the option to exit the program
+| `main.py` | CLI | 17 menu options, along with the option to exit the program |
 
 ## Validation/Error Handling
 The project is designed so that there is a separation of responsibilities between underlying functions and menu functions.
