@@ -42,6 +42,7 @@ def seed():
     checkout_book(4, 2, checkout_date=yesterday)  # Remnants: The Mayflower Project, Bob, Checkout Date is Yesterday
     checkout_book(5, 5)  # A Tale of Two Cities, Eddie, Checkout Date is Today
     checkout_book(6, 5)  # The Great Gatsby, Eddie, Checkout Date is Today
+         
 
     print("\nSeed data added.")
 

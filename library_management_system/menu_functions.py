@@ -712,6 +712,7 @@ def menu_return_book():
                     continue  # Re-run the function
 
                 else:
+                    print("\nReturning to the main menu...")
                     return  # To menu function
                 
 
@@ -724,7 +725,7 @@ def menu_return_book():
                 return  # To main CLI menu 
 
 
-            print("\nGathering borrowing activity...\n")        
+            print("\nGathering borrowing activity...")        
 
             try:
                 checkouts = get_checkouts_by_borrower(borrower_id)  # Use Borrower ID to gather Checkout activity                        
@@ -736,6 +737,7 @@ def menu_return_book():
                     continue  # Re-run the function
 
                 else:
+                    print("\nReturning to the main menu...")
                     return  # To menu function
 
             if not checkouts:  # If borrower does not have any checkout activity
@@ -745,6 +747,7 @@ def menu_return_book():
                     continue  # Re-run the function
 
                 else:
+                    print("\nReturning to the main menu...")
                     return  # To menu function
 
             print(f"\nCheckout history for borrower with ID {borrower_id}:\n")
@@ -764,6 +767,7 @@ def menu_return_book():
                     continue  # Re-run the function
 
                 else:
+                    print("\nReturning to the main menu...")
                     return  # To menu function
 
 
@@ -775,6 +779,7 @@ def menu_return_book():
                     continue  # Re-run the function
 
                 else:
+                    print("\nReturning to the main menu...")
                     return  # To menu function       
             
             checkout_id = selected_checkout_id
@@ -787,6 +792,7 @@ def menu_return_book():
                 continue  # Re-run the function
 
             else:
+                print("\nReturning to the main menu...")
                 return  # To menu function  
             
 
@@ -807,8 +813,8 @@ def menu_return_book():
                 return  # To main CLI menu
 
         if book_returned:           
-           print("\nReturning to the main menu...")                                
-           return  # To main CLI menu
+            print("\nReturning to the main menu...")                                
+            return  # To main CLI menu
 
         else:  # Covers the case where the Book cannot be returned since it was already returned
             if retry_or_return():
