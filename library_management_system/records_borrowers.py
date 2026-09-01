@@ -11,10 +11,10 @@ def validate_borrower_id(borrower_id: int):
     """Validates a Borrower ID. If successful, returns the validated Borrower ID."""
 
     if borrower_id is None:
-        raise ValueError("Cannot proceed. Borrower ID is required.")
+        raise ValueError("\nCannot proceed. Borrower ID is required.")
 
     if type(borrower_id) != int:
-        raise TypeError("Cannot proceed. Borrower ID must be an integer.")  
+        raise TypeError("\nCannot proceed. Borrower ID must be an integer.")  
      
     return borrower_id
 
@@ -23,13 +23,13 @@ def validate_borrower_email(email: str):
     """Validates a Borrower email address. If successful, returns the validated email address."""
 
     if email is None:
-            raise ValueError("Cannot proceed. Email is required.")
+            raise ValueError("\nCannot proceed. Email is required.")
         
     if type(email) != str:
-        raise TypeError("Cannot proceed. Email must be a string.")
+        raise TypeError("\nCannot proceed. Email must be a string.")
     
     if email.strip() == "":
-        raise ValueError("Cannot proceed. Email cannot be empty.")  
+        raise ValueError("\nCannot proceed. Email cannot be empty.")  
 
     email = email.strip().lower() 
 
@@ -38,7 +38,7 @@ def validate_borrower_email(email: str):
     match = re.fullmatch(email_pattern, email)
 
     if not match:
-        raise ValueError(f"Cannot proceed. The email address provided is not a valid email address.")   
+        raise ValueError(f"\nCannot proceed. The email address provided is not a valid email address.")   
 
     return email
 
@@ -49,7 +49,7 @@ def check_if_borrower_id_exists(session, borrower_id: int):  # Separated from va
     borrower = session.get(Borrower, borrower_id)
     
     if borrower is None:
-        raise ValueError(f"Cannot proceed. Borrower ID {borrower_id} does not exist.")
+        raise ValueError(f"\nCannot proceed. Borrower ID {borrower_id} does not exist.")
 
     return borrower
 
@@ -60,7 +60,7 @@ def check_if_email_exists(session, email: str):  # Separated from validate_borro
     test_borrower = session.query(Borrower).filter_by(email_address=email).first() 
 
     if test_borrower is not None:
-        raise ValueError(f"Cannot proceed. Email address {email} already exists for another borrower (ID: {test_borrower.id}) in the database.")
+        raise ValueError(f"\nCannot proceed. Email address {email} already exists for another borrower (ID: {test_borrower.id}) in the database.")
     
     return email
 
@@ -74,7 +74,7 @@ def normalize_borrower_phone(phone: str):
     match = re.fullmatch(phone_pattern, phone)
     
     if not match:
-        raise ValueError(f"Cannot proceed. The phone number provided is not a valid phone number.") 
+        raise ValueError(f"\nCannot proceed. The phone number provided is not a valid phone number.") 
        
    
     clean_num = re.sub(r'\D', '', phone)  # If a valid phone number, Step 1: normalize format by removing any non-digits
@@ -120,7 +120,7 @@ def update_borrower_email(borrower_id: int, new_email: str):
 
         # Check whether the new email address is already in the database 
         if new_email == borrower.email_address:
-            raise ValueError("Cannot update borrower email. The new email address provided is the same as the current email address on file.") 
+            raise ValueError("\nCannot update borrower email. The new email address provided is the same as the current email address on file.") 
 
         new_email = check_if_email_exists(session, new_email)
                    
@@ -133,10 +133,10 @@ def update_borrower_email(borrower_id: int, new_email: str):
                     
         except Exception:
             session.rollback()
-            print("Error updating borrower email in the database. Borrower email address not updated. Please try again. ")
+            print("\nError updating borrower email in the database. Borrower email address not updated. Please try again. ")
             raise
 
-        print(f"Updated email address for {borrower.name} (Borrower ID: {borrower.id}) to {borrower.email_address}.")
+        print(f"\nUpdated email address for {borrower.name} (Borrower ID: {borrower.id}) to {borrower.email_address}.")
 
 
 def get_checkouts_by_borrower(borrower_id: int):
@@ -152,14 +152,29 @@ def get_checkouts_by_borrower(borrower_id: int):
 
         if not borrower.checkouts:            
             return []
+
         
         results = []
         
         for checkout in borrower.checkouts: 
-            late_status = "Late" if checkout.return_date is not None and checkout.due_date < checkout.return_date else "On-Time"         
-            results.append((checkout.id, checkout.book.title, checkout.checkout_date, checkout.due_date, checkout.return_date, late_status))
+            return_date = checkout.return_date if checkout.return_date is not None else "N/A"
 
-        sorted_results = sorted(results, key=lambda c: c.due_date)
+            if checkout.return_date is not None:
+                if checkout.due_date < checkout.return_date:
+                    status = "Returned Late"
+
+                else:
+                    status = "Returned On-Time"
+
+            elif checkout.due_date < date.today():
+                status = "Overdue"
+
+            else:
+                status = "Checked Out"
+                    
+            results.append((checkout.id, checkout.book.title, checkout.checkout_date, checkout.due_date, return_date, status))
+
+        sorted_results = sorted(results, key=lambda c: c[3])  # Sort by due date
         
         return sorted_results
     
@@ -190,13 +205,13 @@ def add_borrower(name: str, email: str, phone: str = None):
         
     # Data Validation - Name
     if name is None:
-        raise ValueError("Cannot add borrower. Name is required.")
+        raise ValueError("\nCannot add borrower. Name is required.")
 
     if type(name) != str:
-        raise TypeError("Cannot add borrower. Name must be a string.")
+        raise TypeError("\nCannot add borrower. Name must be a string.")
 
     if name.strip() == "":
-        raise ValueError("Cannot add borrower. Name cannot be empty.")   
+        raise ValueError("\nCannot add borrower. Name cannot be empty.")   
 
     name = name.strip().title()
 
@@ -208,10 +223,10 @@ def add_borrower(name: str, email: str, phone: str = None):
     # Data Validation - Phone 
     if phone is not None:
         if type(phone) != str:
-            raise TypeError("Cannot add borrower. Phone Number must be a string.")
+            raise TypeError("\nCannot add borrower. Phone Number must be a string.")
     
         if phone.strip() == "":
-            raise ValueError("Cannot add borrower. Phone Number can be None but cannot be an empty string.")
+            raise ValueError("\nCannot add borrower. Phone Number can be None but cannot be an empty string.")
         
         phone = normalize_borrower_phone(phone)
             
@@ -231,10 +246,10 @@ def add_borrower(name: str, email: str, phone: str = None):
         
         except Exception:
             session.rollback()
-            print("Error adding borrower to the database. Borrower not added. Please try again. ")
+            print("\nError adding borrower to the database. Borrower not added. Please try again. ")
             raise
 
-        print(f"Added: {new_borrower}")
+        print(f"\nAdded: {new_borrower}")
 
 
 def delete_borrower(borrower_id: int):
@@ -253,7 +268,7 @@ def delete_borrower(borrower_id: int):
         # Check whether there are any active Checkouts
         for checkout in borrower.checkouts:
             if checkout.return_date is None:
-                print(f"Cannot delete borrower as they currently have a book checked out.")
+                print(f"\nCannot delete borrower as they currently have a book checked out.")
                 return False
             
 
@@ -264,8 +279,8 @@ def delete_borrower(borrower_id: int):
         
         except Exception:
             session.rollback()
-            print("Error deleting borrower from the database. Borrower not deleted. Please try again. ")
+            print("\nError deleting borrower from the database. Borrower not deleted. Please try again. ")
             raise
         
-        print(f"Deleted borrower with ID {borrower_id} from the database.")
+        print(f"\nDeleted borrower with ID {borrower_id} from the database.")
         return True       

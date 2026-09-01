@@ -12,14 +12,14 @@ def main():
     while True:
         print(f"\n{'=' * 10} Library Management System {'=' * 10}")
 
-        print(f"\n{'-' * 5} Book Records {'-' * 5}")        
+        print(f"\n{'-' * 13} Book Records {'-' * 13}")        
         print("1. List all authors")
         print("2. List all books")
         print("3. Add an author")
         print("4. Add a book")
         print("5. Delete a book")
 
-        print(f"\n{'-' * 5} Borrower Records {'-' * 5}")
+        print(f"\n{'-' * 11} Borrower Records {'-' * 11}")
         print("6. List all borrowers")              
         print("7. Update a borrower's email address")        
         print("8. View member borrowing activity") 
@@ -27,7 +27,7 @@ def main():
         print("10. Add a borrower")  
         print("11. Delete a borrower")
 
-        print(f"\n{'-' * 5} Search, Checkout, & Return {'-' * 5}")
+        print(f"\n{'-' * 6} Search, Checkout, & Return {'-' * 6}")
         print("12. List available books")       
         print("13. Search by author")
         print("14. Search by keyword")
@@ -35,7 +35,7 @@ def main():
         print("16. Check out a book")
         print("17. Return a book")
         
-        print(f"\n{'-' * 5} Menu Options {'-' * 5}")         
+        print(f"\n{'-' * 13} Menu Options {'-' * 13}")         
         print("X. Quit")
 
         choice = input("\nSelect an option (1-17) or X to Quit: ").strip().upper()

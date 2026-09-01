@@ -30,7 +30,7 @@ def list_all_books():
         results = []
         
         for book in books:
-            authors = ", ".join(author.name for author in book.authors) 
+            authors = ", ".join(sorted(author.name for author in book.authors))
             results.append((book.id, book.title, authors))
 
         return results
@@ -41,13 +41,13 @@ def add_author(name: str, bio: str = None):
 
     # Data Validation - Name
     if name is None:
-        raise ValueError("Cannot add author. Name is required.")
+        raise ValueError("\nCannot add author. Name is required.")
 
     if type(name) != str:
-        raise TypeError("Cannot add author. Name must be a string.")
+        raise TypeError("\nCannot add author. Name must be a string.")
 
     if name.strip() == "":
-        raise ValueError("Cannot add author. Name cannot be empty.")
+        raise ValueError("\nCannot add author. Name cannot be empty.")
 
     name = name.strip().title()
 
@@ -55,10 +55,10 @@ def add_author(name: str, bio: str = None):
     # Data Validation - Bio  
     if bio is not None:
         if type(bio) != str:
-            raise TypeError("Cannot add author. Bio must be a string.")
+            raise TypeError("\nCannot add author. Bio must be a string.")
 
         if bio.strip() == "":
-            raise ValueError("Cannot add author. Bio can be None but cannot be an empty string.")
+            raise ValueError("\nCannot add author. Bio can be None but cannot be an empty string.")
 
         bio = bio.strip()
 
@@ -74,10 +74,10 @@ def add_author(name: str, bio: str = None):
         
         except Exception:
             session.rollback()
-            print("Error adding author to the database. Author not added. Please try again. ")
+            print("\nError adding author to the database. Author not added. Please try again. ")
             raise
 
-        print(f"Added: {new_author}")        
+        print(f"\nAdded: {new_author}")        
             
 
 def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], available_copies: int = 1):
@@ -88,39 +88,39 @@ def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], 
 
     # Data Validation - Title
     if title is None:
-        raise ValueError("Cannot add book. Title is required.")
+        raise ValueError("\nCannot add book. Title is required.")
 
     if type(title) != str:
-        raise TypeError("Cannot add book. Title must be a string.")
+        raise TypeError("\nCannot add book. Title must be a string.")
 
     if title.strip() == "":
-        raise ValueError("Cannot add book. Title cannot be empty.")
+        raise ValueError("\nCannot add book. Title cannot be empty.")
 
-    title = title.strip().title()
+    title = title.strip()
     
 
     # Data Validation - ISBN
     if isbn is None:
-        raise ValueError("Cannot add book. ISBN is required.")
+        raise ValueError("\nCannot add book. ISBN is required.")
 
     if type(isbn) != str:
-        raise TypeError("Cannot add book. ISBN must be a string.")  
+        raise TypeError("\nCannot add book. ISBN must be a string.")  
 
     isbn = isbn.strip()
 
     if not isbn.isdigit():
-        raise ValueError("Cannot add book. ISBN must contain only numbers.")
+        raise ValueError("\nCannot add book. ISBN must contain only numbers.")
 
     if len(isbn) != 13:
-        raise ValueError("Cannot add book. ISBN must be exactly 13 characters.")
+        raise ValueError("\nCannot add book. ISBN must be exactly 13 characters.")
     
 
     # Data Validation - Year Published
     if year_published is None:
-        raise ValueError("Cannot add book. Year Published is required.")
+        raise ValueError("\nCannot add book. Year Published is required.")
     
     if type(year_published) != int:
-        raise TypeError("Cannot add book. Year Published must be an integer.")  
+        raise TypeError("\nCannot add book. Year Published must be an integer.")  
 
     # Era assigned based on Year Published 
     if year_published > 0:
@@ -130,30 +130,30 @@ def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], 
         era = "BCE"
 
     else:
-        raise ValueError("Cannot add book. Year Published cannot be 0.")
+        raise ValueError("\nCannot add book. Year Published cannot be 0.")
 
 
     # Data Validation - Available Copies
     if type(available_copies) != int:
-        raise TypeError("Cannot add book. Available Copies must be an integer.")
+        raise TypeError("\nCannot add book. Available Copies must be an integer.")
 
     if available_copies <= 0:
-        raise ValueError("Cannot add book. Available Copies cannot be 0 or a negative number.") 
+        raise ValueError("\nCannot add book. Available Copies cannot be 0 or a negative number.") 
     
 
     # Data Validation - Author ID(s)     
     if type(author_ids) != list:
-        raise TypeError("Cannot add book. Author IDs must be a list.")
+        raise TypeError("\nCannot add book. Author IDs must be a list.")
 
     if not author_ids:  # Empty list case
-        raise ValueError("Cannot add book. At least one Author ID is required.")
+        raise ValueError("\nCannot add book. At least one Author ID is required.")
 
     for id in author_ids:
         if type(id) != int:
-            raise TypeError("Cannot add book. All Author IDs must be integers.")   
+            raise TypeError("\nCannot add book. All Author IDs must be integers.")   
 
     if len(author_ids) != len(set(author_ids)):
-        raise ValueError("Cannot add book. Duplicate Author IDs are not allowed.")     
+        raise ValueError("\nCannot add book. Duplicate Author IDs are not allowed.")     
 
 
     with Session(engine) as session:
@@ -163,7 +163,7 @@ def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], 
 
         # Check whether Book (ISBN) already exists
         if existing_book is not None:
-            raise ValueError(f"Cannot add book. ISBN {isbn} already exists in the database.")  
+            raise ValueError(f"\nCannot add book. ISBN {isbn} already exists in the database.")  
 
             
         # Check whether all Author IDs exist
@@ -180,10 +180,10 @@ def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], 
                 authors.append(author)
 
         if len(nonexistent_author_ids) == len(author_ids):
-            raise ValueError("Cannot add book. None of the Author IDs provided exist.")            
+            raise ValueError("\nCannot add book. None of the Author IDs provided exist.")            
 
         elif len(nonexistent_author_ids) > 0:
-            raise ValueError(f"Cannot add book. One or more Author IDs do not exist: {nonexistent_author_ids}")
+            raise ValueError(f"\nCannot add book. One or more Author IDs do not exist: {nonexistent_author_ids}")
         
 
         # If no errors above persist, create Book and add to the database
@@ -195,10 +195,10 @@ def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], 
         
         except Exception:
             session.rollback()
-            print("Error adding book to the database. Book not added. Please try again. ")
+            print("\nError adding book to the database. Book not added. Please try again. ")
             raise
 
-        print(f"Added: {new_book}")        
+        print(f"\nAdded: {new_book}")        
     
 
 def delete_book(book_id: int):
@@ -206,10 +206,10 @@ def delete_book(book_id: int):
 
     # Data Validation - Book ID
     if book_id is None:
-        raise ValueError("Cannot delete book. Book ID is required.")
+        raise ValueError("\nCannot delete book. Book ID is required.")
 
     if type(book_id) != int:
-        raise TypeError("Cannot delete book. Book ID must be an integer.")
+        raise TypeError("\nCannot delete book. Book ID must be an integer.")
 
 
     with Session(engine) as session:
@@ -218,13 +218,13 @@ def delete_book(book_id: int):
 
         # Check whether Book exists
         if book is None:
-            raise ValueError(f"Cannot delete book. Book ID {book_id} does not exist in the database.")
+            raise ValueError(f"\nCannot delete book. Book ID {book_id} does not exist in the database.")
 
 
         # Check whether there are any active Checkouts
         for checkout in book.checkouts:
             if checkout.return_date is None:
-                print("Cannot delete book as it currently has an active checkout.")
+                print("\nCannot delete book as it currently has an active checkout.")
                 return False
             
 
@@ -235,8 +235,8 @@ def delete_book(book_id: int):
 
         except Exception:
             session.rollback()
-            print("Error deleting book from the database. Book not deleted. Please try again.")
+            print("\nError deleting book from the database. Book not deleted. Please try again.")
             raise
 
-        print(f"Deleted book with ID {book_id} from the database.")
+        print(f"\nDeleted book with ID {book_id} from the database.")
         return True

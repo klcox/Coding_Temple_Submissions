@@ -16,7 +16,7 @@ def list_available_books():
         results = []
 
         for book in books:
-            authors = ", ".join(author.name for author in book.authors) 
+            authors = ", ".join(sorted(author.name for author in book.authors))
             results.append((book.id, book.title, authors))
 
         return results
@@ -27,13 +27,13 @@ def find_books_by_author(author_name: str):
 
     # Data Validation - Author Name
     if author_name is None:
-        raise ValueError("Cannot search books. Author Name is required.")
+        raise ValueError("\nCannot search books. Author Name is required.")
 
     if type(author_name) != str:
-        raise TypeError("Cannot search books. Author Name must be a string.")
+        raise TypeError("\nCannot search books. Author Name must be a string.")
 
     if author_name.strip() == "":
-        raise ValueError("Cannot search books. Author Name cannot be empty.")
+        raise ValueError("\nCannot search books. Author Name cannot be empty.")
 
     author_name = author_name.strip()
 
@@ -51,7 +51,7 @@ def find_books_by_author(author_name: str):
         for author in authors:
             for book in author.books:
                 if book.id not in seen_books:
-                    author_names = ", ".join(author.name for author in book.authors)
+                    author_names = ", ".join(sorted(author.name for author in book.authors))
                     results.append((book.id, author_names, book.title))
                     seen_books.add(book.id)
 
@@ -63,13 +63,13 @@ def find_books_by_keyword(keyword: str):
 
     # Data Validation - Keyword
     if keyword is None:
-        raise ValueError("Cannot search books. Keyword is required.")
+        raise ValueError("\nCannot search books. Keyword is required.")
 
     if type(keyword) != str:
-        raise TypeError("Cannot search books. Keyword must be a string.")
+        raise TypeError("\nCannot search books. Keyword must be a string.")
 
     if keyword.strip() == "":
-        raise ValueError("Cannot search books. Keyword cannot be empty.")
+        raise ValueError("\nCannot search books. Keyword cannot be empty.")
 
     keyword = keyword.strip()
 
@@ -84,7 +84,7 @@ def find_books_by_keyword(keyword: str):
         results = []
 
         for book in books:
-            authors = ", ".join(author.name for author in book.authors) 
+            authors = ", ".join(sorted(author.name for author in book.authors))
             results.append((book.id, book.title, authors))
 
         return results
@@ -95,18 +95,18 @@ def find_books_by_era(era: str):
 
     # Data Validation - Era
     if era is None:
-        raise ValueError("Cannot search books. Era is required.")
+        raise ValueError("\nCannot search books. Era is required.")
 
     if type(era) != str:
-        raise TypeError("Cannot search books. Era must be a string.")
+        raise TypeError("\nCannot search books. Era must be a string.")
 
     if era.strip() == "":
-        raise ValueError("Cannot search books. Era cannot be empty.")
+        raise ValueError("\nCannot search books. Era cannot be empty.")
 
     era = era.strip().upper()
 
     if era not in ("BCE", "CE"):
-        raise ValueError("Cannot search books. Era must be either 'BCE' or 'CE'.")
+        raise ValueError("\nCannot search books. Era must be either 'BCE' or 'CE'.")
 
     
     with Session(engine) as session:
@@ -119,7 +119,7 @@ def find_books_by_era(era: str):
         results = []
 
         for book in books:
-            authors = ", ".join(author.name for author in book.authors) 
+            authors = ", ".join(sorted(author.name for author in book.authors))
             results.append((book.id, book.title, authors))
 
         return results    
@@ -130,18 +130,18 @@ def checkout_book(book_id: int, borrower_id: int, checkout_date: date = None):
 
     # Data Validation - Book ID
     if book_id is None:
-        raise ValueError("Cannot create checkout. Book ID is required.")
+        raise ValueError("\nCannot create checkout. Book ID is required.")
 
     if type(book_id) != int:
-        raise TypeError("Cannot create checkout. Book ID must be an integer.")
+        raise TypeError("\nCannot create checkout. Book ID must be an integer.")
 
 
     # Data Validation - Borrower ID
     if borrower_id is None:
-        raise ValueError("Cannot create checkout. Borrower ID is required.")
+        raise ValueError("\nCannot create checkout. Borrower ID is required.")
 
     if type(borrower_id) != int:
-        raise TypeError("Cannot create checkout. Borrower ID must be an integer.")
+        raise TypeError("\nCannot create checkout. Borrower ID must be an integer.")
     
 
     # Data Validation - Checkout Date
@@ -151,14 +151,14 @@ def checkout_book(book_id: int, borrower_id: int, checkout_date: date = None):
         checkout_date = today
 
     if type(checkout_date) != date:
-        raise TypeError("Cannot create checkout. Checkout Date must be a date.")
+        raise TypeError("\nCannot create checkout. Checkout Date must be a date.")
 
     if checkout_date > today:
-        raise ValueError("Cannot create checkout. Checkout Date cannot be in the future.")
+        raise ValueError("\nCannot create checkout. Checkout Date cannot be in the future.")
 
     two_days_ago = today - timedelta(days=2)
     if checkout_date < two_days_ago:
-        raise ValueError("Cannot create checkout. Checkout Date cannot be more than (2) days ago.")
+        raise ValueError("\nCannot create checkout. Checkout Date cannot be more than (2) days ago.")
 
 
     with Session(engine) as session:
@@ -167,17 +167,17 @@ def checkout_book(book_id: int, borrower_id: int, checkout_date: date = None):
         book = session.get(Book, book_id)
 
         if book is None:
-            raise ValueError(f"Cannot create checkout. Book ID {book_id} does not exist.")
+            raise ValueError(f"\nCannot create checkout. Book ID {book_id} does not exist.")
 
         if book.available_copies <= 0:
-            raise ValueError(f"Cannot create checkout. Book ID {book_id} is not available for checkout.")  
+            raise ValueError(f"\nCannot create checkout. Book ID {book_id} is not available for checkout.")  
           
     
         # Check if Borrower exists
         borrower = session.get(Borrower, borrower_id)
 
         if borrower is None:
-            raise ValueError(f"Cannot create checkout. Borrower ID {borrower_id} does not exist.")
+            raise ValueError(f"\nCannot create checkout. Borrower ID {borrower_id} does not exist.")
         
 
         # If no errors above persist, create Checkout and add to the database
@@ -192,10 +192,10 @@ def checkout_book(book_id: int, borrower_id: int, checkout_date: date = None):
         
         except Exception:
             session.rollback()
-            print("Error adding checkout to the database. Book not checked out. Please try again. ")
+            print("\nError adding checkout to the database. Book not checked out. Please try again. ")
             raise   
 
-        print(f"Checkout confirmed. Checkout ID: {new_checkout.id}, Due Date: {new_checkout.due_date}")
+        print(f"\nCheckout confirmed. Checkout ID: {new_checkout.id}, Due Date: {new_checkout.due_date}")
 
 
 def return_book(checkout_id: int):
@@ -203,10 +203,10 @@ def return_book(checkout_id: int):
 
     # Data Validation - Checkout ID
     if checkout_id is None:
-        raise ValueError("Cannot return book. Checkout ID is required.")
+        raise ValueError("\nCannot return book. Checkout ID is required.")
 
     if type(checkout_id) != int:
-        raise TypeError("Cannot return book. Checkout ID must be an integer.")    
+        raise TypeError("\nCannot return book. Checkout ID must be an integer.")    
 
 
     with Session(engine) as session:
@@ -216,10 +216,10 @@ def return_book(checkout_id: int):
         checkout = session.get(Checkout, checkout_id)
 
         if checkout is None:
-            raise ValueError(f"Cannot return book. Checkout ID {checkout_id} does not exist.")        
+            raise ValueError(f"\nCannot return book. Checkout ID {checkout_id} does not exist.")        
 
         if checkout.return_date is not None:
-            print(f"Cannot return book. '{checkout.book.title}' (Checkout ID:{checkout_id}) was returned on {checkout.return_date}.")
+            print(f"\nCannot return book. '{checkout.book.title}' (Checkout ID: {checkout_id}) was returned on {checkout.return_date}.")
             return False
 
 
@@ -232,12 +232,12 @@ def return_book(checkout_id: int):
 
         except Exception:
             session.rollback()
-            print("Error returning book in the database. Book not returned. Please try again. ")
+            print("\nError returning book in the database. Book not returned. Please try again. ")
             raise 
 
-        print(f"Book return confirmed for Checkout ID {checkout_id}.")
+        print(f"\nBook return confirmed for Checkout ID {checkout_id}.")
         
         if checkout.due_date < today: 
-            print("**Note: Your book was returned after the scheduled due date. Late fees may apply.**")
+            print("\n**Note: Your book was returned after the scheduled due date. Late fees may apply.**")
             
         return True      

@@ -6,7 +6,7 @@ from datetime import date, timedelta
 
 def seed():
     init_db()  # Initialize the database by creating the tables for Author, Book, Borrower, and Checkout
-    print("Database initialized.")
+    print("\nDatabase initialized.")
 
     # Add beginning data to run/test the library management system   
     add_author("J.R.R. Tolkien")
@@ -43,7 +43,7 @@ def seed():
     checkout_book(5, 5)  # A Tale of Two Cities, Eddie, Checkout Date is Today
     checkout_book(6, 5)  # The Great Gatsby, Eddie, Checkout Date is Today
 
-    print("Seed data added.")
+    print("\nSeed data added.")
 
 
 # Run
