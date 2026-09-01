@@ -10,7 +10,7 @@ Book and Checkout have a one-to-many relationship: a book may be checked out mor
 
 Borrower and Checkout similarly have a one-to-many relationship: a borrower may make multiple checkouts, but there is only one borrower per checkout.
 
-ERD Visualization:
+### ERD Visualization:
 (Attributes are required/non-nullable unless otherwise specified)
 
     [Author]         <----->         [Book]                              ----->        [Checkout]
