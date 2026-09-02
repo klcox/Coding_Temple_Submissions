@@ -28,11 +28,11 @@ def seed():
     add_book("All the President's Men", "9781416527572", 1974, author_ids=[6, 7])  # Bernstein, Woodward
 
 
-    add_borrower("Alice Chen", "alice@example.com", "123-456-7890")
-    add_borrower("Bob Martinez", "bob@example.com")
-    add_borrower("Charlie Jackson", "charlie@example.com", "(098) 765-4321")
-    add_borrower("David Michaels", "dave@example.com")
-    add_borrower("Eddie Lancaster", "eddie@example.com")
+    add_borrower("Alice Chen", "alice@example.com", date(2026, 7, 31), "123-456-7890")
+    add_borrower("Bob Martinez", "bob@example.com", date(2026, 7, 31))
+    add_borrower("Charlie Jackson", "charlie@example.com", date(2026, 8, 1), "(098) 765-4321")
+    add_borrower("David Michaels", "dave@example.com", date(2026, 8, 1))
+    add_borrower("Eddie Lancaster", "eddie@example.com", date(2026, 8, 2))
     
 
     yesterday = date.today() - timedelta(days=1)

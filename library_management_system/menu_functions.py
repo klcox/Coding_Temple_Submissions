@@ -37,10 +37,14 @@ def menu_list_all_authors():
         print("\nReturning to the main menu...")
         return  # To main CLI menu
 
-    print(f"{'ID':<5} | {'Author Name':<25}")
+    print(f"{'ID':<5} | {'Author Name':<25} | {'Bio':<20}")
     print("-" * 70)
     for item in authors:
-        print(f"{item[0]:<5} | {item[1]:<25}") 
+        bio = item[2]
+
+        if len(bio) > 15:
+            bio = bio[:15] + "..."
+        print(f"{item[0]:<5} | {item[1]:<25} | {bio:<20}") 
 
     print("\nReturning to the main menu...")
     return  # To main CLI menu
@@ -58,10 +62,10 @@ def menu_list_all_books():
         print("\nReturning to the main menu...")
         return  # To main CLI menu
 
-    print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40}")
-    print("-" * 100)
+    print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
+    print("-" * 120)
     for item in books:
-        print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40}")   
+        print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")   
 
     print("\nReturning to the main menu...")
     return  # To main CLI menu    
@@ -275,10 +279,10 @@ def menu_list_all_borrowers():
         print("\nReturning to the main menu...")
         return  # To main CLI menu
 
-    print(f"{'ID':<5} | {'Name':<25} | {'Email':<30}")
-    print("-" * 80)
+    print(f"{'ID':<5} | {'Name':<25} | {'Email':<30} | {'Phone':<15} | {'Membership Date':<15}")
+    print("-" * 100)
     for item in borrowers:
-        print(f"{item[0]:<5} | {item[1]:<25} | {item[2]:<30}")   
+        print(f"{item[0]:<5} | {item[1]:<25} | {item[2]:<30} | {item[3]:<15} | {str(item[4]):<15}")   
 
     print("\nReturning to the main menu...")
     return  # To main CLI menu   
@@ -399,6 +403,21 @@ def menu_add_borrower():
         email = input("\nWhat is the borrower's email address? ")
         phone = input("\nWhat is the borrower's phone number? (Press Enter to skip) ")
 
+        membership_date = input("Please enter the borrower's membership date (2026 and later, YYYY-MM-DD): ").strip()               
+                    
+        try:
+            membership_date = date.fromisoformat(membership_date)                
+
+        except ValueError:
+            print("\nCannot attempt to add borrower. Membership date must match the format YYYY-MM-DD.")
+
+            if retry_or_return():
+                continue  # Re-run the function
+
+            else:
+                print("\nReturning to the main menu...")                                
+                return  # To main CLI menu          
+
         if phone.strip() == "":
             phone = None
 
@@ -406,7 +425,7 @@ def menu_add_borrower():
         print("\nAttempting to add borrower to the database...")
 
         try:
-            add_borrower(name, email, phone)            
+            add_borrower(name, email, membership_date, phone)            
 
         except Exception as error_message:
             print(error_message) 
@@ -482,10 +501,10 @@ def menu_list_available_books():
         return  # To main CLI menu
 
     print("\nBooks available for checkout:\n")
-    print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40}")
-    print("-" * 100)
+    print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
+    print("-" * 120)
     for item in books:
-        print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40}")
+        print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")
 
     print("\nReturning to the main menu...")
     return  # To main CLI menu
@@ -523,11 +542,11 @@ def menu_find_books_by_author():
                 print("\nReturning to the main menu...")
                 return  # To main CLI menu 
 
-        print(f"\nBooks by authors whose name contains '{author_name}':\n")    
-        print(f"{'ID':<5} | {'Author(s)':<40} | {'Title':<40}")
-        print("-" * 100)        
+        print(f"\nBooks by authors whose name contains '{author_name}':\n")   
+        print(f"{'ID':<5} | {'Author(s)':<40} | {'Title':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
+        print("-" * 120)
         for item in results:
-            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40}")
+            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")
 
         print("\nReturning to the main menu...")
         return  # To main CLI menu
@@ -566,10 +585,10 @@ def menu_find_books_by_keyword():
                 return  # To main CLI menu 
 
         print(f"\nBooks whose title contains '{keyword}':\n")    
-        print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40}")
-        print("-" * 100)
+        print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
+        print("-" * 120)
         for item in results:
-            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40}")
+            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")
 
         print("\nReturning to the main menu...")
         return  # To main CLI menu
@@ -607,10 +626,10 @@ def menu_find_books_by_era():
                 return  # To main CLI menu 
 
         print(f"\nBooks from the era '{era}':\n")    
-        print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40}")
-        print("-" * 100)        
+        print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
+        print("-" * 120)
         for item in results:
-            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40}")
+            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")
 
         print("\nReturning to the main menu...")
         return  # To main CLI menu
@@ -713,7 +732,7 @@ def menu_return_book():
 
                 else:
                     print("\nReturning to the main menu...")
-                    return  # To menu function
+                    return  # To main CLI menu
                 
 
         elif know_checkout_id == "N":  # If NO, gather Checkout information by Borrower and prompt user for Checkout ID
@@ -738,7 +757,7 @@ def menu_return_book():
 
                 else:
                     print("\nReturning to the main menu...")
-                    return  # To menu function
+                    return  # To main CLI menu
 
             if not checkouts:  # If borrower does not have any checkout activity
                 print("\nCannot attempt to return book as the borrower does not have any checkout activity.")
@@ -748,7 +767,7 @@ def menu_return_book():
 
                 else:
                     print("\nReturning to the main menu...")
-                    return  # To menu function
+                    return  # To main CLI menu
 
             print(f"\nCheckout history for borrower with ID {borrower_id}:\n")
             print(f"{'Checkout ID':<14} | {'Book Title':<40} | {'Checkout Date':<15} | {'Due Date':<15} | {'Return Date':<15} | {'Status':<12}")  # Present the checkouts to the user for selection              
@@ -768,7 +787,7 @@ def menu_return_book():
 
                 else:
                     print("\nReturning to the main menu...")
-                    return  # To menu function
+                    return  # To main CLI menu
 
 
             # Check that the ID entered by the user matches one of the IDs from the list above
@@ -780,7 +799,7 @@ def menu_return_book():
 
                 else:
                     print("\nReturning to the main menu...")
-                    return  # To menu function       
+                    return  # To main CLI menu       
             
             checkout_id = selected_checkout_id
 
@@ -793,7 +812,7 @@ def menu_return_book():
 
             else:
                 print("\nReturning to the main menu...")
-                return  # To menu function  
+                return  # To main CLI menu  
             
 
         # Attempt return

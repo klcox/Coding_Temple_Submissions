@@ -22,7 +22,7 @@ def main():
         print(f"\n{'-' * 11} Borrower Records {'-' * 11}")
         print("6. List all borrowers")              
         print("7. Update a borrower's email address")        
-        print("8. View member borrowing activity") 
+        print("8. View member borrowing activity")
         print("9. View overdue books") 
         print("10. Add a borrower")  
         print("11. Delete a borrower")

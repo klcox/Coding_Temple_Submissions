@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 
 def list_all_authors():
-    """Get all Authors currently in the database, ordered by name. Returns a list of tuples containing the Author ID and Author name; returns an empty list if no Authors exist."""
+    """Get all Authors currently in the database, ordered by name. Returns a list of tuples containing the Author ID, name, and bio ('N/A' if None); returns an empty list if no Authors exist."""
     
     with Session(engine) as session:
 
@@ -12,13 +12,18 @@ def list_all_authors():
         if not authors:            
             return []
 
-        results = [(author.id, author.name) for author in authors]
-        
+        results = []
+
+        for author in authors:
+            bio = author.bio if author.bio is not None else "N/A"
+            results.append(
+                (author.id, author.name, bio)
+            )
         return results
 
 
 def list_all_books():
-    """Get all Books currently in the database, ordered by title. Returns a list of tuples containing the Book ID, Book title, and Author name(s); returns an empty list if no Books exist."""
+    """Get all Books currently in the database, ordered by title. Returns a list of tuples containing the Book ID, Book title, Author name(s), ISBN, year originally published (including era), and the number of available copies; returns an empty list if no Books exist."""
     
     with Session(engine) as session:
 
@@ -31,7 +36,10 @@ def list_all_books():
         
         for book in books:
             authors = ", ".join(sorted(author.name for author in book.authors))
-            results.append((book.id, book.title, authors))
+            year = (f"{abs(book.year_published)} {book.era}")          
+            results.append(
+                (book.id, book.title, authors, book.isbn, year, book.available_copies)
+            )
 
         return results
     

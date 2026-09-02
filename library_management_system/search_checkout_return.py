@@ -4,7 +4,7 @@ from datetime import date, timedelta
 
 
 def list_available_books():
-    """Searches for all Books with copies available for checkout. Returns a list of tuples containing the Book ID, Book title, and Author name(s); returns an empty list if no matching Books are found."""
+    """Searches for all Books with copies available for checkout. Returns a list of tuples containing the Book ID, title, Author name(s), ISBN, year originally published (including era), and the number of available copies, ordered by title; returns an empty list if no matching Books are found."""
 
     with Session(engine) as session:
     
@@ -17,13 +17,14 @@ def list_available_books():
 
         for book in books:
             authors = ", ".join(sorted(author.name for author in book.authors))
-            results.append((book.id, book.title, authors))
+            year = (f"{abs(book.year_published)} {book.era}")          
+            results.append((book.id, book.title, authors, book.isbn, year, book.available_copies))
 
         return results
 
 
 def find_books_by_author(author_name: str):
-    """Searches for Books where the Author name contains author_name (e.g. 'Smith'), case-insensitive. Returns a list of tuples containing the Book ID, Author name(s), and Book title; returns an empty list if no matching Authors are found."""
+    """Searches for Books where the Author name contains author_name (e.g. 'Smith'), case-insensitive. Returns a list of tuples containing the Book ID, Author name(s), title, ISBN, year originally published (including era), and the number of available copies, ordered by Author name; returns an empty list if no matching Authors are found."""
 
     # Data Validation - Author Name
     if author_name is None:
@@ -52,14 +53,15 @@ def find_books_by_author(author_name: str):
             for book in author.books:
                 if book.id not in seen_books:
                     author_names = ", ".join(sorted(author.name for author in book.authors))
-                    results.append((book.id, author_names, book.title))
+                    year = (f"{abs(book.year_published)} {book.era}") 
+                    results.append((book.id, author_names, book.title, book.isbn, year, book.available_copies))
                     seen_books.add(book.id)
 
         return results
         
 
 def find_books_by_keyword(keyword: str):
-    """Searches for Books where the title contains keyword, case-insensitive. Returns a list of tuples containing the Book ID, Book title, and Author name(s); returns an empty list if no matching Books are found."""
+    """Searches for Books where the title contains keyword, case-insensitive. Returns a list of tuples containing the Book ID, title, Author name(s), ISBN, year originally published (including era), and the number of available copies; returns an empty list if no matching Books are found."""
 
     # Data Validation - Keyword
     if keyword is None:
@@ -85,13 +87,14 @@ def find_books_by_keyword(keyword: str):
 
         for book in books:
             authors = ", ".join(sorted(author.name for author in book.authors))
-            results.append((book.id, book.title, authors))
+            year = (f"{abs(book.year_published)} {book.era}")          
+            results.append((book.id, book.title, authors, book.isbn, year, book.available_copies))
 
         return results
 
 
 def find_books_by_era(era: str):
-    """Searches for books from the designated era. Returns a list of tuples containing the book ID, book title, and author name(s); returns an empty list if no matching books are found."""
+    """Searches for books from the designated era, case-insensitive. Returns a list of tuples containing the Book ID, title, Author name(s), ISBN, year originally published (including era), and the number of available copies, ordered by title; returns an empty list if no matching books are found."""
 
     # Data Validation - Era
     if era is None:
@@ -120,7 +123,8 @@ def find_books_by_era(era: str):
 
         for book in books:
             authors = ", ".join(sorted(author.name for author in book.authors))
-            results.append((book.id, book.title, authors))
+            year = (f"{abs(book.year_published)} {book.era}")          
+            results.append((book.id, book.title, authors, book.isbn, year, book.available_copies))
 
         return results    
 

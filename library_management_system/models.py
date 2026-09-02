@@ -60,7 +60,8 @@ class Borrower(Base):
     # Fundamental attributes
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
-    email_address: Mapped[str] = mapped_column(unique=True, nullable=False)
+    email_address: Mapped[str] = mapped_column(unique=True, nullable=False)    
+    membership_date: Mapped[date] = mapped_column(nullable=False)
     phone: Mapped[Optional[str]] = mapped_column()
 
     # Relationship to Checkouts    
@@ -68,7 +69,7 @@ class Borrower(Base):
 
     def __repr__(self):
         phone = self.phone if self.phone is not None else "N/A"
-        return f"Borrower(name='{self.name}', email='{self.email_address}', phone='{phone}')"
+        return f"Borrower(name='{self.name}', email='{self.email_address}', phone='{phone}', membership_date='{self.membership_date}')"
 
 
 class Checkout(Base):

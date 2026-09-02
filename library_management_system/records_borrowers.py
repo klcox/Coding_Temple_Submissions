@@ -89,7 +89,7 @@ def normalize_borrower_phone(phone: str):
 
 
 def list_all_borrowers():
-    """Get all Borrowers currently in the database, ordered by name. Returns a list of tuples containing the Borrower ID, name, and email address; returns an empty list if no Borrowers exist."""
+    """Get all Borrowers currently in the database, ordered by name. Returns a list of tuples containing the Borrower ID, name, email address, phone ('N/A' if None), and membership date; returns an empty list if no Borrowers exist."""
     
     with Session(engine) as session:
 
@@ -98,7 +98,13 @@ def list_all_borrowers():
         if not borrowers:            
             return []
 
-        results = [(borrower.id, borrower.name, borrower.email_address) for borrower in borrowers]       
+        results = []
+
+        for borrower in borrowers:
+            phone = borrower.phone if borrower.phone is not None else "N/A"
+            results.append(
+                (borrower.id, borrower.name, borrower.email_address, phone, borrower.membership_date)    
+            )  
        
         return results  
 
@@ -200,7 +206,7 @@ def get_overdue_books():
         return results
 
 
-def add_borrower(name: str, email: str, phone: str = None):
+def add_borrower(name: str, email: str, membership_date: date, phone: str = None):
     """Add a new Borrower. Returns None if successful."""
         
     # Data Validation - Name
@@ -229,8 +235,19 @@ def add_borrower(name: str, email: str, phone: str = None):
             raise ValueError("\nCannot add borrower. Phone Number can be None but cannot be an empty string.")
         
         phone = normalize_borrower_phone(phone)
-            
+
+
+    # Data Validation - Membership Date
+    if membership_date is None:
+        raise ValueError("\nCannot add borrower. Membership Date is required.")
     
+    if type(membership_date) != date:
+        raise TypeError("\nCannot add borrower. Membership Date must be a date.")
+
+    if membership_date < date(2026, 1, 1):  # Prevents nonsensical membership years such as 1925, 1500, etc.
+        raise ValueError("\nCannot add borrower. Membership Date cannot be earlier than 2026.")
+
+
     with Session(engine) as session:    
 
         # Check whether email address already exists in the database
@@ -238,7 +255,7 @@ def add_borrower(name: str, email: str, phone: str = None):
 
         
         # If no errors above persist, create Borrower and add to the database
-        new_borrower = Borrower(name=name, email_address=email, phone=phone)
+        new_borrower = Borrower(name=name, email_address=email, phone=phone, membership_date=membership_date)
 
         try:
             session.add(new_borrower)
