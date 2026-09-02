@@ -270,7 +270,7 @@ def add_borrower(name: str, email: str, membership_date: date, phone: str = None
 
 
 def delete_borrower(borrower_id: int):
-    """Delete a Borrower if they do not currently have any active Checkouts. Returns True if successful; returns False if there is an active checkout preventing the deletion."""
+    """Delete a Borrower if they do not currently have any active Checkouts. If there are no active checkouts, any associated Checkout history is deleted before deleting the Borrower so as to prevent errors. Returns True if successful; returns False if there is an active checkout preventing the deletion."""
 
     # Data Validation - Borrower ID
     borrower_id = validate_borrower_id(borrower_id)   
@@ -281,12 +281,16 @@ def delete_borrower(borrower_id: int):
         # Check whether the Borrower ID exists in the database
         borrower = check_if_borrower_id_exists(session, borrower_id)
 
-
-        # Check whether there are any active Checkouts
+        
         for checkout in borrower.checkouts:
+
+            # Check whether there are any active Checkouts
             if checkout.return_date is None:
                 print(f"\nCannot delete borrower as they currently have a book checked out.")
                 return False
+
+            # Delete Checkout history
+            session.delete(checkout)
             
 
         # If no errors above persist, delete the Borrower from the database

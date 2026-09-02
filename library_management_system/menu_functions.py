@@ -17,7 +17,7 @@ from search_checkout_return import (
 )
 
 
-# Menu calls to associated functions:
+# Menu functions that call the associated underlying functions:
 
 
 # --------------
@@ -37,14 +37,14 @@ def menu_list_all_authors():
         print("\nReturning to the main menu...")
         return  # To main CLI menu
 
-    print(f"{'ID':<5} | {'Author Name':<25} | {'Bio':<20}")
-    print("-" * 70)
+    print(f"{'ID':<5} | {'Author Name':<25} | {'Bio':<25}")
+    print("-" * 60)
     for item in authors:
         bio = item[2]
 
-        if len(bio) > 15:
-            bio = bio[:15] + "..."
-        print(f"{item[0]:<5} | {item[1]:<25} | {bio:<20}") 
+        if len(bio) > 20:
+            bio = bio[:20] + "..."
+        print(f"{item[0]:<5} | {item[1]:<25} | {bio:<25}") 
 
     print("\nReturning to the main menu...")
     return  # To main CLI menu
@@ -62,10 +62,10 @@ def menu_list_all_books():
         print("\nReturning to the main menu...")
         return  # To main CLI menu
 
-    print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
-    print("-" * 120)
+    print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<20} | {'Year Originally Published':<30} | {'Available Copies':<20}")
+    print("-" * 167)
     for item in books:
-        print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")   
+        print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<20} | {item[4]:<30} | {item[5]:<20}")   
 
     print("\nReturning to the main menu...")
     return  # To main CLI menu    
@@ -221,7 +221,7 @@ def menu_add_book():
         return  # To main CLI menu 
 
 def menu_delete_book():
-    """Prompts for the Book ID and deletes from the database (if there are no active checkouts)."""
+    """Prompts for the Book ID and deletes the Book (as well as any associated Checkout history) from the database (if there are no active checkouts)."""
 
     while True:
 
@@ -280,7 +280,7 @@ def menu_list_all_borrowers():
         return  # To main CLI menu
 
     print(f"{'ID':<5} | {'Name':<25} | {'Email':<30} | {'Phone':<15} | {'Membership Date':<15}")
-    print("-" * 100)
+    print("-" * 103)
     for item in borrowers:
         print(f"{item[0]:<5} | {item[1]:<25} | {item[2]:<30} | {item[3]:<15} | {str(item[4]):<15}")   
 
@@ -361,10 +361,10 @@ def menu_get_checkouts_by_borrower():
                 return  # To main CLI menu
 
         print(f"\nCheckout history for borrower with ID {borrower_id}:\n")        
-        print(f"{'Checkout ID':<14} | {'Book Title':<40} | {'Checkout Date':<15} | {'Due Date':<15} | {'Return Date':<15} | {'Status':<12}")
-        print("-" * 130)
+        print(f"{'Checkout ID':<14} | {'Book Title':<40} | {'Checkout Date':<15} | {'Due Date':<15} | {'Return Date':<15} | {'Status':<14}")
+        print("-" * 128)
         for item in checkout_history:
-            print(f"{item[0]:<14} | {item[1]:<40} | {str(item[2]):<15} | {str(item[3]):<15} | {str(item[4]):<15} | {item[5]:<12}")
+            print(f"{item[0]:<14} | {item[1]:<40} | {str(item[2]):<15} | {str(item[3]):<15} | {str(item[4]):<15} | {item[5]:<14}")
 
         print("\nReturning to the main menu...")
         return  # To main CLI menu  
@@ -384,7 +384,7 @@ def menu_get_overdue_books():
 
     print("\nOverdue checkouts:\n")
     print(f"{'Checkout ID':<5} | {'Book Title':<40} | {'Borrower ID':<14} | {'Due Date':<15} | {'Days Late':<5}")
-    print("-" * 90)
+    print("-" * 95)
     for item in overdue_checkouts:
         print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<14} | {str(item[3]):<15} | {item[4]:<5}")
 
@@ -442,7 +442,7 @@ def menu_add_borrower():
 
 
 def menu_delete_borrower():
-    """Prompts for Borrower ID and deletes them from the database (if they do not have any active checkouts)."""
+    """Prompts for Borrower ID and deletes the Borrower (as well as any associated Checkout history) from the database (if they do not have any active checkouts)."""
     
     while True:
 
@@ -501,10 +501,10 @@ def menu_list_available_books():
         return  # To main CLI menu
 
     print("\nBooks available for checkout:\n")
-    print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
-    print("-" * 120)
+    print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<20} | {'Year Originally Published':<30} | {'Available Copies':<20}")
+    print("-" * 167)
     for item in books:
-        print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")
+        print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<20} | {item[4]:<30} | {item[5]:<20}")
 
     print("\nReturning to the main menu...")
     return  # To main CLI menu
@@ -543,10 +543,10 @@ def menu_find_books_by_author():
                 return  # To main CLI menu 
 
         print(f"\nBooks by authors whose name contains '{author_name}':\n")   
-        print(f"{'ID':<5} | {'Author(s)':<40} | {'Title':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
-        print("-" * 120)
+        print(f"{'ID':<5} | {'Author(s)':<40} | {'Title':<40} | {'ISBN':<20} | {'Year Originally Published':<30} | {'Available Copies':<20}")
+        print("-" * 167)
         for item in results:
-            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")
+            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<20} | {item[4]:<30} | {item[5]:<20}")
 
         print("\nReturning to the main menu...")
         return  # To main CLI menu
@@ -585,10 +585,10 @@ def menu_find_books_by_keyword():
                 return  # To main CLI menu 
 
         print(f"\nBooks whose title contains '{keyword}':\n")    
-        print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
-        print("-" * 120)
+        print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<20} | {'Year Originally Published':<30} | {'Available Copies':<20}")
+        print("-" * 167)
         for item in results:
-            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")
+            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<20} | {item[4]:<30} | {item[5]:<20}")
 
         print("\nReturning to the main menu...")
         return  # To main CLI menu
@@ -626,10 +626,10 @@ def menu_find_books_by_era():
                 return  # To main CLI menu 
 
         print(f"\nBooks from the era '{era}':\n")    
-        print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
-        print("-" * 120)
+        print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<20} | {'Year Originally Published':<30} | {'Available Copies':<20}")
+        print("-" * 167)
         for item in results:
-            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}")
+            print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<20} | {item[4]:<30} | {item[5]:<20}")
 
         print("\nReturning to the main menu...")
         return  # To main CLI menu
@@ -770,10 +770,10 @@ def menu_return_book():
                     return  # To main CLI menu
 
             print(f"\nCheckout history for borrower with ID {borrower_id}:\n")
-            print(f"{'Checkout ID':<14} | {'Book Title':<40} | {'Checkout Date':<15} | {'Due Date':<15} | {'Return Date':<15} | {'Status':<12}")  # Present the checkouts to the user for selection              
-            print("-" * 130)
+            print(f"{'Checkout ID':<14} | {'Book Title':<40} | {'Checkout Date':<15} | {'Due Date':<15} | {'Return Date':<15} | {'Status':<14}")  # Present the checkouts to the user for selection              
+            print("-" * 128)
             for item in checkouts:
-                print(f"{item[0]:<14} | {item[1]:<40} | {str(item[2]):<15} | {str(item[3]):<15} | {str(item[4]):<15} | {item[5]:<12}")           
+                print(f"{item[0]:<14} | {item[1]:<40} | {str(item[2]):<15} | {str(item[3]):<15} | {str(item[4]):<15} | {item[5]:<14}")           
 
         
             try:

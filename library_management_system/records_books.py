@@ -210,7 +210,7 @@ def add_book(title: str, isbn: str, year_published: int, author_ids: list[int], 
     
 
 def delete_book(book_id: int):
-    """Delete a Book if it is not currently checked out. Returns True if successful; returns False if there is an active checkout preventing the deletion."""
+    """Delete a Book if it is not currently checked out. If there are no active checkouts, any associated Checkout history is deleted before deleting the Book so as to prevent errors. Returns True if successful; returns False if there is an active checkout preventing the deletion."""
 
     # Data Validation - Book ID
     if book_id is None:
@@ -228,14 +228,18 @@ def delete_book(book_id: int):
         if book is None:
             raise ValueError(f"\nCannot delete book. Book ID {book_id} does not exist in the database.")
 
-
-        # Check whether there are any active Checkouts
+        
         for checkout in book.checkouts:
+
+            # Check whether there are any active Checkouts
             if checkout.return_date is None:
                 print("\nCannot delete book as it currently has an active checkout.")
                 return False
-            
 
+            # Delete Checkout history
+            session.delete(checkout)           
+
+            
         # If no errors above persist, delete the Book from the database
         try:
             session.delete(book)

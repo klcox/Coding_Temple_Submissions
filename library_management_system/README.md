@@ -61,6 +61,7 @@ The project is designed so that there is a separation of responsibilities betwee
 ## Future Features:
 - Additional retry/return options for improved user-friendliness
 - Sort/search options (allow the user to choose)
+- Deactivate Authors, Books, and Borrowers rather than deleting them so as to preserve historical records
 - Convert database records to pandas DataFrames for analysis and reporting
 
 - delete_author()

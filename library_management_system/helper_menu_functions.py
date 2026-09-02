@@ -57,14 +57,14 @@ def collect_author_id():
                                 
 
             print("\nPlease locate the Author ID from the list of authors below:\n")       
-            print(f"{'ID':<5} | {'Author Name':<25} | {'Bio':<20}")
-            print("-" * 70)
+            print(f"{'ID':<5} | {'Author Name':<25} | {'Bio':<25}")
+            print("-" * 60)
             for item in authors:
                 bio = item[2]
                 
-                if len(bio) > 15:
-                    bio = bio[:15] + "..."
-                print(f"{item[0]:<5} | {item[1]:<25} | {bio:<20}") 
+                if len(bio) > 20:
+                    bio = bio[:20] + "..."
+                print(f"{item[0]:<5} | {item[1]:<25} | {bio:<25}") 
 
 
             try:
@@ -140,10 +140,10 @@ def collect_book_id():
                                 
 
             print("\nPlease locate the Book ID from the list of books below:\n")        
-            print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<15} | {'Year Originally Published':<9} | {'Available Copies':<5}")
-            print("-" * 120)
+            print(f"{'ID':<5} | {'Title':<40} | {'Author(s)':<40} | {'ISBN':<20} | {'Year Originally Published':<30} | {'Available Copies':<20}")
+            print("-" * 167)
             for item in books:
-                print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<15} | {item[4]:<9} | {item[5]:<5}") 
+                print(f"{item[0]:<5} | {item[1]:<40} | {item[2]:<40} | {item[3]:<20} | {item[4]:<30} | {item[5]:<20}") 
 
 
             try:
@@ -220,7 +220,7 @@ def collect_borrower_id():
 
             print("\nPlease locate the Borrower ID from the list of borrowers below:\n")             
             print(f"{'ID':<5} | {'Name':<25} | {'Email':<30} | {'Phone':<15} | {'Membership Date':<15}")
-            print("-" * 100)
+            print("-" * 103)
             for item in borrowers:
                 print(f"{item[0]:<5} | {item[1]:<25} | {item[2]:<30} | {item[3]:<15} | {str(item[4]):<15}") 
 
