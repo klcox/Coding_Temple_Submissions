@@ -60,36 +60,13 @@ The project is designed so that there is a separation of responsibilities betwee
 
 ## Future Features:
 - Additional retry/return options for improved user-friendliness
-- Sort/search options (allow the user to choose)
+- Functions to update most other aspects of each model (e.g. Author name, Book title, Borrower phone, etc.)
+- Functions to search Borrowers and find a Book by its ISBN
+- Allow the user to choose how the results are sorted in the display
 - Deactivate Authors, Books, and Borrowers rather than deleting them so as to preserve historical records
-- Convert database records to pandas DataFrames for analysis and reporting
-
-- delete_author()
-- update_author_name()
-- update_author_bio()
-
-- update_book_title()
-- update_book_authors()
-- update_book_isbn()
-- update_book_year_published()
-- update_available_copies()
-
-- update_borrower_name()
-- update_borrower_phone()
-- update_borrower_membership_date()
-- search_borrowers()
-
-- find_book_by_isbn()
-
-- list_all_checkout_history()
-- get_current_checkouts()
-- get_book_checkout_history()
-- get_books_never_checked_out()
-
-- export_authors_to_csv()
-- export_books_to_csv()
-- export_borrowers_to_csv()
-- export_checkout_history_to_csv()
+- Functions to retrieve all Checkout history, current Checkouts, and Checkout history by book
+- Functions to export database information to a CSV file
+- Convert database records to pandas DataFrames for further analysis and reporting
 
 ## Special Note
 `seed_data.py` is intended to be run with a **fresh** database so as to initialize the library with sample data for testing. Running this file multiple times on an existing database may result in duplicate records or constraint errors. If the latter occurs, delete `library.db` and the `__pycache__` folder; then try running `seed_data.py` again.
