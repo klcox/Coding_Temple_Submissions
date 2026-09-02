@@ -36,19 +36,12 @@ The database consists of (4) underlying models: Author, Book, Borrower, and Chec
 | File | Purpose | Contents
 |---|---|---|
 | `models.py` | Establishes the models and relationships noted above | `Author`, `Book`, `Borrower`, `Checkout` |
-
 | `records_books.py` | Underlying functions related to books and authors | `list_all_authors`, `list_all_books`, `add_author`, `add_book`, `delete_book` |
-
 | `records_borrowers.py` | Underlying functions related to borrowers | `list_all_borrowers`, `update_borrower_email`, `get_checkouts_by_borrower`, `get_overdue_books`, `add_borrower`, `delete_borrower`, and any helper functions |
-
 | `search_checkout_return.py` | Underlying functions related to searches, checkouts, and returns | `list_available_books`, `find_books_by_author`, `find_books_by_keyword`, `find_books_by_era`, `checkout_book`, `return_book` |
-
 | `seed_data.py` | Initializes the database (creates the tables) and adds seed data | Seed data (various authors, books, borrowers, and checkouts) to enable a user to test the database |
-
-| `menu_functions.py` | Menu functions which translate/transfer user input to the underlying functions | Naming follows the convention of `menu_` + function name above |
-
+| `menu_functions.py` | Menu functions which translate/pass user input to the underlying functions | Naming follows the convention of `menu_` + function name above |
 | `helper_menu_functions.py` | Functions that assist in directing the flow of the menu and collecting user input; separated for readability | `retry_or_return`, `collect_author_id`, `collect_book_id`, `collect_borrower_id` |
-
 | `main.py` | CLI | 17 menu options, along with the option to exit the program |
 
 ## Validation/Error Handling
@@ -66,22 +59,39 @@ The project is designed so that there is a separation of responsibilities betwee
 - handle menu flow (retries/redirection back to the CLI)
 
 ## Future Features:
-- Additional retry/return options for increased user-friendliness
-- list_all_checkout_history()
+- Additional retry/return options for improved user-friendliness
+- Sort/search options (allow the user to choose)
+- Convert database records to pandas DataFrames for analysis and reporting
+
 - delete_author()
-- update_borrower_name()
-- update_borrower_phone()
-- update_borrower_membership_date()
 - update_author_name()
 - update_author_bio()
+
 - update_book_title()
 - update_book_authors()
 - update_book_isbn()
 - update_book_year_published()
+- update_available_copies()
+
+- update_borrower_name()
+- update_borrower_phone()
+- update_borrower_membership_date()
+- search_borrowers()
+
+- find_book_by_isbn()
+
+- list_all_checkout_history()
+- get_current_checkouts()
+- get_book_checkout_history()
+- get_books_never_checked_out()
+
+- export_authors_to_csv()
+- export_books_to_csv()
+- export_borrowers_to_csv()
 - export_checkout_history_to_csv()
 
 ## Special Note
-`seed_data.py` is intended to be run with a **fresh** database so as to initialize the library with sample data for testing. Running this file multiple times on an existing database may result in duplicate records or constraint errors. If the latter occurs, delete `library.db` and the `__pycache__` folder; then try running `seed.datapy` again.
+`seed_data.py` is intended to be run with a **fresh** database so as to initialize the library with sample data for testing. Running this file multiple times on an existing database may result in duplicate records or constraint errors. If the latter occurs, delete `library.db` and the `__pycache__` folder; then try running `seed_data.py` again.
 
 ## Setup
 1. Clone this repo
