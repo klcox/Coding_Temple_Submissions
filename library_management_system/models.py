@@ -32,7 +32,7 @@ class Author(Base):
 
     def __repr__(self):
         bio = self.bio if self.bio is not None else "N/A"
-        return f"Author(id='{self.id}', name='{self.name}', bio='{bio}')"
+        return f"Author(id={self.id}, name='{self.name}', bio='{bio}')"
 
 
 class Book(Base):
@@ -51,7 +51,7 @@ class Book(Base):
     checkouts: Mapped[list["Checkout"]] = relationship(back_populates="book")
     
     def __repr__(self):
-        return f"Book(id='{self.id}', title='{self.title}', isbn='{self.isbn}', year_published={abs(self.year_published)} {self.era}, available_copies={self.available_copies})"
+        return f"Book(id={self.id}, title='{self.title}', isbn='{self.isbn}', year_published={abs(self.year_published)} {self.era}, available_copies={self.available_copies})"
 
 
 class Borrower(Base):
@@ -69,7 +69,7 @@ class Borrower(Base):
 
     def __repr__(self):
         phone = self.phone if self.phone is not None else "N/A"
-        return f"Borrower(id='{self.id}', name='{self.name}', email='{self.email_address}', phone='{phone}', membership_date='{self.membership_date}')"
+        return f"Borrower(id={self.id}, name='{self.name}', email='{self.email_address}', phone='{phone}', membership_date={self.membership_date})"
 
 
 class Checkout(Base):
@@ -90,7 +90,7 @@ class Checkout(Base):
 
     def __repr__(self):
         return_date = self.return_date if self.return_date is not None else "N/A"
-        return f"Checkout(id='{self.id}', checkout_date={self.checkout_date}, due_date={self.due_date}, return_date={return_date})"
+        return f"Checkout(id={self.id}, checkout_date={self.checkout_date}, due_date={self.due_date}, return_date={return_date})"
 
 
 def init_db():

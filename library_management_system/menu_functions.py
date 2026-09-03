@@ -361,10 +361,10 @@ def menu_get_checkouts_by_borrower():
                 return  # To main CLI menu
 
         print(f"\nCheckout history for borrower with ID {borrower_id}:\n")        
-        print(f"{'Checkout ID':<14} | {'Book Title':<40} | {'Checkout Date':<15} | {'Due Date':<15} | {'Return Date':<15} | {'Status':<14}")
-        print("-" * 128)
+        print(f"{'Checkout ID':<14} | {'Book Title':<40} | {'Checkout Date':<15} | {'Due Date':<15} | {'Return Date':<15} | {'Status':<18}")
+        print("-" * 132)
         for item in checkout_history:
-            print(f"{item[0]:<14} | {item[1]:<40} | {str(item[2]):<15} | {str(item[3]):<15} | {str(item[4]):<15} | {item[5]:<14}")
+            print(f"{item[0]:<14} | {item[1]:<40} | {str(item[2]):<15} | {str(item[3]):<15} | {str(item[4]):<15} | {item[5]:<18}")
 
         print("\nReturning to the main menu...")
         return  # To main CLI menu  
@@ -770,10 +770,10 @@ def menu_return_book():
                     return  # To main CLI menu
 
             print(f"\nCheckout history for borrower with ID {borrower_id}:\n")
-            print(f"{'Checkout ID':<14} | {'Book Title':<40} | {'Checkout Date':<15} | {'Due Date':<15} | {'Return Date':<15} | {'Status':<14}")  # Present the checkouts to the user for selection              
-            print("-" * 128)
+            print(f"{'Checkout ID':<14} | {'Book Title':<40} | {'Checkout Date':<15} | {'Due Date':<15} | {'Return Date':<15} | {'Status':<18}")  # Present the checkouts to the user for selection              
+            print("-" * 132)
             for item in checkouts:
-                print(f"{item[0]:<14} | {item[1]:<40} | {str(item[2]):<15} | {str(item[3]):<15} | {str(item[4]):<15} | {item[5]:<14}")           
+                print(f"{item[0]:<14} | {item[1]:<40} | {str(item[2]):<15} | {str(item[3]):<15} | {str(item[4]):<15} | {item[5]:<18}")           
 
         
             try:
