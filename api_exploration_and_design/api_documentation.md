@@ -1,20 +1,16 @@
-\# Module 4 Project — Part 1: API Documentation
+# Module 4 Project — Part 1: API Documentation
 
 
 
-\*\*Your Name:\*\* Kelly Cox
+---
 
 
 
-\---
+1. ## JSONPlaceholder API
 
 
 
-\# 1. JSONPlaceholder API
-
-
-
-\## Base URL
+### Base URL
 
 
 
@@ -22,7 +18,9 @@ https://jsonplaceholder.typicode.com
 
 
 
-\## Authentication Method
+
+
+### Authentication Method
 
 
 
@@ -30,179 +28,162 @@ None
 
 
 
-\## Tested Endpoints
+
+
+### Tested Endpoints
 
 
 
-\### 1. GET `/users` — Get all users
+#### 1. GET /users (Get all users)
 
 
 
-\*\*Sample Response (200, OK):\*\*
-
-
+Sample Response (200, OK):
 
 ```json
 
-\[
+[
 
-&#x20; {
+ {
 
-&#x20;   "id": 1,
+   "id": 1,
 
-&#x20;   "name": "Leanne Graham",
+   "name": "Leanne Graham",
 
-&#x20;   "username": "Bret",
+   "username": "Bret",
 
-&#x20;   "email": "Sincere@april.biz",
+   "email": "Sincere@april.biz",
 
-&#x20;   "address": {
+   "address": {
 
-&#x20;     "street": "Kulas Light",
+     "street": "Kulas Light",
 
-&#x20;     "suite": "Apt. 556",
+     "suite": "Apt. 556",
 
-&#x20;     "city": "Gwenborough",
+     "city": "Gwenborough",
 
-&#x20;     "zipcode": "92998-3874",
+     "zipcode": "92998-3874",
 
-&#x20;     "geo": {
+     "geo": {
 
-&#x20;       "lat": "-37.3159",
+       "lat": "-37.3159",
 
-&#x20;       "lng": "81.1496"
+       "lng": "81.1496"
 
-&#x20;     }
+     }
 
-&#x20;   },
+   },
 
-&#x20;   "phone": "1-770-736-8031 x56442",
+   "phone": "1-770-736-8031 x56442",
 
-&#x20;   "website": "hildegard.org",
+   "website": "hildegard.org",
 
-&#x20;   "company": {
+   "company": {
 
-&#x20;     "name": "Romaguera-Crona",
+     "name": "Romaguera-Crona",
 
-&#x20;     "catchPhrase": "Multi-layered client-server neural-net",
+     "catchPhrase": "Multi-layered client-server neural-net",
 
-&#x20;     "bs": "harness real-time e-markets"
+     "bs": "harness real-time e-markets"
 
-&#x20;   }
+   }
 
-&#x20; },
+ },
 
-&#x20; "...additional users"
+	...additional users
 
 ]
 
 ```
 
-
-
-\### 2. GET `/posts?userId=2` — Query Parameter: Get all posts by a specific user
-
-
-
-\*\*Sample Response (200, OK):\*\*
+#### 2. GET /posts?userId=2 (Query Parameter - Get all posts by a specific user)
 
 
 
+Sample Response (200, OK):
 ```json
 
-\[
+[
 
-&#x20; {
+ {
 
-&#x20;   "userId": 2,
+   "userId": 2,
 
-&#x20;   "id": 11,
+   "id": 11,
 
-&#x20;   "title": "et ea vero quia laudantium autem",
+   "title": "et ea vero quia laudantium autem",
 
-&#x20;   "body": "delectus reiciendis molestiae occaecati non minima eveniet qui voluptatibus\\naccusamus in eum beatae sit\\nvel qui neque voluptates ut commodi qui incidunt\\nut animi commodi"
+   "body": "delectus reiciendis molestiae occaecati non minima eveniet qui voluptatibusnaccusamus in eum beatae sitnvel qui neque voluptates ut commodi qui inciduntnut animi commodi"
 
-&#x20; },
+ },
 
-&#x20; "...additional posts"
+	...additional posts
 
 ]
-
 ```
 
 
-
-\### 3. POST `/posts` — Create a new post
-
-
-
-\*\*Note:\*\* The created post does not persist on the server.
+#### 3. POST /posts (POST [create] a new post)
 
 
 
-\*\*Sample Response (201, Created):\*\*
+***Note: the created post does not persist on the server.*
 
 
 
+Sample Response (201, Created):
 ```json
+
 
 {
 
-&#x20; "title": "Test Title",
+ "title": "Test Title",
 
-&#x20; "body": "Test Body",
+ "body": "Test Body",
 
-&#x20; "userId": 1,
+ "userId": 1,
 
-&#x20; "id": 101
+ "id": 101
 
 }
-
 ```
 
 
-
-\### 4. GET `/users/1/todos` — Nested Resource: Get all todos for a specific user
-
-
-
-\*\*Sample Response (200, OK):\*\*
+#### 4. GET /users/1/todos (Nested Resource - Get all todos for a specific user)
 
 
 
+Sample Response (200, OK):
 ```json
 
-\[
 
-&#x20; {
+[
 
-&#x20;   "userId": 1,
+ {
 
-&#x20;   "id": 1,
+   "userId": 1,
 
-&#x20;   "title": "delectus aut autem",
+   "id": 1,
 
-&#x20;   "completed": false
+   "title": "delectus aut autem",
 
-&#x20; },
+   "completed": false
 
-&#x20; "...additional todos"
+ },
+
+	...additional todos
 
 ]
-
 ```
 
 
-
-\### 5. GET `/users/posts` — Testing Error Handling: Nonexistent Resource
-
-
-
-\*\*Sample Response (404, Not Found):\*\*
+#### 5. GET /users/posts (Testing Error Handling - Nonexistent Resource)
 
 
 
+Sample Response (404, Not Found):
 ```json
+
 
 {}
 
@@ -210,7 +191,7 @@ None
 
 
 
-\## Rate Limits
+### Rate Limits
 
 
 
@@ -218,19 +199,17 @@ All endpoints returned rate limit headers and values similar to the following:
 
 
 
-| Header                |      Value |
-
-| --------------------- | ---------: |
-
-| X-Ratelimit-Limit     |       1000 |
-
-| X-Ratelimit-Remaining |        999 |
-
-| X-Ratelimit-Reset     | 1780057932 |
+| Header | Value |
+|---|---|
+| X-Ratelimit-Limit | 1000 |
+| X-Ratelimit-Remaining | 999 |
+| X-Ratelimit-Reset | 1780057932 |
 
 
 
-\## One Thing That Surprised Me or Which Did Not Work as Expected
+
+
+### One Thing That Surprised Me or Which Did Not Work as Expected
 
 
 
@@ -238,11 +217,9 @@ I was most surprised by the rate limits as I noticed several things:
 
 
 
-\* It appears that the reset date/time is in the past.
-
-\* Even after running my script multiple times, the Remaining and Limit amounts remained the same at 999 and 1000, respectively, with each run.
-
-\* Upon researching the API documentation (including the associated GitHub), there is little to no discussion of rate limits.
+- It appears that the reset date/time is in the past.
+- Even after running my script multiple times, the Remaining and Limit amounts remained the same at 999 and 1000, respectively, with each run.
+- Upon researching the API documentation (including the associated GitHub), there is little to no discussion of rate limits.
 
 
 
@@ -250,15 +227,17 @@ In this sense, it appears that this API does not actively enforce rate limits. I
 
 
 
-\---
 
 
 
-\# 2. PokeAPI
 
 
 
-\## Base URL
+## 2. PokeAPI
+
+
+
+### Base URL
 
 
 
@@ -266,7 +245,9 @@ https://pokeapi.co/api/v2
 
 
 
-\## Authentication Method
+
+
+### Authentication Method
 
 
 
@@ -274,355 +255,911 @@ None
 
 
 
-\## Tested Endpoints
+
+
+### Tested Endpoints
 
 
 
-\### 1. GET `/pokemon/25` — Get a specific Pokémon
+#### 1. GET /pokemon/25 (Get a specific pokemon)
 
 
 
-\*\*Sample Response (200, OK):\*\*
+Sample Response (200, OK):
 
 
 
-\*\*Note:\*\* Using here the response for a different Pokémon (Clefairy, #35) as the actual response for Pikachu (#25) was extremely long. The response below was taken from the API documentation.
-
-
+***Note: Using here the response for a different pokemon (Clefairy, #35) as the actual response for Pikachu (#25) was extremely long. The response below was taken from the API documentation.*
 
 ```json
 
 {
 
-&#x20; "id": 35,
+ "id": 35,
 
-&#x20; "name": "clefairy",
+ "name": "clefairy",
 
-&#x20; "base\_experience": 113,
+ "base_experience": 113,
 
-&#x20; "height": 6,
+ "height": 6,
 
-&#x20; "is\_default": true,
+ "is_default": true,
 
-&#x20; "order": 56,
+ "order": 56,
 
-&#x20; "weight": 75,
+ "weight": 75,
 
-&#x20; "abilities": \[
+ "abilities": [
 
-&#x20;   {
+   {
 
-&#x20;     "is\_hidden": true,
+     "is_hidden": true,
 
-&#x20;     "slot": 3,
+     "slot": 3,
 
-&#x20;     "ability": {
+     "ability": {
 
-&#x20;       "name": "friend-guard",
+       "name": "friend-guard",
 
-&#x20;       "url": "https://pokeapi.co/api/v2/ability/132/"
+       "url": "https://pokeapi.co/api/v2/ability/132/"
 
-&#x20;     }
+     }
 
-&#x20;   }
+   }
 
-&#x20; ],
+ ],
 
-&#x20; "forms": \[
+ "forms": [
 
-&#x20;   {
+   {
 
-&#x20;     "name": "clefairy",
+     "name": "clefairy",
 
-&#x20;     "url": "https://pokeapi.co/api/v2/pokemon-form/35/"
+     "url": "https://pokeapi.co/api/v2/pokemon-form/35/"
 
-&#x20;   }
+   }
 
-&#x20; ],
+ ],
 
-&#x20; "game\_indices": \[
+ "game_indices": [
 
-&#x20;   {
+   {
 
-&#x20;     "game\_index": 35,
+     "game_index": 35,
 
-&#x20;     "version": {
+     "version": {
 
-&#x20;       "name": "white-2",
+       "name": "white-2",
 
-&#x20;       "url": "https://pokeapi.co/api/v2/version/22/"
+       "url": "https://pokeapi.co/api/v2/version/22/"
 
-&#x20;     }
+     }
 
-&#x20;   }
+   }
 
-&#x20; ],
+ ],
 
-&#x20; "held\_items": \[
+ "held_items": [
 
-&#x20;   {
+   {
 
-&#x20;     "item": {
+     "item": {
 
-&#x20;       "name": "moon-stone",
+       "name": "moon-stone",
 
-&#x20;       "url": "https://pokeapi.co/api/v2/item/81/"
+       "url": "https://pokeapi.co/api/v2/item/81/"
 
-&#x20;     },
+     },
 
-&#x20;     "version\_details": \[
+     "version_details": [
 
-&#x20;       {
+       {
 
-&#x20;         "rarity": 5,
+         "rarity": 5,
 
-&#x20;         "version": {
+         "version": {
 
-&#x20;           "name": "ruby",
+           "name": "ruby",
 
-&#x20;           "url": "https://pokeapi.co/api/v2/version/7/"
+           "url": "https://pokeapi.co/api/v2/version/7/"
 
-&#x20;         }
+         }
 
-&#x20;       }
+       }
 
-&#x20;     ]
+     ]
 
-&#x20;   }
+   }
 
-&#x20; ],
+ ],
 
-&#x20; "location\_area\_encounters": "/api/v2/pokemon/35/encounters",
+ "location_area_encounters": "/api/v2/pokemon/35/encounters",
 
-&#x20; "moves": \[
+ "moves": [
 
-&#x20;   {
+   {
 
-&#x20;     "move": {
+     "move": {
 
-&#x20;       "name": "pound",
+       "name": "pound",
 
-&#x20;       "url": "https://pokeapi.co/api/v2/move/1/"
+       "url": "https://pokeapi.co/api/v2/move/1/"
 
-&#x20;     },
+     },
 
-&#x20;     "version\_group\_details": \[
+     "version_group_details": [
 
-&#x20;       {
+       {
 
-&#x20;         "level\_learned\_at": 1,
+         "level_learned_at": 1,
 
-&#x20;         "version\_group": {
+         "version_group": {
 
-&#x20;           "name": "red-blue",
+           "name": "red-blue",
 
-&#x20;           "url": "https://pokeapi.co/api/v2/version-group/1/"
+           "url": "https://pokeapi.co/api/v2/version-group/1/"
 
-&#x20;         },
+         },
 
-&#x20;         "move\_learn\_method": {
+         "move_learn_method": {
 
-&#x20;           "name": "level-up",
+           "name": "level-up",
 
-&#x20;           "url": "https://pokeapi.co/api/v2/move-learn-method/1/"
+           "url": "https://pokeapi.co/api/v2/move-learn-method/1/"
 
-&#x20;         },
+         },
 
-&#x20;         "order": 1
+         "order": 1
 
-&#x20;       }
+       }
 
-&#x20;     ]
+     ]
 
-&#x20;   }
+   }
 
-&#x20; ],
+ ],
 
-&#x20; "species": {
+ "species": {
 
-&#x20;   "name": "clefairy",
+   "name": "clefairy",
 
-&#x20;   "url": "https://pokeapi.co/api/v2/pokemon-species/35/"
+   "url": "https://pokeapi.co/api/v2/pokemon-species/35/"
 
-&#x20; },
+ },
 
-&#x20; "sprites": {
+ "sprites": {
 
-&#x20;   "back\_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/35.png",
+   "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/35.png",
 
-&#x20;   "back\_female": null,
+   "back_female": null,
 
-&#x20;   "back\_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/35.png",
+   "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/35.png",
 
-&#x20;   "back\_shiny\_female": null,
+   "back_shiny_female": null,
 
-&#x20;   "front\_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/35.png",
+   "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/35.png",
 
-&#x20;   "front\_female": null,
+   "front_female": null,
 
-&#x20;   "front\_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/35.png",
+   "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/35.png",
 
-&#x20;   "front\_shiny\_female": null,
+   "front_shiny_female": null,
 
-&#x20;   "other": {
+   "other": {
 
-&#x20;     "dream\_world": {
+     "dream_world": {
 
-&#x20;       "front\_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/35.svg",
+       "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/35.svg",
 
-&#x20;       "front\_female": null
+       "front_female": null
 
-&#x20;     },
+     },
 
-&#x20;     "home": {
+     "home": {
 
-&#x20;       "front\_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/35.png",
+       "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/35.png",
 
-&#x20;       "front\_female": null,
+       "front_female": null,
 
-&#x20;       "front\_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/shiny/35.png"
+       "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/shiny/35.png",
 
-&#x20;     },
+       "front_shiny_female": null
 
-&#x20;     "official-artwork": {
+     },
 
-&#x20;       "front\_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/35.png",
+     "official-artwork": {
 
-&#x20;       "front\_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/35.png"
+       "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/35.png",
 
-&#x20;     },
+       "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/35.png"
 
-&#x20;     "showdown": {
+     },
 
-&#x20;       "back\_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/35.gif",
+     "showdown": {
 
-&#x20;       "back\_female": null,
+       "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/35.gif",
 
-&#x20;       "back\_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/shiny/35.gif",
+       "back_female": null,
 
-&#x20;       "back\_shiny\_female": null,
+       "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/shiny/35.gif",
 
-&#x20;       "front\_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/35.gif",
+       "back_shiny_female": null,
 
-&#x20;       "front\_female": null,
+       "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/35.gif",
 
-&#x20;       "front\_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/shiny/35.gif"
+       "front_female": null,
 
-&#x20;     }
+       "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/shiny/35.gif",
 
-&#x20;   }
+       "front_shiny_female": null
 
-&#x20; },
+     }
 
-&#x20; "cries": {
+   },
 
-&#x20;   "latest": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/35.ogg",
+   "versions": {
 
-&#x20;   "legacy": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/legacy/35.ogg"
+     "generation-i": {
 
-&#x20; },
+       "red-blue": {
 
-&#x20; "stats": \[
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/back/35.png",
 
-&#x20;   {
+         "back_gray": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/back/gray/35.png",
 
-&#x20;     "base\_stat": 35,
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/35.png",
 
-&#x20;     "effort": 0,
+         "front_gray": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/red-blue/gray/35.png"
 
-&#x20;     "stat": {
+       },
 
-&#x20;       "name": "speed",
+       "yellow": {
 
-&#x20;       "url": "https://pokeapi.co/api/v2/stat/6/"
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/yellow/back/35.png",
 
-&#x20;     }
+         "back_gray": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/yellow/back/gray/35.png",
 
-&#x20;   }
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/yellow/35.png",
 
-&#x20; ],
+         "front_gray": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/yellow/gray/35.png"
 
-&#x20; "types": \[
+       }
 
-&#x20;   {
+     },
 
-&#x20;     "slot": 1,
+     "generation-ii": {
 
-&#x20;     "type": {
+       "crystal": {
 
-&#x20;       "name": "fairy",
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/back/35.png",
 
-&#x20;       "url": "https://pokeapi.co/api/v2/type/18/"
+         "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/back/shiny/35.png",
 
-&#x20;     }
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/35.png",
 
-&#x20;   }
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/shiny/35.png"
 
-&#x20; ],
+       },
 
-&#x20; "past\_types": \[
+       "gold": {
 
-&#x20;   {
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/back/35.png",
 
-&#x20;     "generation": {
+         "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/back/shiny/35.png",
 
-&#x20;       "name": "generation-v",
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/35.png",
 
-&#x20;       "url": "https://pokeapi.co/api/v2/generation/5/"
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/shiny/35.png"
 
-&#x20;     },
+       },
 
-&#x20;     "types": \[
+       "silver": {
 
-&#x20;       {
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/silver/back/35.png",
 
-&#x20;         "slot": 1,
+         "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/silver/back/shiny/35.png",
 
-&#x20;         "type": {
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/silver/35.png",
 
-&#x20;           "name": "normal",
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/silver/shiny/35.png"
 
-&#x20;           "url": "https://pokeapi.co/api/v2/type/1/"
+       }
 
-&#x20;         }
+     },
 
-&#x20;       }
+     "generation-iii": {
 
-&#x20;     ]
+       "emerald": {
 
-&#x20;   }
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/35.png",
 
-&#x20; ],
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/shiny/35.png"
 
-&#x20; "past\_abilities": \[
+       },
 
-&#x20;   {
+       "firered-leafgreen": {
 
-&#x20;     "generation": {
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/firered-leafgreen/back/35.png",
 
-&#x20;       "name": "generation-iv",
+         "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/firered-leafgreen/back/shiny/35.png",
 
-&#x20;       "url": "https://pokeapi.co/api/v2/generation/4/"
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/firered-leafgreen/35.png",
 
-&#x20;     },
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/firered-leafgreen/shiny/35.png"
 
-&#x20;     "abilities": \[
+       },
 
-&#x20;       {
+       "ruby-sapphire": {
 
-&#x20;         "ability": null,
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/ruby-sapphire/back/35.png",
 
-&#x20;         "is\_hidden": true,
+         "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/ruby-sapphire/back/shiny/35.png",
 
-&#x20;         "slot": 3
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/ruby-sapphire/35.png",
 
-&#x20;       }
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/ruby-sapphire/shiny/35.png"
 
-&#x20;     ]
+       }
 
-&#x20;   }
+     },
 
-&#x20; ]
+     "generation-iv": {
+
+       "diamond-pearl": {
+
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/back/35.png",
+
+         "back_female": null,
+
+         "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/back/shiny/35.png",
+
+         "back_shiny_female": null,
+
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/35.png",
+
+         "front_female": null,
+
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/diamond-pearl/shiny/35.png",
+
+         "front_shiny_female": null
+
+       },
+
+       "heartgold-soulsilver": {
+
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/back/35.png",
+
+         "back_female": null,
+
+         "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/back/shiny/35.png",
+
+         "back_shiny_female": null,
+
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/35.png",
+
+         "front_female": null,
+
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/heartgold-soulsilver/shiny/35.png",
+
+         "front_shiny_female": null
+
+       },
+
+       "platinum": {
+
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/platinum/back/35.png",
+
+         "back_female": null,
+
+         "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/platinum/back/shiny/35.png",
+
+         "back_shiny_female": null,
+
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/platinum/35.png",
+
+         "front_female": null,
+
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iv/platinum/shiny/35.png",
+
+         "front_shiny_female": null
+
+       }
+
+     },
+
+     "generation-v": {
+
+       "black-white": {
+
+         "animated": {
+
+           "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/back/35.gif",
+
+           "back_female": null,
+
+           "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/back/shiny/35.gif",
+
+           "back_shiny_female": null,
+
+           "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/35.gif",
+
+           "front_female": null,
+
+           "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/shiny/35.gif",
+
+           "front_shiny_female": null
+
+         },
+
+         "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/back/35.png",
+
+         "back_female": null,
+
+         "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/back/shiny/35.png",
+
+         "back_shiny_female": null,
+
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/35.png",
+
+         "front_female": null,
+
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/shiny/35.png",
+
+         "front_shiny_female": null
+
+       }
+
+     },
+
+     "generation-vi": {
+
+       "omegaruby-alphasapphire": {
+
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vi/omegaruby-alphasapphire/35.png",
+
+         "front_female": null,
+
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vi/omegaruby-alphasapphire/shiny/35.png",
+
+         "front_shiny_female": null
+
+       },
+
+       "x-y": {
+
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vi/x-y/35.png",
+
+         "front_female": null,
+
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vi/x-y/shiny/35.png",
+
+         "front_shiny_female": null
+
+       }
+
+     },
+
+     "generation-vii": {
+
+       "icons": {
+
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/35.png",
+
+         "front_female": null
+
+       },
+
+       "ultra-sun-ultra-moon": {
+
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/ultra-sun-ultra-moon/35.png",
+
+         "front_female": null,
+
+         "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/ultra-sun-ultra-moon/shiny/35.png",
+
+         "front_shiny_female": null
+
+       }
+
+     },
+
+     "generation-viii": {
+
+       "icons": {
+
+         "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-viii/icons/35.png",
+
+         "front_female": null
+
+       }
+
+     }
+
+   }
+
+ },
+
+ "cries": {
+
+   "latest": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/35.ogg",
+
+   "legacy": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/legacy/35.ogg"
+
+ },
+
+ "stats": [
+
+   {
+
+     "base_stat": 35,
+
+     "effort": 0,
+
+     "stat": {
+
+       "name": "speed",
+
+       "url": "https://pokeapi.co/api/v2/stat/6/"
+
+     }
+
+   }
+
+ ],
+
+ "types": [
+
+   {
+
+     "slot": 1,
+
+     "type": {
+
+       "name": "fairy",
+
+       "url": "https://pokeapi.co/api/v2/type/18/"
+
+     }
+
+   }
+
+ ],
+
+ "past_types": [
+
+   {
+
+     "generation": {
+
+       "name": "generation-v",
+
+       "url": "https://pokeapi.co/api/v2/generation/5/"
+
+     },
+
+     "types": [
+
+       {
+
+         "slot": 1,
+
+         "type": {
+
+           "name": "normal",
+
+           "url": "https://pokeapi.co/api/v2/type/1/"
+
+         }
+
+       }
+
+     ]
+
+   }
+
+ ],
+
+ "past_abilities": [
+
+   {
+
+     "generation": {
+
+       "name": "generation-iv",
+
+       "url": "https://pokeapi.co/api/v2/generation/4/"
+
+     },
+
+     "abilities": [
+
+       {
+
+         "ability": null,
+
+         "is_hidden": true,
+
+         "slot": 3
+
+       }
+
+     ]
+
+   }
+
+ ]
+
+}
+
+```
+
+#### 2. GET /type/13 (Get information/all pokemon pertaining to a specific type)
+
+
+
+Sample Response (200, OK):
+
+
+***Note: Using here the response for a different pokemon type (ground, ID 5) as the actual response for electric-type pokemon (ID 13) was extremely long. The response below was taken from the API documentation.*
+
+```json
+
+
+{
+
+ "id": 5,
+
+ "name": "ground",
+
+ "damage_relations": {
+
+   "no_damage_to": [
+
+     {
+
+       "name": "flying",
+
+       "url": "https://pokeapi.co/api/v2/type/3/"
+
+     }
+
+   ],
+
+   "half_damage_to": [
+
+     {
+
+       "name": "bug",
+
+       "url": "https://pokeapi.co/api/v2/type/7/"
+
+     }
+
+   ],
+
+   "double_damage_to": [
+
+     {
+
+       "name": "poison",
+
+       "url": "https://pokeapi.co/api/v2/type/4/"
+
+     }
+
+   ],
+
+   "no_damage_from": [
+
+     {
+
+       "name": "electric",
+
+       "url": "https://pokeapi.co/api/v2/type/13/"
+
+     }
+
+   ],
+
+   "half_damage_from": [
+
+     {
+
+       "name": "poison",
+
+       "url": "https://pokeapi.co/api/v2/type/4/"
+
+     }
+
+   ],
+
+   "double_damage_from": [
+
+     {
+
+       "name": "water",
+
+       "url": "https://pokeapi.co/api/v2/type/11/"
+
+     }
+
+   ]
+
+ },
+
+ "past_damage_relations": [
+
+   {
+
+     "generation": {
+
+       "name": "generation-v",
+
+       "url": "https://pokeapi.co/api/v2/generation/5/"
+
+     },
+
+     "damage_relations": {
+
+       "no_damage_to": [
+
+         {
+
+           "name": "normal",
+
+           "url": "https://pokeapi.co/api/v2/type/1/"
+
+         }
+
+       ],
+
+       "half_damage_to": [
+
+         {
+
+           "name": "steel",
+
+           "url": "https://pokeapi.co/api/v2/type/9/"
+
+         }
+
+       ],
+
+       "double_damage_to": [
+
+         {
+
+           "name": "ghost",
+
+           "url": "https://pokeapi.co/api/v2/type/8/"
+
+         }
+
+       ],
+
+       "no_damage_from": [
+
+         {
+
+           "name": "normal",
+
+           "url": "https://pokeapi.co/api/v2/type/1/"
+
+         }
+
+       ],
+
+       "half_damage_from": [
+
+         {
+
+           "name": "poison",
+
+           "url": "https://pokeapi.co/api/v2/type/4/"
+
+         }
+
+       ],
+
+       "double_damage_from": [
+
+         {
+
+           "name": "ghost",
+
+           "url": "https://pokeapi.co/api/v2/type/8/"
+
+         }
+
+       ]
+
+     }
+
+   }
+
+ ],
+
+ "game_indices": [
+
+   {
+
+     "game_index": 4,
+
+     "generation": {
+
+       "name": "generation-i",
+
+       "url": "https://pokeapi.co/api/v2/generation/1/"
+
+     }
+
+   }
+
+ ],
+
+ "generation": {
+
+   "name": "generation-i",
+
+   "url": "https://pokeapi.co/api/v2/generation/1/"
+
+ },
+
+ "move_damage_class": {
+
+   "name": "physical",
+
+   "url": "https://pokeapi.co/api/v2/move-damage-class/2/"
+
+ },
+
+ "names": [
+
+   {
+
+     "name": "ã˜ã‚ã‚“",
+
+     "language": {
+
+       "name": "ja",
+
+       "url": "https://pokeapi.co/api/v2/language/1/"
+
+     }
+
+   }
+
+ ],
+
+ "pokemon": [
+
+   {
+
+     "slot": 1,
+
+     "pokemon": {
+
+       "name": "sandshrew",
+
+       "url": "https://pokeapi.co/api/v2/pokemon/27/"
+
+     }
+
+   }
+
+ ],
+
+ "moves": [
+
+   {
+
+     "name": "sand-attack",
+
+     "url": "https://pokeapi.co/api/v2/move/28/"
+
+   }
+
+ ]
 
 }
 
@@ -630,239 +1167,35 @@ None
 
 
 
-\### 2. GET `/type/13` — Get information/all Pokémon pertaining to a specific type
+### Rate Limits
 
 
 
-\*\*Sample Response (200, OK):\*\*
+None (The associated headers/values, e.g. X-Ratelimit-Limit, did not even appear in the response.)
 
 
 
-\*\*Note:\*\* Using here the response for a different Pokémon type (Ground, ID 5) as the actual response for Electric-type Pokémon (ID 13) was extremely long. The response below was taken from the API documentation.
 
 
+### One Thing That Surprised Me or Which Did Not Work as Expected
 
-```json
 
-{
 
-&#x20; "id": 5,
+I was surprised at the lack of rate limits as well as the lack of use of filler headers for rate limits such as those used in JSONPlaceholder API. I was also surprised at the depth and breadth of information utilized across the API and in the responses. This made the documentation rather overwhelming, and this made it very tedious and somewhat complicated when accessing various elements of the response in that the data is so deeply nested. For example: pokemon_by_type['damage_relations']['no_damage_to'][0]['name'].
 
-&#x20; "name": "ground",
 
-&#x20; "damage\_relations": {
 
-&#x20;   "no\_damage\_to": \[
 
-&#x20;     {
 
-&#x20;       "name": "flying",
 
-&#x20;       "url": "https://pokeapi.co/api/v2/type/3/"
 
-&#x20;     }
 
-&#x20;   ],
 
-&#x20;   "half\_damage\_to": \[
+## 3. DummyJSON API
 
-&#x20;     {
 
-&#x20;       "name": "bug",
 
-&#x20;       "url": "https://pokeapi.co/api/v2/type/7/"
-
-&#x20;     }
-
-&#x20;   ],
-
-&#x20;   "double\_damage\_to": \[
-
-&#x20;     {
-
-&#x20;       "name": "poison",
-
-&#x20;       "url": "https://pokeapi.co/api/v2/type/4/"
-
-&#x20;     }
-
-&#x20;   ],
-
-&#x20;   "no\_damage\_from": \[
-
-&#x20;     {
-
-&#x20;       "name": "electric",
-
-&#x20;       "url": "https://pokeapi.co/api/v2/type/13/"
-
-&#x20;     }
-
-&#x20;   ],
-
-&#x20;   "half\_damage\_from": \[
-
-&#x20;     {
-
-&#x20;       "name": "poison",
-
-&#x20;       "url": "https://pokeapi.co/api/v2/type/4/"
-
-&#x20;     }
-
-&#x20;   ],
-
-&#x20;   "double\_damage\_from": \[
-
-&#x20;     {
-
-&#x20;       "name": "water",
-
-&#x20;       "url": "https://pokeapi.co/api/v2/type/11/"
-
-&#x20;     }
-
-&#x20;   ]
-
-&#x20; },
-
-&#x20; "past\_damage\_relations": \[
-
-&#x20;   {
-
-&#x20;     "generation": {
-
-&#x20;       "name": "generation-v",
-
-&#x20;       "url": "https://pokeapi.co/api/v2/generation/5/"
-
-&#x20;     }
-
-&#x20;   }
-
-&#x20; ],
-
-&#x20; "game\_indices": \[
-
-&#x20;   {
-
-&#x20;     "game\_index": 4,
-
-&#x20;     "generation": {
-
-&#x20;       "name": "generation-i",
-
-&#x20;       "url": "https://pokeapi.co/api/v2/generation/1/"
-
-&#x20;     }
-
-&#x20;   }
-
-&#x20; ],
-
-&#x20; "generation": {
-
-&#x20;   "name": "generation-i",
-
-&#x20;   "url": "https://pokeapi.co/api/v2/generation/1/"
-
-&#x20; },
-
-&#x20; "move\_damage\_class": {
-
-&#x20;   "name": "physical",
-
-&#x20;   "url": "https://pokeapi.co/api/v2/move-damage-class/2/"
-
-&#x20; },
-
-&#x20; "names": \[
-
-&#x20;   {
-
-&#x20;     "name": "ã˜ã‚â€š",
-
-&#x20;     "language": {
-
-&#x20;       "name": "ja",
-
-&#x20;       "url": "https://pokeapi.co/api/v2/language/1/"
-
-&#x20;     }
-
-&#x20;   }
-
-&#x20; ],
-
-&#x20; "pokemon": \[
-
-&#x20;   {
-
-&#x20;     "slot": 1,
-
-&#x20;     "pokemon": {
-
-&#x20;       "name": "sandshrew",
-
-&#x20;       "url": "https://pokeapi.co/api/v2/pokemon/27/"
-
-&#x20;     }
-
-&#x20;   }
-
-&#x20; ],
-
-&#x20; "moves": \[
-
-&#x20;   {
-
-&#x20;     "name": "sand-attack",
-
-&#x20;     "url": "https://pokeapi.co/api/v2/move/28/"
-
-&#x20;   }
-
-&#x20; ]
-
-}
-
-```
-
-
-
-\## Rate Limits
-
-
-
-None. The associated headers/values, such as `X-Ratelimit-Limit`, did not appear in the response.
-
-
-
-\## One Thing That Surprised Me or Which Did Not Work as Expected
-
-
-
-I was surprised at the lack of rate limits as well as the lack of use of filler headers for rate limits such as those used in JSONPlaceholder API. I was also surprised at the depth and breadth of information utilized across the API and in the responses. This made the documentation rather overwhelming, and this made it very tedious and somewhat complicated when accessing various elements of the response in that the data is so deeply nested. For example:
-
-
-
-```python
-
-pokemon\_by\_type\['damage\_relations']\['no\_damage\_to']\[0]\['name']
-
-```
-
-
-
-\---
-
-
-
-\# 3. DummyJSON API
-
-
-
-\## Base URL
+### Base URL
 
 
 
@@ -870,7 +1203,9 @@ https://dummyjson.com
 
 
 
-\## Authentication Method
+
+
+### Authentication Method
 
 
 
@@ -881,354 +1216,326 @@ None.
 However, the developer does provide the option to use sample users, sample tokens, and authentication headers in order to test accessing the API as a logged-in user:
 
 
+```json
+headers: {
+
+   "Authorization": "Bearer YOUR_ACCESS_TOKEN_HERE",
+
+   "Content-Type": "application/json"
+
+ }
+```
+
+
+
+
+### Tested Endpoints
+
+
+
+#### 1. GET /products/1 (Get a specific product)
+
+
+
+Sample Response (200, OK):
+```json
+
+
+{
+
+ "id": 1,
+
+ "title": "Essence Mascara Lash Princess",
+
+ "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
+
+ "category": "beauty",
+
+ "price": 9.99,
+
+ "discountPercentage": 7.17,
+
+ "rating": 4.94,
+
+ "stock": 5,
+
+ "tags": [
+
+   "beauty",
+
+   "mascara"
+
+ ],
+
+ "brand": "Essence",
+
+ "sku": "RCH45Q1A",
+
+ "weight": 2,
+
+ "dimensions": {
+
+   "width": 23.17,
+
+   "height": 14.43,
+
+   "depth": 28.01
+
+ },
+
+ "warrantyInformation": "1 month warranty",
+
+ "shippingInformation": "Ships in 1 month",
+
+ "availabilityStatus": "Low Stock",
+
+ "reviews": [
+
+   {
+
+     "rating": 2,
+
+     "comment": "Very unhappy with my purchase!",
+
+     "date": "2024-05-23T08:56:21.618Z",
+
+     "reviewerName": "John Doe",
+
+     "reviewerEmail": "john.doe@x.dummyjson.com"
+
+   },
+
+   {
+
+     "rating": 2,
+
+     "comment": "Not as described!",
+
+     "date": "2024-05-23T08:56:21.618Z",
+
+     "reviewerName": "Nolan Gonzalez",
+
+     "reviewerEmail": "nolan.gonzalez@x.dummyjson.com"
+
+   },
+
+   {
+
+     "rating": 5,
+
+     "comment": "Very satisfied!",
+
+     "date": "2024-05-23T08:56:21.618Z",
+
+     "reviewerName": "Scarlett Wright",
+
+     "reviewerEmail": "scarlett.wright@x.dummyjson.com"
+
+   }
+
+ ],
+
+ "returnPolicy": "30 days return policy",
+
+ "minimumOrderQuantity": 24,
+
+ "meta": {
+
+   "createdAt": "2024-05-23T08:56:21.618Z",
+
+   "updatedAt": "2024-05-23T08:56:21.618Z",
+
+   "barcode": "9164035109868",
+
+   "qrCode": "..."
+
+ },
+
+ "thumbnail": "...",
+
+ "images": ["...", "...", "..."]
+
+}
+```
+
+
+#### 2. PATCH /products/1 (Update a specific product)
+
+
+
+***Note: the update does not persist on the server.*
+
+
+
+Sample Response (200, OK):
 
 ```json
 
 {
 
-&#x20; "Authorization": "Bearer YOUR\_ACCESS\_TOKEN\_HERE",
+ "id": 1,
 
-&#x20; "Content-Type": "application/json"
+ "title": "Essence Mascara Lash Princess",
+
+ "price": 12.99,
+
+ "discountPercentage": 10.48,
+
+ "stock": 99,
+
+ "rating": 2.56,
+
+ "images": ["https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"],
+
+ "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+
+ "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
+
+ "brand": "Essence",
+
+ "category": "beauty"
 
 }
 
 ```
 
-
-
-\## Tested Endpoints
-
-
-
-\### 1. GET `/products/1` — Get a specific product
+#### 3. DELETE /products/1 (Delete a specific product)
 
 
 
-\*\*Sample Response (200, OK):\*\*
+***Note: the deletion does not persist on the server.*
 
 
 
+Sample Response (200, OK):
 ```json
+
 
 {
 
-&#x20; "id": 1,
+ "id": 1,
 
-&#x20; "title": "Essence Mascara Lash Princess",
+ "title": "Essence Mascara Lash Princess",
 
-&#x20; "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
+ "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
 
-&#x20; "category": "beauty",
+ "category": "beauty",
 
-&#x20; "price": 9.99,
+ "price": 9.99,
 
-&#x20; "discountPercentage": 7.17,
+ "discountPercentage": 7.17,
 
-&#x20; "rating": 4.94,
+ "rating": 4.94,
 
-&#x20; "stock": 5,
+ "stock": 5,
 
-&#x20; "tags": \[
+ "tags": [
 
-&#x20;   "beauty",
+   "beauty",
 
-&#x20;   "mascara"
+   "mascara"
 
-&#x20; ],
+ ],
 
-&#x20; "brand": "Essence",
+ "brand": "Essence",
 
-&#x20; "sku": "RCH45Q1A",
+ "sku": "RCH45Q1A",
 
-&#x20; "weight": 2,
+ "weight": 2,
 
-&#x20; "dimensions": {
+ "dimensions": {
 
-&#x20;   "width": 23.17,
+   "width": 23.17,
 
-&#x20;   "height": 14.43,
+   "height": 14.43,
 
-&#x20;   "depth": 28.01
+   "depth": 28.01
 
-&#x20; },
+ },
 
-&#x20; "warrantyInformation": "1 month warranty",
+ "warrantyInformation": "1 month warranty",
 
-&#x20; "shippingInformation": "Ships in 1 month",
+ "shippingInformation": "Ships in 1 month",
 
-&#x20; "availabilityStatus": "Low Stock",
+ "availabilityStatus": "Low Stock",
 
-&#x20; "reviews": \[
+ "reviews": [
 
-&#x20;   {
+   {
 
-&#x20;     "rating": 2,
+     "rating": 2,
 
-&#x20;     "comment": "Very unhappy with my purchase!",
+     "comment": "Very unhappy with my purchase!",
 
-&#x20;     "date": "2024-05-23T08:56:21.618Z",
+     "date": "2024-05-23T08:56:21.618Z",
 
-&#x20;     "reviewerName": "John Doe",
+     "reviewerName": "John Doe",
 
-&#x20;     "reviewerEmail": "john.doe@x.dummyjson.com"
+     "reviewerEmail": "john.doe@x.dummyjson.com"
 
-&#x20;   },
+   },
 
-&#x20;   {
+   {
 
-&#x20;     "rating": 2,
+     "rating": 2,
 
-&#x20;     "comment": "Not as described!",
+     "comment": "Not as described!",
 
-&#x20;     "date": "2024-05-23T08:56:21.618Z",
+     "date": "2024-05-23T08:56:21.618Z",
 
-&#x20;     "reviewerName": "Nolan Gonzalez",
+     "reviewerName": "Nolan Gonzalez",
 
-&#x20;     "reviewerEmail": "nolan.gonzalez@x.dummyjson.com"
+     "reviewerEmail": "nolan.gonzalez@x.dummyjson.com"
 
-&#x20;   },
+   },
 
-&#x20;   {
+   {
 
-&#x20;     "rating": 5,
+     "rating": 5,
 
-&#x20;     "comment": "Very satisfied!",
+     "comment": "Very satisfied!",
 
-&#x20;     "date": "2024-05-23T08:56:21.618Z",
+     "date": "2024-05-23T08:56:21.618Z",
 
-&#x20;     "reviewerName": "Scarlett Wright",
+     "reviewerName": "Scarlett Wright",
 
-&#x20;     "reviewerEmail": "scarlett.wright@x.dummyjson.com"
+     "reviewerEmail": "scarlett.wright@x.dummyjson.com"
 
-&#x20;   }
+   }
 
-&#x20; ],
+ ],
 
-&#x20; "returnPolicy": "30 days return policy",
+ "returnPolicy": "30 days return policy",
 
-&#x20; "minimumOrderQuantity": 24,
+ "minimumOrderQuantity": 24,
 
-&#x20; "meta": {
+ "meta": {
 
-&#x20;   "createdAt": "2024-05-23T08:56:21.618Z",
+   "createdAt": "2024-05-23T08:56:21.618Z",
 
-&#x20;   "updatedAt": "2024-05-23T08:56:21.618Z",
+   "updatedAt": "2024-05-23T08:56:21.618Z",
 
-&#x20;   "barcode": "9164035109868",
+   "barcode": "9164035109868",
 
-&#x20;   "qrCode": "..."
+   "qrCode": "..."
 
-&#x20; },
+ },
 
-&#x20; "thumbnail": "...",
+ "thumbnail": "...",
 
-&#x20; "images": \[
+ "images": ["...", "...", "..."],
 
-&#x20;   "...",
+ "isDeleted": true,
 
-&#x20;   "..."
-
-&#x20; ]
+ "deletedOn": "2024-05-24T08:56:21.618Z"
 
 }
-
 ```
 
 
 
-\### 2. PATCH `/products/1` — Update a specific product
 
-
-
-\*\*Note:\*\* The update does not persist on the server.
-
-
-
-\*\*Sample Response (200, OK):\*\*
-
-
-
-```json
-
-{
-
-&#x20; "id": 1,
-
-&#x20; "title": "Essence Mascara Lash Princess",
-
-&#x20; "price": 12.99,
-
-&#x20; "discountPercentage": 10.48,
-
-&#x20; "stock": 99,
-
-&#x20; "rating": 2.56,
-
-&#x20; "images": \[
-
-&#x20;   "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-
-&#x20; ],
-
-&#x20; "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-
-&#x20; "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
-
-&#x20; "brand": "Essence",
-
-&#x20; "category": "beauty"
-
-}
-
-```
-
-
-
-\### 3. DELETE `/products/1` — Delete a specific product
-
-
-
-\*\*Note:\*\* The deletion does not persist on the server.
-
-
-
-\*\*Sample Response (200, OK):\*\*
-
-
-
-```json
-
-{
-
-&#x20; "id": 1,
-
-&#x20; "title": "Essence Mascara Lash Princess",
-
-&#x20; "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
-
-&#x20; "category": "beauty",
-
-&#x20; "price": 9.99,
-
-&#x20; "discountPercentage": 7.17,
-
-&#x20; "rating": 4.94,
-
-&#x20; "stock": 5,
-
-&#x20; "tags": \[
-
-&#x20;   "beauty",
-
-&#x20;   "mascara"
-
-&#x20; ],
-
-&#x20; "brand": "Essence",
-
-&#x20; "sku": "RCH45Q1A",
-
-&#x20; "weight": 2,
-
-&#x20; "dimensions": {
-
-&#x20;   "width": 23.17,
-
-&#x20;   "height": 14.43,
-
-&#x20;   "depth": 28.01
-
-&#x20; },
-
-&#x20; "warrantyInformation": "1 month warranty",
-
-&#x20; "shippingInformation": "Ships in 1 month",
-
-&#x20; "availabilityStatus": "Low Stock",
-
-&#x20; "reviews": \[
-
-&#x20;   {
-
-&#x20;     "rating": 2,
-
-&#x20;     "comment": "Very unhappy with my purchase!",
-
-&#x20;     "date": "2024-05-23T08:56:21.618Z",
-
-&#x20;     "reviewerName": "John Doe",
-
-&#x20;     "reviewerEmail": "john.doe@x.dummyjson.com"
-
-&#x20;   },
-
-&#x20;   {
-
-&#x20;     "rating": 2,
-
-&#x20;     "comment": "Not as described!",
-
-&#x20;     "date": "2024-05-23T08:56:21.618Z",
-
-&#x20;     "reviewerName": "Nolan Gonzalez",
-
-&#x20;     "reviewerEmail": "nolan.gonzalez@x.dummyjson.com"
-
-&#x20;   },
-
-&#x20;   {
-
-&#x20;     "rating": 5,
-
-&#x20;     "comment": "Very satisfied with my purchase!",
-
-&#x20;     "date": "2024-05-23T08:56:21.618Z",
-
-&#x20;     "reviewerName": "Scarlett Wright",
-
-&#x20;     "reviewerEmail": "scarlett.wright@x.dummyjson.com"
-
-&#x20;   }
-
-&#x20; ],
-
-&#x20; "returnPolicy": "30 days return policy",
-
-&#x20; "minimumOrderQuantity": 24,
-
-&#x20; "meta": {
-
-&#x20;   "createdAt": "2024-05-23T08:56:21.618Z",
-
-&#x20;   "updatedAt": "2024-05-23T08:56:21.618Z",
-
-&#x20;   "barcode": "9164035109868",
-
-&#x20;   "qrCode": "..."
-
-&#x20; },
-
-&#x20; "thumbnail": "...",
-
-&#x20; "images": \[
-
-&#x20;   "...",
-
-&#x20;   "..."
-
-&#x20; ],
-
-&#x20; "isDeleted": true,
-
-&#x20; "deletedOn": "2024-05-24T08:56:21.618Z"
-
-}
-
-```
-
-
-
-\## Rate Limits
+### Rate Limits
 
 
 
@@ -1236,15 +1543,11 @@ All endpoints returned rate limit headers and values such as the following:
 
 
 
-| Header                |      Value |
-
-| --------------------- | ---------: |
-
-| X-Ratelimit-Limit     |        100 |
-
-| X-Ratelimit-Remaining |         99 |
-
-| X-Ratelimit-Reset     | 1790105612 |
+| Header | Value |
+|---|---|
+| X-Ratelimit-Limit | 100 |
+| X-Ratelimit-Remaining | 99 |
+| X-Ratelimit-Reset | 1790105612 |
 
 
 
@@ -1252,7 +1555,7 @@ However, similar to JSONPlaceholder API, it appears DummyJSON API does not activ
 
 
 
-\## One Thing That Surprised Me or Which Did Not Work as Expected
+### One Thing That Surprised Me or Which Did Not Work as Expected
 
 
 
@@ -1260,17 +1563,17 @@ Once again, I was surprised at the lack of true rate limits. I was also surprise
 
 
 
-\---
 
 
 
-\# 4. One Thing That Surprised Me Overall
+
+## 4. One Thing That Surprised Me Overall
 
 
 
-I was very surprised that the documentation for each API above provided rather detailed information regarding the resources available and sample responses yet lacked other topics of significant consideration for users of the API, such as sections outlining (or outlining more explicitly) authentication, rate limits, status codes, and error formats. As a comparative example, the documentation for GitHub REST API utilized in an earlier assignment, while overwhelming, was extremely thorough in these respects. As a user, I found the latter documentation much more helpful than that of the APIs tested above, and, as a result, I will aim to implement similar documentation structures for users of any APIs I develop in the future.
+I was very surprised that the documentation for each API above provided rather detailed information regarding the resources available and sample responses yet lacked other topics of significant consideration for users of the API, such as sections outlining (or outlining more explicitly) authentication, rate limits, status codes, and error formats. As a comparative example, the documentation for GitHub Rest API utilized in an earlier assignment, while overwhelming, was extremely thorough in these respects. As a user, I found the latter documentation much more helpful than that of the APIs tested above, and, as a result, I will aim to implement similar documentation structures for users of any APIs I develop in the future.
 
 
 
-\---
+
 
