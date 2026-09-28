@@ -43,13 +43,8 @@ class ContactUpdate(BaseModel):
             raise ValueError("must be a valid email address")
         return v
 
-class ContactResponse(BaseModel):
+class ContactResponse(ContactCreate):
     """Schema for returning a contact."""
 
-    contact_id: int
-    first_name: str
-    last_name: str
-    email: str
-    phone: Optional[str]
-    category: ContactCategory
+    contact_id: int    
     created_at: str

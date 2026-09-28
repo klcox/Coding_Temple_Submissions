@@ -78,7 +78,9 @@ def update_contact(contact_id: int, updates: ContactUpdate):
 
     for contact in contacts_list:
         if contact["contact_id"] == contact_id:
-            update_data = updates.model_dump(exclude_unset=True)
+            
+            update_data = {k: v for k, v in updates.modeldump(exclude_unset=True).items() if v is not None or k == "phone"}  # Ensures required fields do not become null; excludes None values from the update except for phone as it is optional.
+
             contact.update(update_data)
             return contact
     raise HTTPException(status_code=404, detail="Contact not found.")
