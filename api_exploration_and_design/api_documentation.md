@@ -6,7 +6,7 @@
 
 
 
-1. ## JSONPlaceholder API
+## 1. JSONPlaceholder API
 
 
 
@@ -1181,7 +1181,7 @@ None (The associated headers/values, e.g. X-Ratelimit-Limit, did not even appear
 
 
 
-I was surprised at the lack of rate limits as well as the lack of use of filler headers for rate limits such as those used in JSONPlaceholder API. I was also surprised at the depth and breadth of information utilized across the API and in the responses. This made the documentation rather overwhelming, and this made it very tedious and somewhat complicated when accessing various elements of the response in that the data is so deeply nested. For example: pokemon_by_type['damage_relations']['no_damage_to'][0]['name'].
+I was surprised at the lack of rate limits as well as the lack of use of filler headers for rate limits such as those used in JSONPlaceholder API. I was also surprised at the depth and breadth of information utilized across the API and in the responses. This made the documentation rather overwhelming, and this made it very tedious and somewhat complicated when accessing various elements of the response in that the data is so deeply nested. For example: `pokemon_by_type['damage_relations']['no_damage_to'][0]['name']`.
 
 
 
