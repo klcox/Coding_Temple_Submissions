@@ -99,9 +99,9 @@ books_list = [
 def list_books(
     genre: Optional[BookGenre] = None,
     min_year: int = Query(default=1, gt=0),
-    max_year: int = 2050,
+    max_year: int = Query(default=2050, gt=0),
     sort_by: BookSort = BookSort.book_id,
-    search_title: Optional[str] = Query(default=None, min_length=1, max_length=70),
+    search: Optional[str] = Query(default=None, min_length=1, max_length=70),  # search title
     search_author: Optional[str] = Query(default=None, min_length=1, max_length=70),
     search_available: Optional[bool] = None,
     skip: int = Query(default=0, ge=0),
@@ -117,10 +117,12 @@ def list_books(
     if genre:  # If the user supplied the genre as a query parameter, select only the books that match this genre
         results = [b for b in results if b["genre"] == genre]
 
+    if min_year > max_year:
+        raise HTTPException(status_code=400, detail="min_year cannot be greater than max_year")
     results = [b for b in results if min_year <= b["year"] <= max_year]  # Select only the books that fall between the min_ and max_year (either defaults or user-supplied query parameters)
 
-    if search_title:  # If the user supplied a query parameter to search by title, select only the books that contain the search content in the title
-        results = [b for b in results if search_title.lower() in b["title"].lower()]
+    if search:  # If the user supplied a query parameter to search, select only the books that contain the search content in the title
+        results = [b for b in results if search.lower() in b["title"].lower()]
 
     if search_author:  # If the user supplied a query parameter to search by author, select only the books that contain the search content in the author name
         results = [b for b in results if search_author.lower() in b["author"].lower()]
@@ -130,7 +132,7 @@ def list_books(
 
 
     # Sort results
-    results.sort(key=lambda b: b[sort_by.value])  # Sort books by user-supplied query parameter; otherwise default is to sort by book title
+    results.sort(key=lambda b: b[sort_by.value])  # Sort books by user-supplied query parameter; otherwise default is to sort by book_id
 
 
     # Pagination    
