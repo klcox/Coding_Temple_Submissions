@@ -8,7 +8,7 @@
 
 
 
-\---
+---
 
 
 
@@ -18,7 +18,7 @@ This API design pertains to a Study Tracker app. Students utilize the app to enr
 
 
 
-\---
+---
 
 
 
@@ -28,14 +28,14 @@ This API design pertains to a Study Tracker app. Students utilize the app to enr
 
 |**Resource**|**Description**|**Key Attributes**|
 |-|-|-|
-|Students|People who use the platform|student\_id, name, email\_address, phone, date\_created|
-|Courses|Classes for which students set goals and log study sessions|course\_id, course\_num, subject, title, instructor, course\_start, course\_end|
-|Study Sessions|Study sessions which students log per course|session\_id, student (object), course\_id, session\_start, session\_end, total\_hours, notes (optional)|
-|Goals|Study goals (target hours) which students set weekly per course|goal\_id, student (object), course\_id, goal\_start, goal\_end, target\_hours, description (optional)|
+|Students|People who use the platform|student_id, name, email_address, phone, date_created|
+|Courses|Classes for which students set goals and log study sessions|course_id, course_num, subject, title, instructor, course_start, course_end|
+|Study Sessions|Study sessions which students log per course|session_id, student (object), course_id, session_start, session_end, total_hours, notes (optional)|
+|Goals|Study goals (target hours) which students set weekly per course|goal_id, student (object), course_id, goal_start, goal_end, target_hours, description (optional)|
 
 
 
-\---
+
 
 
 
@@ -53,7 +53,7 @@ This API design pertains to a Study Tracker app. Students utilize the app to enr
 
 
 
-\---
+
 
 
 
@@ -65,42 +65,42 @@ This API design pertains to a Study Tracker app. Students utilize the app to enr
 |-|-|-|
 |POST|/auth/login|User (student) log-in|
 |-|-|-|
-|GET|/students/{student\_id}|Get a specific student profile|
+|GET|/students/{student_id}|Get a specific student profile|
 |POST|/students|Create a new student account|
-|PATCH|/students/{student\_id}|Update a specific student account/profile|
-|DELETE|/students/{student\_id}|Delete a specific student account|
+|PATCH|/students/{student_id}|Update a specific student account/profile|
+|DELETE|/students/{student_id}|Delete a specific student account|
 |-|-|-|
 |GET|/courses|List all courses|
-|GET|/courses?course\_num=101\&subject=BIO|Filter courses (e.g. by course\_num and subject)|
-|GET|/students/{student\_id}/courses|List all courses in which a specific student is enrolled|
-|GET|/courses/{course\_id}|Get details for a specific course|
+|GET|/courses?course_num=101&subject=BIO|Filter courses (e.g. by course_num and subject)|
+|GET|/students/{student_id}/courses|List all courses in which a specific student is enrolled|
+|GET|/courses/{course_id}|Get details for a specific course|
 |POST|/courses|Create a new course|
-|PATCH|/courses/{course\_id}|Update a specific course|
-|DELETE|/courses/{course\_id}|Delete a specific course|
+|PATCH|/courses/{course_id}|Update a specific course|
+|DELETE|/courses/{course_id}|Delete a specific course|
 |-|-|-|
-|GET|/students/{student\_id}/sessions|List all study sessions for a specific student|
-|GET|/students/{student\_id}/sessions?course\_id=2|Filter study sessions for a specific student (e.g. by course\_id)|
-|POST|/students/{student\_id}/sessions|Log a new study session|
-|PATCH|/students/{student\_id}/sessions/{session\_id}|Update a specific study session for a specific student|
-|DELETE|/students/{student\_id}/sessions/{session\_id}|Delete a specific study session for a specific student|
+|GET|/students/{student_id}/sessions|List all study sessions for a specific student|
+|GET|/students/{student_id}/sessions?course_id=2|Filter study sessions for a specific student (e.g. by course_id)|
+|POST|/students/{student_id}/sessions|Log a new study session|
+|PATCH|/students/{student_id}/sessions/{session_id}|Update a specific study session for a specific student|
+|DELETE|/students/{student_id}/sessions/{session_id}|Delete a specific study session for a specific student|
 |-|-|-|
-|GET|/students/{student\_id}/goals|List all goals for a specific student|
-|GET|/students/{student\_id}/goals?course\_id=2|Filter goals for a specific student (e.g. by course\_id)|
-|POST|/students/{student\_id}/goals|Create a new weekly goal for a specific student|
-|PATCH|/students/{student\_id}/goals/{goal\_id}|Update a specific goal for a specific student|
-|DELETE|/students/{student\_id}/goals/{goal\_id}|Delete a specific goal for a specific student|
+|GET|/students/{student_id}/goals|List all goals for a specific student|
+|GET|/students/{student_id}/goals?course_id=2|Filter goals for a specific student (e.g. by course_id)|
+|POST|/students/{student_id}/goals|Create a new weekly goal for a specific student|
+|PATCH|/students/{student_id}/goals/{goal_id}|Update a specific goal for a specific student|
+|DELETE|/students/{student_id}/goals/{goal_id}|Delete a specific goal for a specific student|
 |-|-|-|
-|GET|/students/{student\_id}/progress|Get progress toward all study goals for a specific student|
-|GET|/students/{student\_id}/courses/{course\_id}/progress|Get progress toward all study goals for a specific course, for a specific student|
-|GET|/students/{student\_id}/goals/{goal\_id}/progress|Get progress toward a specific study goal for a specific student|
+|GET|/students/{student_id}/progress|Get progress toward all study goals for a specific student|
+|GET|/students/{student_id}/courses/{course_id}/progress|Get progress toward all study goals for a specific course, for a specific student|
+|GET|/students/{student_id}/goals/{goal_id}/progress|Get progress toward a specific study goal for a specific student|
 
 
 
-Note: As each goal covers a particular week of study, progress would be calculated from existing resource attributes, e.g. date ranges for goals and study sessions, target\_hours for goals, and total\_hours per session.
+Note: As each goal covers a particular week of study, progress would be calculated from existing resource attributes, e.g. date ranges for goals and study sessions, target_hours for goals, and total_hours per session.
 
 
 
-\---
+
 
 
 
@@ -108,141 +108,142 @@ Note: As each goal covers a particular week of study, progress would be calculat
 
 
 
-### POST /students/{student\_id}/sessions — Log a new study session
+### POST /students/{student_id}/sessions — Log a new study session
 
 
 
 **Request body:**
-
+```json
 {
 
-	"course\_id": 2,                                     ← integer, required
+	"course_id": 2,                                     ← integer, required
 
-	"session\_start": "2026-09-15T13:30:00",             ← datetime, required
+	"session_start": "2026-09-15T13:30:00",             ← datetime, required
 
-	"session\_end": "2026-09-15T15:30:00"	            ← datetime, required
+	"session_end": "2026-09-15T15:30:00"	            ← datetime, required
 }
-
+```
 
 **Success response (201 Created):**
+```json
 {
 
-	"session\_id": 1,                                    ← integer
+	"session_id": 1,                                    ← integer
 
 	"student": {                                        ← object
 
-		"student\_id": 1,		              ← integer
+		"student_id": 1,		              ← integer
 
 		"name": "Kelly Cox",                          ← string
 
-		"email\_address": "test@gmail.com",            ← string
+		"email_address": "test@gmail.com",            ← string
 
 		"phone": "555-555-5555",                      ← string
 
-		"date\_created": "2026-09-13T16:00:00"         ← datetime
+		"date_created": "2026-09-13T16:00:00"         ← datetime
 
 	},
 
-	"course\_id": 2,                                     ← integer
+	"course_id": 2,                                     ← integer
 
-	"session\_start": "2026-09-15T13:30:00",             ← datetime
+	"session_start": "2026-09-15T13:30:00",             ← datetime
 
-	"session\_end": "2026-09-15T15:30:00",               ← datetime
+	"session_end": "2026-09-15T15:30:00",               ← datetime
 
-	"total\_hours": 2.00,                                ← float 
+	"total_hours": 2.00,                                ← float 
 
 	"notes": null	                                    ← string or null (optional for request)
 }
+```
 
 
 
-
-### POST /students/{student\_id}/goals — Create a new weekly goal
+### POST /students/{student_id}/goals — Create a new weekly goal
 
 
 
 **Request body:**
-
+```json
 { 
-	"course\_id": 2,                                     ← integer, required
+	"course_id": 2,                                     ← integer, required
 
-	"goal\_start": "2026-09-14T00:00:00",                ← datetime, required
+	"goal_start": "2026-09-14T00:00:00",                ← datetime, required
 
-	"goal\_end": "2026-09-20T23:59:00",                  ← datetime, required
+	"goal_end": "2026-09-20T23:59:00",                  ← datetime, required
 
-	"target\_hours": 15.00                               ← float, required
+	"target_hours": 15.00                               ← float, required
 }
-
+```
 
 **Success response (201 Created):**
-
+```json
 {
-	"goal\_id": 1,                                       ← integer
+	"goal_id": 1,                                       ← integer
 
 	"student": {                                        ← object
 
-		"student\_id": 1,                              ← integer
+		"student_id": 1,                              ← integer
 
 		"name": "Kelly Cox",                          ← string
 
-		"email\_address": "test@gmail.com",            ← string
+		"email_address": "test@gmail.com",            ← string
 
 		"phone": "555-555-5555",                      ← string
 
-		"date\_created": "2026-09-13T16:00:00"         ← datetime
+		"date_created": "2026-09-13T16:00:00"         ← datetime
 
 	},
 
-	"course\_id": 2,                                     ← integer
+	"course_id": 2,                                     ← integer
 
-	"goal\_start": "2026-09-14T00:00:00",                ← datetime
+	"goal_start": "2026-09-14T00:00:00",                ← datetime
 
-	"goal\_end": "2026-09-20T23:59:00",                  ← datetime
+	"goal_end": "2026-09-20T23:59:00",                  ← datetime
 
-	"target\_hours": 15.00,                              ← float
+	"target_hours": 15.00,                              ← float
 
 	"description": null                                 ← string or null (optional for request)
 }
+```
 
-
-### GET /students/{student\_id}/goals?course\_id=2 — Get (filter) all goals for a specific student for a specific course
+### GET /students/{student_id}/goals?course_id=2 — Get (filter) all goals for a specific student for a specific course
 
 
 
 **Response (200 OK):**
-
+```json
 {
-	"data": \[                                            ← list of dictionaries
+	"data": [                                            ← list of dictionaries
 
 		{
-			"goal\_id": 1,                                     ← integer
+			"goal_id": 1,                                     ← integer
 
 			"student": {                                      ← object
 
-				"student\_id": 1,                             ← integer
+				"student_id": 1,                             ← integer
 
 				"name": "Kelly Cox",                         ← string
 
-				"email\_address": "test@gmail.com",           ← string
+				"email_address": "test@gmail.com",           ← string
 
 				"phone": "555-555-5555",                     ← string
 
-				"date\_created": "2026-09-13T16:00:00"        ← datetime
+				"date_created": "2026-09-13T16:00:00"        ← datetime
 
 			},
 
-			"course\_id": 2,                                   ← integer
+			"course_id": 2,                                   ← integer
 
-			"goal\_start": "2026-09-14T00:00:00",              ← datetime
+			"goal_start": "2026-09-14T00:00:00",              ← datetime
 
-			"goal\_end": "2026-09-20T23:59:00",                ← datetime
+			"goal_end": "2026-09-20T23:59:00",                ← datetime
 
-			"target\_hours": 15.00,                            ← float
+			"target_hours": 15.00,                            ← float
 
 			"description": null                               ← string or null
 		},
 
-		...\[additional goals]
+		...[additional goals]
 	],
 
 	"meta": { 
@@ -251,38 +252,38 @@ Note: As each goal covers a particular week of study, progress would be calculat
 
 		"page": 1,                                                ← integer
 
-		"per\_page": 5,                                            ← integer
+		"per_page": 5,                                            ← integer
 
-		"total\_pages": 2                                          ← integer
+		"total_pages": 2                                          ← integer
 	}
 }
+```
 
 
-
-### GET /students/{student\_id}/progress — Get progress for a specific student
+### GET /students/{student_id}/progress — Get progress for a specific student
 
 
 
 **Response (200 OK):**
-
+```json
 {
-	"data": \[                                             ← list of dictionaries
+	"data": [                                             ← list of dictionaries
 
 		{
 
-			"course\_id": 2,                                   ← integer
+			"course_id": 2,                                   ← integer
 
-			"goal\_id": 1,                                     ← integer
+			"goal_id": 1,                                     ← integer
 
-			"target\_hours": 15.00,                            ← float
+			"target_hours": 15.00,                            ← float
 
-			"hours\_studied": 2.00,                            ← float
+			"hours_studied": 2.00,                            ← float
 
-			"progress\_percent": 13.33                         ← float
+			"progress_percent": 13.33                         ← float
 
 		},
 
-		\[...additional progress objects]
+		[...additional progress objects]
 
 	],	
 	"meta": {
@@ -291,14 +292,13 @@ Note: As each goal covers a particular week of study, progress would be calculat
 
 		"page": 1,                                                ← integer
 
-		"per\_page": 5,                                            ← integer
+		"per_page": 5,                                            ← integer
 
-		"total\_pages": 3                                          ← integer	
+		"total_pages": 3                                          ← integer	
 	}
 }
+```
 
-
-\---
 
 
 
@@ -310,34 +310,34 @@ Note: As each goal covers a particular week of study, progress would be calculat
 |-|-|-|
 |POST /auth/login|No|Students with an account (password required)|
 |-|-|-|
-|GET /students/{student\_id}|Yes|Only the student themself|
+|GET /students/{student_id}|Yes|Only the student themself|
 |POST /students|No|Public|
-|PATCH /students/{student\_id}|Yes|Only the student themself|
-|DELETE /students/{student\_id}|Yes|Only the student themself|
+|PATCH /students/{student_id}|Yes|Only the student themself|
+|DELETE /students/{student_id}|Yes|Only the student themself|
 |-|-|-|
 |GET /courses|Yes|Any logged-in student|
-|GET /courses?course\_num=101\&subject=BIO|Yes|Any logged-in student|
-|GET /students/{student\_id}/courses|Yes|Only the student themself|
-|GET /courses/{course\_id}|Yes|Any logged-in student|
+|GET /courses?course_num=101&subject=BIO|Yes|Any logged-in student|
+|GET /students/{student_id}/courses|Yes|Only the student themself|
+|GET /courses/{course_id}|Yes|Any logged-in student|
 |POST /courses|Yes|Admin only|
-|PATCH /courses/{course\_id}|Yes|Admin only|
-|DELETE /courses/{course\_id}|Yes|Admin only|
-|-||-|
-|GET /students/{student\_id}/sessions|Yes|Only the student themself|
-|GET /students/{student\_id}/sessions?course\_id=2|Yes|Only the student themself|
-|POST /students/{student\_id}/sessions|Yes|Only the student themself|
-|PATCH /students/{student\_id}/sessions/{session\_id}|Yes|Only the student themself|
-|DELETE /students/{student\_id}/sessions/{session\_id}|Yes|Only the student themself|
-|-||-|
-|GET /students/{student\_id}/goals|Yes|Only the student themself|
-|GET /students/{student\_id}/goals?course\_id=2|Yes|Only the student themself|
-|POST /students/{student\_id}/goals|Yes|Only the student themself|
-|PATCH /students/{student\_id}/goals/{goal\_id}|Yes|Only the student themself|
-|DELETE /students/{student\_id}/goals/{goal\_id}|Yes|Only the student themself|
-|-||-|
-|GET /students/{student\_id}/progress|Yes|Only the student themself|
-|GET /students/{student\_id}/courses/{course\_id}/progress|Yes|Only the student themself|
-|GET /students/{student\_id}/goals/{goal\_id}/progress|Yes|Only the student themself|
+|PATCH /courses/{course_id}|Yes|Admin only|
+|DELETE /courses/{course_id}|Yes|Admin only|
+|-|-|-|
+|GET /students/{student_id}/sessions|Yes|Only the student themself|
+|GET /students/{student_id}/sessions?course_id=2|Yes|Only the student themself|
+|POST /students/{student_id}/sessions|Yes|Only the student themself|
+|PATCH /students/{student_id}/sessions/{session_id}|Yes|Only the student themself|
+|DELETE /students/{student_id}/sessions/{session_id}|Yes|Only the student themself|
+|-|-|-|
+|GET /students/{student_id}/goals|Yes|Only the student themself|
+|GET /students/{student_id}/goals?course_id=2|Yes|Only the student themself|
+|POST /students/{student_id}/goals|Yes|Only the student themself|
+|PATCH /students/{student_id}/goals/{goal_id}|Yes|Only the student themself|
+|DELETE /students/{student_id}/goals/{goal_id}|Yes|Only the student themself|
+|-|-|-|
+|GET /students/{student_id}/progress|Yes|Only the student themself|
+|GET /students/{student_id}/courses/{course_id}/progress|Yes|Only the student themself|
+|GET /students/{student_id}/goals/{goal_id}/progress|Yes|Only the student themself|
 
 
 
@@ -358,11 +358,11 @@ To obtain a JWT:
 
 
 
-\---
+---
 
 
 
-## Section 6 — Error Responses for POST /students/{student\_id}/sessions
+## Section 6 — Error Responses for POST /students/{student_id}/sessions
 
 
 
@@ -379,7 +379,7 @@ To obtain a JWT:
 
 
 
-\---
+
 
 
 
@@ -392,5 +392,5 @@ To obtain a JWT:
 
 
 
-\---
+
 
