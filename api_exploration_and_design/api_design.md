@@ -1,7 +1,5 @@
 # Module 4 Project — Part 2: Study Tracker API Design
 
-**Your Name: Kelly Cox**
-
 
 
 **Version: v1**
@@ -115,7 +113,6 @@ Note: As each goal covers a particular week of study, progress would be calculat
 **Request body:**
 ```json
 {
-
 	"course_id": 2,                                     ← integer, required
 
 	"session_start": "2026-09-15T13:30:00",             ← datetime, required
@@ -127,21 +124,19 @@ Note: As each goal covers a particular week of study, progress would be calculat
 **Success response (201 Created):**
 ```json
 {
-
 	"session_id": 1,                                    ← integer
 
 	"student": {                                        ← object
 
-		"student_id": 1,		              ← integer
+		"student_id": 1,		                          ← integer
 
-		"name": "Kelly Cox",                          ← string
+		"name": "Kelly Cox",                              ← string
 
-		"email_address": "test@gmail.com",            ← string
+		"email_address": "test@gmail.com",                ← string
 
-		"phone": "555-555-5555",                      ← string
+		"phone": "555-555-5555",                          ← string
 
-		"date_created": "2026-09-13T16:00:00"         ← datetime
-
+		"date_created": "2026-09-13T16:00:00"             ← datetime
 	},
 
 	"course_id": 2,                                     ← integer
@@ -182,15 +177,15 @@ Note: As each goal covers a particular week of study, progress would be calculat
 
 	"student": {                                        ← object
 
-		"student_id": 1,                              ← integer
+		"student_id": 1,                                 ← integer
 
-		"name": "Kelly Cox",                          ← string
+		"name": "Kelly Cox",                             ← string
 
-		"email_address": "test@gmail.com",            ← string
+		"email_address": "test@gmail.com",               ← string
 
-		"phone": "555-555-5555",                      ← string
+		"phone": "555-555-5555",                         ← string
 
-		"date_created": "2026-09-13T16:00:00"         ← datetime
+		"date_created": "2026-09-13T16:00:00"            ← datetime
 
 	},
 
@@ -214,21 +209,20 @@ Note: As each goal covers a particular week of study, progress would be calculat
 ```json
 {
 	"data": [                                            ← list of dictionaries
-
 		{
 			"goal_id": 1,                                     ← integer
 
 			"student": {                                      ← object
 
-				"student_id": 1,                             ← integer
+				"student_id": 1,                               ← integer
 
-				"name": "Kelly Cox",                         ← string
+				"name": "Kelly Cox",                           ← string
 
-				"email_address": "test@gmail.com",           ← string
+				"email_address": "test@gmail.com",             ← string
 
-				"phone": "555-555-5555",                     ← string
+				"phone": "555-555-5555",                       ← string
 
-				"date_created": "2026-09-13T16:00:00"        ← datetime
+				"date_created": "2026-09-13T16:00:00"          ← datetime
 
 			},
 
@@ -243,18 +237,20 @@ Note: As each goal covers a particular week of study, progress would be calculat
 			"description": null                               ← string or null
 		},
 
-		...[additional goals]
+		[...additional goals]
+
 	],
 
 	"meta": { 
 
-		"total": 10,                                              ← integer
+		"total": 10,                                          ← integer
 
-		"page": 1,                                                ← integer
+		"page": 1,                                            ← integer
 
-		"per_page": 5,                                            ← integer
+		"per_page": 5,                                        ← integer
 
-		"total_pages": 2                                          ← integer
+		"total_pages": 2                                      ← integer
+	
 	}
 }
 ```
@@ -268,9 +264,7 @@ Note: As each goal covers a particular week of study, progress would be calculat
 ```json
 {
 	"data": [                                             ← list of dictionaries
-
 		{
-
 			"course_id": 2,                                   ← integer
 
 			"goal_id": 1,                                     ← integer
@@ -285,16 +279,17 @@ Note: As each goal covers a particular week of study, progress would be calculat
 
 		[...additional progress objects]
 
-	],	
+	],
+
 	"meta": {
 
-		"total": 15,                                              ← integer
+		"total": 15,                                          ← integer
 
-		"page": 1,                                                ← integer
+		"page": 1,                                            ← integer
 
-		"per_page": 5,                                            ← integer
+		"per_page": 5,                                        ← integer 
 
-		"total_pages": 3                                          ← integer	
+		"total_pages": 3                                      ← integer	
 	}
 }
 ```
