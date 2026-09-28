@@ -33,7 +33,7 @@ Then, `api_documentation.md` describes the exploration in greater detail, includ
 
 ## Part 2 - Design
 
-For this portion of the project, `api_design.md ` presents a suggested design for a Study Tracker app. The design includes:
+For this portion of the project, `api_design.md` presents a suggested design for a Study Tracker app. The design includes:
 
 - Application Description
 - Resources
