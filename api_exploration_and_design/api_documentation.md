@@ -241,7 +241,7 @@ In this sense, it appears that this API does not actively enforce rate limits. I
 
 
 
-https://pokeapi.co/api/v2
+https://pokeapi.co/docs/v2
 
 
 
