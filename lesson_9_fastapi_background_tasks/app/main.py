@@ -1,4 +1,4 @@
-# Run with: uvicorn app.main:app --reload  (from background-tasks/ folder)
+# Run with: uvicorn app.main:app --reload
 
 from fastapi import FastAPI
 from app.routers import reports
