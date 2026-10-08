@@ -9,6 +9,7 @@ This repo contains various assignments and projects submitted as part of my stud
 - SQL (SQLite, SQLAlchemy)
 - REST API
 - Fast API (Pydantic, Uvicorn)
+- Pytest
 - HTML *(Upcoming)*
 - CSS *(Upcoming)*
 - JavaScript *(Upcoming)*
