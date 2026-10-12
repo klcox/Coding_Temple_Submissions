@@ -1,19 +1,14 @@
-from enum import Enum
+from typing import Optional, TYPE_CHECKING
 from app.database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, ForeignKey, Enum as SQLEnum
-from typing import Optional
+from app.enums import TaskPriority
 from datetime import datetime
 from sqlalchemy.sql import func
 
 
-class TaskPriority(str, Enum):
-    """Only allow these possibilities for a task's priority"""
-
-    low = "low"
-    medium = "medium"
-    high = "high"
-    urgent = "urgent"
+if TYPE_CHECKING:  # Conditional import for Pylance type-checking
+    from app.models.user import User
 
 
 class Task(Base):

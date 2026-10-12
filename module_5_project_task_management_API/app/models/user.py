@@ -1,8 +1,13 @@
+from typing import TYPE_CHECKING
 from app.database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String
 from datetime import datetime
 from sqlalchemy.sql import func
+
+
+if TYPE_CHECKING:  # Conditional import for Pylance type-checking
+    from app.models.task import Task
 
 
 class User(Base):
