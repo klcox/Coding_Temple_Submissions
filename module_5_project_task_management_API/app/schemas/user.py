@@ -19,6 +19,16 @@ class UserCreate(BaseModel):
             raise ValueError("Must be a valid email address (contains @)")
         return v
 
+    model_config = ConfigDict(
+        json_schema_extra = {
+            "example": {
+                "username": "username123",
+                "email": "email@test.com",
+                "password": "password456"
+            }
+        }
+    )
+
 
 class UserUpdate(BaseModel):
     """Schema for partially updating a user (PATCH). Includes email validation ('@' required) if email is provided"""
@@ -35,8 +45,16 @@ class UserUpdate(BaseModel):
             raise ValueError("Must be a valid email address (contains @)")
         return v
 
+    model_config = ConfigDict(
+        json_schema_extra = {
+            "example": {                
+                "email": "new_email@test.com"                
+            }
+        }
+    )
 
-class UserResponse(BaseModel):
+
+class UserResponse(BaseModel):  # Does not inherit from UserCreate so as to omit the password from the response schema
     """Schema for returning a user"""
 
     id: int    
@@ -45,7 +63,18 @@ class UserResponse(BaseModel):
     is_active: bool
     created_at: datetime
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra = {
+            "example": {                
+                "id": 1,
+                "username": "username123",
+                "email": "email@test.com", 
+                "is_active": True,
+                "created_at": "2026-10-12T10:30:00"
+            }
+        }            
+    )
 
 
 class TokenResponse(BaseModel):
@@ -53,3 +82,12 @@ class TokenResponse(BaseModel):
 
     access_token: str
     token_type: str = "bearer"
+
+    model_config = ConfigDict(
+        json_schema_extra = {
+            "example": {                
+                "access_token": "SAMPLE_TOKEN",
+                "token_type": "bearer"
+            }
+        }
+    )
