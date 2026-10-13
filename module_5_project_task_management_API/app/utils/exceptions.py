@@ -11,16 +11,17 @@ from fastapi.exceptions import RequestValidationError
 class AppException(Exception):
     """Base exception class for the application."""
 
-    def __init__(self, detail: str, status_code: int = 400):
+    def __init__(self, detail: str, status_code: int = 400, headers = None):
         self.detail = detail
         self.status_code = status_code
+        self.headers = headers
 
 class NotFoundException(AppException):
     """Raised when a requested resource is not found/does not exist."""
 
-    def __init__(self, resource: str, resource_id: int):
+    def __init__(self, resource: str, resource_identifier: str):
         super().__init__(
-            detail = f"{resource} with ID {resource_id} not found.",
+            detail = f"{resource} with {resource_identifier} not found.",
             status_code = 404            
         )
 
@@ -34,12 +35,22 @@ class DuplicateException(AppException):
         )
 
 class UnauthorizedException(AppException):
-    """Raised when authentication is required."""
+    """Raised when a token or user cannot be authenticated."""
 
-    def __init__(self, detail: str = "Authentication required."):
+    def __init__(self, detail: str):
         super().__init__(
             detail = detail,
-            status_code = 401
+            status_code = 401,
+            headers = {"WWW-Authenticate": "Bearer"}
+        )
+
+class ForbiddenException(AppException):
+    """Raised when there are insufficient permissions (i.e. a user is authenticated but does not have permission to perform the action)."""
+
+    def __init__(self, detail: str = "You do not have permission to perform this action."):
+        super().__init__(
+            detail = detail,
+            status_code = 403
         )
 
 class InternalError(AppException):
@@ -63,10 +74,12 @@ async def app_exception_handler(request: Request, exc: AppException):
     return JSONResponse(
         status_code = exc.status_code,
         content = {
-            "error_status": True,            
+            "error_status": True,
+            "error_type": type(exc).__name__,
             "detail": exc.detail,
             "status_code": exc.status_code,
-        }
+        },
+        headers = exc.headers
     )
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
