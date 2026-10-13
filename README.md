@@ -4,23 +4,25 @@ This repo contains various assignments and projects submitted as part of my stud
 
 ## Concepts/Topics
 
-- Python
-- Pandas
-- SQL (SQLite, SQLAlchemy)
-- REST API
-- Fast API (Pydantic, Uvicorn)
-- Pytest
-- HTML *(Upcoming)*
-- CSS *(Upcoming)*
-- JavaScript *(Upcoming)*
-- Streamlit *(Upcoming)*
-- RAG *(Upcoming)*
+* Python
+* Pandas
+* SQL (SQLite, SQLAlchemy)
+* REST API
+* Fast API (Pydantic, Uvicorn)
+* Pytest
+* HTML *(Upcoming)*
+* CSS *(Upcoming)*
+* JavaScript *(Upcoming)*
+* Streamlit *(Upcoming)*
+* RAG *(Upcoming)*
 
 ## Projects
 
-- Grade Tracker
-- Data Cleaning
-- Library Management System
-- API Exploration and Design
+* Grade Tracker
+* Data Cleaning
+* Library Management System
+* API Exploration and Design
+* Task Management API
 
 (all other directories pertain to assignments)
+
