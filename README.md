@@ -18,6 +18,8 @@ This repo contains various assignments and projects submitted as part of my stud
 
 ## Projects
 
+#### *(In order of completion, earliest to most recent)*
+
 * Grade Tracker
 * Data Cleaning
 * Library Management System
