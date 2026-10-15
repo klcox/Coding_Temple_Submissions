@@ -6,7 +6,7 @@ from jose import JWTError, jwt
 from fastapi import Depends, Security
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.utils.exceptions import UnauthorizedException, NotFoundException
+from app.utils.exceptions import UnauthorizedException, NotFoundException, ForbiddenException
 
 
 pwd_context = CryptContext(schemes = ["bcrypt"], deprecated="auto")
@@ -72,5 +72,8 @@ def get_current_user(
     user = db.query(User).filter(User.username == username).first()
     if user is None:  # Token is valid, but user is not in the database
         raise NotFoundException("User", f"username {username}")
+
+    if not user.is_active:
+        raise ForbiddenException("Cannot proceed. This account has been deactivated. Please contact admin or support.")
 
     return user

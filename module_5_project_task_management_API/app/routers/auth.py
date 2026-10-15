@@ -30,9 +30,12 @@ def register_user(request: Request, user: UserCreate, db: Session = Depends(get_
     """
     Creates a new user in the database. 
 
+    Rate Limit:
+    - 5 requests per minute
+
     The request body should contain:
     - **username**: (Required) The user's username (string, must be unique, must be between 2-50 characters)
-    - **email**: (Required) The user's email address (string, must be between 7-100 characters and contain '@')
+    - **email**: (Required) The user's email address (string, must be unique, must be between 7-100 characters and contain '@')
     - **password**: (Required) The user's password (string, must be between 8-200 characters)
 
     1. Verifies whether any unique identifiers (username, email) already exist in the database.
@@ -55,15 +58,15 @@ def register_user(request: Request, user: UserCreate, db: Session = Depends(get_
 
     # Check if the user already exists in the database by searching for the unique identifiers (username, email)
 
-    existing_username = db.query(User).filter(User.username == user.username).first()
+    check_existing_username = db.query(User).filter(User.username == user.username).first()
 
-    if existing_username:
+    if check_existing_username:
         raise DuplicateException("User", "username", f"{user.username}")
 
     
-    existing_email = db.query(User).filter(User.email == user.email).first()
+    check_existing_email = db.query(User).filter(User.email == user.email).first()
     
-    if existing_email:
+    if check_existing_email:
         raise DuplicateException("User", "email", f"{user.email}")
     
 
@@ -105,6 +108,9 @@ def login_and_get_token(
 ):
     """
     Validates credentials and returns a JWT if verified.
+
+    Rate Limit:
+    - 5 requests per minute
     
     The request body should contain:
     - **username**: (Required) The user's username (string, must be unique, must be between 2-50 characters)  
@@ -133,7 +139,7 @@ def login_and_get_token(
         raise UnauthorizedException("Incorrect username or password.")
 
     if not user.is_active:
-        raise ForbiddenException("Unable to log-in. Please contact the admin or support.")
+        raise ForbiddenException("Unable to log-in. This account has been deactivated. Please contact admin or support.")
 
     token = create_access_token({"sub": user.username})
     return TokenResponse(access_token=token)
