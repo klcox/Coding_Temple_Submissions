@@ -22,7 +22,8 @@ router = APIRouter(
 
 @router.post(
     "/register", 
-    response_model=UserResponse, status_code=201,
+    response_model=UserResponse, 
+    status_code=201,
     responses = {  
         201: {"description": "Created - User created successfully"},      
         409: {"description": "Conflict - Unique identifier (username or email) already exists in the database"},

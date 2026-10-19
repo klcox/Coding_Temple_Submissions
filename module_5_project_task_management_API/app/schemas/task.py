@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
-from app.enums import TaskPriority
+from app.utils.enums import TaskPriority
 from datetime import datetime
 
 
@@ -62,4 +62,57 @@ class TaskResponse(TaskCreate):
                 "updated_at": "2026-10-13T12:00:00"             
             }
         }    
+    )
+
+
+class TaskPaginationMeta(BaseModel):
+    """Schema for task pagination metadata."""
+
+    total: int    
+    num_pages: int
+    page: int
+    limit: int    
+
+    # Sample schema included as "meta" in the schema below
+
+
+class TaskPaginationResponse(BaseModel):
+    """Schema for paginated task results"""
+
+    data: list[TaskResponse]
+    meta: TaskPaginationMeta     
+
+    model_config = ConfigDict(
+        from_attributes = True,
+        json_schema_extra = {
+            "example": {                
+                "data": [
+                    {
+                        "title": "Buy Groceries",
+                        "description": "Apples, bananas, eggs, bread",
+                        "priority": "medium",
+                        "completed": False,               
+                        "id": 1,
+                        "user_id": 1,
+                        "created_at": "2026-10-13T12:00:00",
+                        "updated_at": "2026-10-13T12:00:00" 
+                    },
+                    {
+                        "title": "Finish Homework",                        
+                        "priority": "high",
+                        "completed": False,               
+                        "id": 2,
+                        "user_id": 1,
+                        "created_at": "2026-10-13T12:30:00",
+                        "updated_at": "2026-10-13T12:30:00" 
+                    }
+                ],
+                "meta": {
+                    "total": 2,
+                    "num_pages": 1,
+                    "page": 1,
+                    "limit": 10
+                }              
+            }
+        }
     )

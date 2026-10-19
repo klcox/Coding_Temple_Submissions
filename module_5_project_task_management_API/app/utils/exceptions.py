@@ -17,7 +17,7 @@ class AppException(Exception):
         self.headers = headers
 
 class BadRequestException(AppException):
-    """Raised when a request or query parameter is invalid or inconsistent, e.g. an end_date earlier than a start_date."""
+    """Raised when a request is missing required fields or when a business rule is violated, e.g. an end_date earlier than a start_date."""
 
     def __init__(self, detail: str):
         super().__init__(
