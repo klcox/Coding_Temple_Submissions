@@ -1,11 +1,12 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from app.config import settings
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
+
 
 engine = create_engine(
     settings.DATABASE_URL,
     connect_args={
-        "check_same_thread": False
+        "check_same_thread": False  # Needed for SQLite only
     }
 )
 
@@ -22,7 +23,7 @@ def get_db():
     db = SessionLocal()
 
     try:
-        yield db
+        yield db  # Provides the database session to the endpoint
 
     finally:
-        db.close()
+        db.close()  # Closes session when the request is done

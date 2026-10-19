@@ -1,7 +1,3 @@
-from app.database import engine, Base
-from app.models.task import Task  # Imported here for SQLAlchemy registration before creating the database tables
-from app.models.user import User  # Imported here for SQLAlchemy registration before creating the database tables
-
 from fastapi import FastAPI
 from app.config import settings
 from textwrap import dedent
@@ -18,14 +14,6 @@ from fastapi.exceptions import RequestValidationError
 from app.routers import auth, users, tasks
 
 
-# =======================
-# DATABASE TABLE CREATION
-# =======================
-
-
-Base.metadata.create_all(bind=engine)  # Creates database tables if they do not already exist
-
-
 # ========
 # APP INFO
 # ========
@@ -38,12 +26,12 @@ openapi_tags = [  # Assists in organizing routers in the documentation
     },
     {
         "name": "Users", 
-        "description": "User profile management"
+        "description": "User profile management and admin-only activity log access"
     },
     {
         "name": "Tasks", 
         "description": "Create and manage tasks"
-    }
+    }    
 ]
 
 app = FastAPI(  # App info; appears at the top of the documentation
@@ -52,18 +40,18 @@ app = FastAPI(  # App info; appears at the top of the documentation
         A task management API built with FastAPI.
 
         ## Features
-        - User registration and JWT authentication
+        - User registration, JWT authentication, and Admin verification
         - CORS Middleware configuration
         - Rate limiting
-        - Full CRUD for tasks, including filtering and pagination
-        - Background task processing
+        - Full CRUD for tasks, including filtering, sorting, and pagination
+        - Background task processing related to user activity logs
         - Validation and error handling
         - An AI-ready endpoint
         - Pytest testing
 
         ## Authentication
         Most endpoints require a Bearer token. In the documentation:
-        - Register at: `/auth/register'
+        - Register at: `/auth/register`
         - Next, enter your username and password at `/auth/token` **(Note the access token received in the response.)**
 
         Then, for endpoints that require authentication:
@@ -143,6 +131,7 @@ def root():
 # RUNNING THE PROGRAM
 # ===================
 
+# BEFORE RUNNING: Ensure that data is seeded via seed_data.py
 
 if __name__ == "__main__":
     import uvicorn

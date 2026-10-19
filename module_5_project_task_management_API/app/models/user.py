@@ -8,6 +8,7 @@ from sqlalchemy.sql import func
 
 if TYPE_CHECKING:  # Conditional import for Pylance type-checking
     from app.models.task import Task
+    from app.models.activity import ActivityLog
 
 
 class User(Base):
@@ -20,6 +21,8 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(String(200), nullable=False)   
     is_active: Mapped[bool] = mapped_column(nullable=False, default=True)
+    is_admin: Mapped[bool] = mapped_column(nullable=False, default=False)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
     tasks: Mapped[list["Task"]] = relationship(back_populates="user")  # Relationship to Tasks
+    activity_log: Mapped[list["ActivityLog"]] = relationship(back_populates="user")  # Relationship to ActivityLogs

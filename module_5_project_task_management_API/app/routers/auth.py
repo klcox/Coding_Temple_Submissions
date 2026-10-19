@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Request, Depends
 from app.schemas.user import UserCreate, UserResponse, TokenResponse
+from app.utils.limiter import limiter
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
 from app.utils.exceptions import DuplicateException, InternalError, UnauthorizedException, ForbiddenException
 from app.utils.security import hash_password, verify_password, create_access_token
 from fastapi.security import OAuth2PasswordRequestForm
-from app.utils.limiter import limiter
 
 
 router = APIRouter(
@@ -15,11 +15,16 @@ router = APIRouter(
 )
 
 
+# ========
+# REGISTER
+# ========
+
+
 @router.post(
         "/register", 
         response_model=UserResponse, status_code=201,
         responses = {  
-            201: {"description": "OK - User created successfully"},      
+            201: {"description": "Created - User created successfully"},      
             409: {"description": "Conflict - Unique identifier (username or email) already exists in the database"},
             422: {"description": "Validation Error - Check request body"},
             500: {"description": "Internal Error - An error occurred while attempting to add the user to the database"}
@@ -83,11 +88,16 @@ def register_user(request: Request, user: UserCreate, db: Session = Depends(get_
         db.commit()
         db.refresh(new_user)
 
-    except Exception:
+    except Exception:  # Catches unexpected errors encountered during database transaction
         db.rollback()
         raise InternalError("User account not created.")
 
     return new_user
+
+
+# ======
+# LOG-IN
+# ======
 
 
 @router.post(
@@ -97,7 +107,7 @@ def register_user(request: Request, user: UserCreate, db: Session = Depends(get_
             200: {"description": "OK - User verified successfully, token provided"},      
             401: {"description": "Unauthorized - Username and/or password is incorrect"},
             403: {"description": "Forbidden - User account is inactive"},
-            422: {"description": "Validation Error - Check request body"}            
+            422: {"description": "Validation Error - Check form data"}            
         }
 )
 @limiter.limit("5/minute")
@@ -112,7 +122,7 @@ def login_and_get_token(
     Rate Limit:
     - 5 requests per minute
     
-    The request body should contain:
+    The form data should contain:
     - **username**: (Required) The user's username (string, must be unique, must be between 2-50 characters)  
     - **password**: (Required) The user's password (string, must be between 8-200 characters)
 

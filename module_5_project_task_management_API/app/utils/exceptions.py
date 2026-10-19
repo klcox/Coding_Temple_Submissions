@@ -11,27 +11,18 @@ from fastapi.exceptions import RequestValidationError
 class AppException(Exception):
     """Base exception class for the application."""
 
-    def __init__(self, detail: str, status_code: int = 400, headers = None):
+    def __init__(self, detail: str, status_code: int, headers = None):
         self.detail = detail
         self.status_code = status_code
         self.headers = headers
 
-class NotFoundException(AppException):
-    """Raised when a requested resource is not found/does not exist."""
+class BadRequestException(AppException):
+    """Raised when a request or query parameter is invalid or inconsistent, e.g. an end_date earlier than a start_date."""
 
-    def __init__(self, resource: str, resource_identifier: str):
+    def __init__(self, detail: str):
         super().__init__(
-            detail = f"{resource} with {resource_identifier} not found.",
-            status_code = 404            
-        )
-
-class DuplicateException(AppException):
-    """Raised when creating a resource would violate a uniqueness constraint."""
-
-    def __init__(self, resource: str, field: str, value: str):
-        super().__init__(
-            detail = f"{resource} with {field} '{value}' already exists.", 
-            status_code = 409
+            detail = detail,
+            status_code = 400            
         )
 
 class UnauthorizedException(AppException):
@@ -51,6 +42,24 @@ class ForbiddenException(AppException):
         super().__init__(
             detail = detail,
             status_code = 403
+        )
+
+class NotFoundException(AppException):
+    """Raised when a requested resource is not found/does not exist."""
+
+    def __init__(self, resource: str, resource_identifier: str):
+        super().__init__(
+            detail = f"{resource} with {resource_identifier} not found.",
+            status_code = 404            
+        )
+
+class DuplicateException(AppException):
+    """Raised when creating a resource would violate a uniqueness constraint."""
+
+    def __init__(self, resource: str, field: str, value: str):
+        super().__init__(
+            detail = f"{resource} with {field} '{value}' already exists.", 
+            status_code = 409
         )
 
 class InternalError(AppException):

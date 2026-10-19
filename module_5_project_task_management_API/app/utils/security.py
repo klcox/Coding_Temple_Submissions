@@ -2,11 +2,12 @@ from passlib.context import CryptContext
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from datetime import datetime, timezone, timedelta
 from app.config import settings 
-from jose import JWTError, jwt
-from fastapi import Depends, Security
+from jose import jwt, JWTError
+from fastapi import Security, Depends
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.utils.exceptions import UnauthorizedException, NotFoundException, ForbiddenException
+from app.utils.exceptions import UnauthorizedException, ForbiddenException
+from app.models.user import User
 
 
 pwd_context = CryptContext(schemes = ["bcrypt"], deprecated="auto")
@@ -31,7 +32,7 @@ def create_access_token(data: dict):
 
     to_encode = data.copy()
 
-    expire = datetime.now(timezone.utc) + timedelta(minutes = settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(minutes = settings.ACCESS_TOKEN_EXPIRE_MINUTES)  # Sets expiration date/time
 
     to_encode.update({"exp": expire})
 
@@ -65,15 +66,22 @@ def get_current_user(
 
     username = payload.get("sub")
     if username is None:  # Token is valid but has no associated username
-        raise UnauthorizedException("Invalid token")
-
-    from app.models.user import User  # Importing here avoids circular imports
+        raise UnauthorizedException("Invalid token")   
 
     user = db.query(User).filter(User.username == username).first()
     if user is None:  # Token is valid, but user is not in the database
-        raise NotFoundException("User", f"username {username}")
+        raise UnauthorizedException("Invalid token. User not found.")
 
-    if not user.is_active:
+    if not user.is_active:  # Token is valid, but user is deactivated
         raise ForbiddenException("Cannot proceed. This account has been deactivated. Please contact admin or support.")
+
+    return user
+
+
+def verify_admin_status(user: User = Depends(get_current_user)):   
+    """After a user is authenticated, verifies admin status. If verified, returns the authenticated user.""" 
+
+    if not user.is_admin:
+        raise ForbiddenException()  # Uses default error message outlined in the exception
 
     return user

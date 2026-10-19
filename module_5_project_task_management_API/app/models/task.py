@@ -1,7 +1,7 @@
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from app.database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, ForeignKey, Enum as SQLEnum
+from sqlalchemy import String, Enum as SQLEnum, ForeignKey
 from app.enums import TaskPriority
 from datetime import datetime
 from sqlalchemy.sql import func
@@ -9,6 +9,7 @@ from sqlalchemy.sql import func
 
 if TYPE_CHECKING:  # Conditional import for Pylance type-checking
     from app.models.user import User
+    from app.models.activity import ActivityLog
 
 
 class Task(Base):
@@ -25,4 +26,6 @@ class Task(Base):
     updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())  # server_default sets the timestamp when the table row is created; onupdate updates the timestamp when the row is updated
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))  # Relationship to Users
-    user: Mapped["User"] = relationship(back_populates="tasks")    
+    user: Mapped["User"] = relationship(back_populates="tasks")  
+    
+    activity_log: Mapped[list["ActivityLog"]] = relationship(back_populates="task")  # Relationship to ActivityLogs
