@@ -5,10 +5,10 @@ from datetime import datetime
 
 
 class TaskCreate(BaseModel):
-    """Schema for creating a new task"""
+    """Schema for creating a new task."""
     
     title: str = Field(min_length=1, max_length=200)
-    description: Optional[str] = Field(default=None, max_length=2000)
+    description: Optional[str] = Field(default=None, min_length=1, max_length=2000)
     priority: TaskPriority = Field(default=TaskPriority.medium)    
 
     model_config = ConfigDict(
@@ -23,10 +23,10 @@ class TaskCreate(BaseModel):
     
     
 class TaskUpdate(BaseModel):
-    """Schema for partially updating a task (PATCH)"""
+    """Schema for partially updating a task (PATCH)."""
 
     title: Optional[str] = Field(default=None, min_length=1, max_length=200)
-    description: Optional[str] = Field(default=None, max_length=2000)
+    description: Optional[str] = Field(default=None, min_length=1, max_length=2000)
     priority: Optional[TaskPriority] = None
     completed: Optional[bool] = None
 
@@ -40,7 +40,7 @@ class TaskUpdate(BaseModel):
 
 
 class TaskResponse(TaskCreate):
-    """Schema for returning a task"""
+    """Schema for returning a task."""
 
     completed: bool
     id: int

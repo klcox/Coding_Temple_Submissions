@@ -21,14 +21,14 @@ router = APIRouter(
 
 
 @router.post(
-        "/register", 
-        response_model=UserResponse, status_code=201,
-        responses = {  
-            201: {"description": "Created - User created successfully"},      
-            409: {"description": "Conflict - Unique identifier (username or email) already exists in the database"},
-            422: {"description": "Validation Error - Check request body"},
-            500: {"description": "Internal Error - An error occurred while attempting to add the user to the database"}
-        }
+    "/register", 
+    response_model=UserResponse, status_code=201,
+    responses = {  
+        201: {"description": "Created - User created successfully"},      
+        409: {"description": "Conflict - Unique identifier (username or email) already exists in the database"},
+        422: {"description": "Validation Error - Check request body"},
+        500: {"description": "Internal Error - An error occurred while attempting to add the user to the database"}
+    }
 )
 @limiter.limit("5/minute")
 def register_user(request: Request, user: UserCreate, db: Session = Depends(get_db)):
@@ -101,14 +101,14 @@ def register_user(request: Request, user: UserCreate, db: Session = Depends(get_
 
 
 @router.post(
-        "/login", 
-        response_model=TokenResponse,
-        responses = {  
-            200: {"description": "OK - User verified successfully, token provided"},      
-            401: {"description": "Unauthorized - Username and/or password is incorrect"},
-            403: {"description": "Forbidden - User account is inactive"},
-            422: {"description": "Validation Error - Check form data"}            
-        }
+    "/login", 
+    response_model=TokenResponse,
+    responses = {  
+        200: {"description": "OK - User verified successfully, token provided"},      
+        401: {"description": "Unauthorized - Username and/or password is incorrect"},
+        403: {"description": "Forbidden - User account is inactive"},
+        422: {"description": "Validation Error - Check form data"}            
+    }
 )
 @limiter.limit("5/minute")
 def login_and_get_token(
@@ -139,7 +139,7 @@ def login_and_get_token(
     
     Possible Errors:
     - 401 - Unauthorized (the username and/or password could not be verified)
-    - 403 - Forbidden (the user account is inactive)
+    - 403 - Forbidden (the user account is deactivated)
     - 422 - Validation Error (one or more of the validation requirements has been violated)  
     """
 

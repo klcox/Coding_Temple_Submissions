@@ -52,7 +52,7 @@ app = FastAPI(  # App info; appears at the top of the documentation
         ## Authentication
         Most endpoints require a Bearer token. In the documentation:
         - Register at: `/auth/register`
-        - Next, enter your username and password at `/auth/token` **(Note the access token received in the response.)**
+        - Next, enter your username and password at `/auth/login` **(Note the access token received in the response.)**
 
         Then, for endpoints that require authentication:
         - Click the lock icon at the far-right of the endpoint

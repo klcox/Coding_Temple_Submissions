@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class UserCreate(BaseModel):
-    """Schema for creating a user. Includes email validation ('@' required)"""
+    """Schema for creating a user. Includes email validation ('@' required)."""
     
     username: str = Field(min_length=2, max_length=50)
     email: str = Field(min_length=7, max_length=100)
@@ -31,7 +31,7 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    """Schema for partially updating a user (PATCH). Includes email validation ('@' required) if email is provided"""
+    """Schema for partially updating a user (PATCH). Includes email validation ('@' required) if email is provided."""
 
     email: Optional[str] = Field(default=None, min_length=7, max_length=100)
     password: Optional[str] = Field(default=None, min_length=8, max_length=200)
@@ -55,7 +55,7 @@ class UserUpdate(BaseModel):
 
 
 class UserResponse(BaseModel):  # Does not inherit from UserCreate so as to omit the password and admin status from the response schema
-    """Schema for returning a user"""
+    """Schema for returning a user."""
 
     id: int    
     username: str
@@ -78,7 +78,7 @@ class UserResponse(BaseModel):  # Does not inherit from UserCreate so as to omit
 
 
 class TokenResponse(BaseModel):
-    """Schema for providing a JWT"""
+    """Schema for providing a JWT."""
 
     access_token: str
     token_type: str = "bearer"
