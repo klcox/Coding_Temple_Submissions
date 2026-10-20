@@ -77,7 +77,7 @@ class TaskPaginationMeta(BaseModel):
 
 
 class TaskPaginationResponse(BaseModel):
-    """Schema for paginated task results"""
+    """Schema for paginated task results."""
 
     data: list[TaskResponse]
     meta: TaskPaginationMeta     

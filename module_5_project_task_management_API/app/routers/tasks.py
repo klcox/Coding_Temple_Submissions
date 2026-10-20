@@ -11,6 +11,7 @@ from app.utils.security import get_current_user
 from typing import Optional
 from app.utils.enums import TaskPriority, TaskSort, TaskSortOrder
 import math
+from sqlalchemy import case
 
 
 router = APIRouter(
@@ -32,7 +33,7 @@ def create_activity_log(user_id, task_id, task_title, action, changes = None):
         task_id = task_id,
         task_title = task_title,
         action = action,
-        changes = changes if changes else None
+        changes = changes
     )
 
     db = SessionLocal()
@@ -41,15 +42,15 @@ def create_activity_log(user_id, task_id, task_title, action, changes = None):
         db.add(new_log)
         db.commit()          
 
-    except Exception as err_msg:  
+    except Exception:  # Background task exception may be logged by the server but will not change the primary response already returned to the client
         db.rollback()
-        raise InternalError(f"Task was not logged. Error: {err_msg}")
+        raise InternalError("Task was not logged.")
 
     finally: 
         db.close()
 
 
-def get_task_or_4XX(task_id: int, db: Session, current_user: User):
+def get_task_or_raise(task_id: int, db: Session, current_user: User):
     """Helper function - attempts to locate a specific task in the database. Returns the task if successful; otherwise, raises an error."""
 
     task = db.query(Task).filter(Task.id == task_id).first()
@@ -97,7 +98,7 @@ def create_task(
     The request body should contain:
     - **title**: (Required) The task title (string, must be between 1-200 characters)
     - **description**: (Optional) The task description (string, must be between 1-2000 characters; default is None)
-    - **priority**: (Optional) The task priority level (one of "low", "medium", "high", "urgent"; default is"medium")
+    - **priority**: (Optional) The task priority level (one of "low", "medium", "high", "urgent"; default is "medium")
 
     1. Utilizes the imported get_current_user function to validate the provided token and return the current user.
     2. If the token cannot be validated or has expired, raises a 401 error.
@@ -237,14 +238,22 @@ def get_all_tasks(
         raise BadRequestException(f"Page must be between 1 and {num_pages}")
     
 
-    # Sorting
+    # Sorting    
 
-    sort_column = getattr(Task, sort_by.value)
+    if sort_by == TaskSort.priority:
+        sort_column = case(
+            (Task.priority == TaskPriority.urgent, 4),
+            (Task.priority == TaskPriority.high, 3),
+            (Task.priority == TaskPriority.medium, 2),
+            (Task.priority == TaskPriority.low, 1),
+        )
 
-    if sort_order == TaskSortOrder.asc:
-        query = query.order_by(sort_column.asc(), Task.id.desc())  # Secondary ordering by task ID in the event of a duplicate sort_by value
     else:
-        query = query.order_by(sort_column.desc(), Task.id.desc())
+        sort_column = getattr(Task, sort_by.value)  
+    
+    sort_expression = (sort_column.asc() if sort_order == TaskSortOrder.asc else sort_column.desc())
+
+    query = query.order_by(sort_expression, Task.id.desc())  # Secondary ordering by task ID in the event of a duplicate sort_by value
 
 
     # Pagination
@@ -276,8 +285,8 @@ def get_all_tasks(
     responses = {
         200: {"description": "OK - Successfully returned task"},
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_4XX
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_4XX
+        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_raise
+        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_raise
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"}
     }
 )
@@ -313,7 +322,7 @@ def get_task_by_id(
     - 422 - Validation Error (the task ID is not an integer greater than 0)   
     """  
         
-    return get_task_or_4XX(task_id, db, current_user)
+    return get_task_or_raise(task_id, db, current_user)
     
 
 # ===========
@@ -328,8 +337,8 @@ def get_task_by_id(
         200: {"description": "OK - Successfully updated the task"},
         400: {"description": "Bad Request - Request is empty"},
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_4XX
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_4XX
+        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_raise
+        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_raise
         422: {"description": "Validation Error - Check request body and/or Task ID is not an integer greater than 0"},
         500: {"description": "Internal Error - An error occurred while attempting to update the database"}
     }
@@ -351,7 +360,7 @@ def update_task(
     
     The request body should contain:
     - **title**: (Optional) The task's new title (string, must be between 1-200 characters)
-    - **description**: (Optional) The task's new description (string, must be between 1-2000 characters)
+    - **description**: (Optional) The task's new description (string, must be between 1-2000 characters; can be set to null to clear the description)
     - **priority**: (Optional) The task's new priority level (one of "low", "medium", "high", "urgent")
     - **completed**: (Optional) The task's new completion status (boolean)
 
@@ -383,7 +392,7 @@ def update_task(
     - 500 - Internal Error (an error occurred while attempting to update the task in the database)
     """    
 
-    task = get_task_or_4XX(task_id, db, current_user)
+    task = get_task_or_raise(task_id, db, current_user)
     
     update_data = {
         k: v
@@ -421,8 +430,8 @@ def update_task(
     responses = {
         200: {"description": "OK - Successfully deleted the task"},       
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_4XX
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_4XX
+        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_raise
+        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_raise
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"},
         500: {"description": "Internal Error - An error occurred while attempting to delete the task from the database"}
     }
@@ -466,7 +475,7 @@ def delete_task(
     - 500 - Internal Error (an error occurred while attempting to delete the task from the database)
     """
 
-    task = get_task_or_4XX(task_id, db, current_user)
+    task = get_task_or_raise(task_id, db, current_user)
     task_title = task.title
 
     try:       
@@ -493,8 +502,8 @@ def delete_task(
     responses = {
         200: {"description": "OK - Successfully returned the sample AI suggestion"},       
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_4XX
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_4XX
+        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_raise
+        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_raise
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"}        
     }
 )
@@ -530,7 +539,7 @@ def suggest_task_action(
     - 422 - Validation Error (the task ID is not an integer greater than 0)    
     """
 
-    task = get_task_or_4XX(task_id, db, current_user)
+    task = get_task_or_raise(task_id, db, current_user)
     
     return {
         "task_id": task.id,

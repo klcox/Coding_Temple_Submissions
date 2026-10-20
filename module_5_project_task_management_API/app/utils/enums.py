@@ -4,10 +4,10 @@ from enum import Enum
 class TaskPriority(str, Enum):
     """Only allow these possibilities for a task's priority"""
 
-    low = "low"
-    medium = "medium"
-    high = "high"
     urgent = "urgent"
+    high = "high"
+    medium = "medium"
+    low = "low"
 
 
 class TaskSort(str, Enum):

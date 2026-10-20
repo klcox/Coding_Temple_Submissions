@@ -1,17 +1,21 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict
 from app.utils.enums import ActivityLogAction
 from typing import Optional
 from datetime import datetime
 
 
 class ActivityLogCreate(BaseModel):
-    """Schema for creating a user's activity log entry."""
+    """
+    Schema for creating an activity log entry. 
+
+    Field constraints are not needed on most values as they are provided manually at the time of creation using existing database data. 
+    """
 
     user_id: int
     task_id: int | None
     task_title: str
     action: ActivityLogAction
-    changes: Optional[str] = None
+    changes: Optional[str] = Field(default=None, max_length=200)
 
     model_config = ConfigDict(
         from_attributes = True,
@@ -28,7 +32,7 @@ class ActivityLogCreate(BaseModel):
 
 
 class ActivityLogResponse(ActivityLogCreate):
-    """Schema for returning a user's activity log entry."""
+    """Schema for returning an activity log entry."""
 
     id: int    
     timestamp: datetime      
@@ -61,7 +65,7 @@ class ActivityLogPaginationMeta(BaseModel):
 
 
 class ActivityLogPaginationResponse(BaseModel):
-    """Schema for paginated activity log results"""
+    """Schema for paginated activity log results."""
 
     data: list[ActivityLogResponse]
     meta: ActivityLogPaginationMeta     

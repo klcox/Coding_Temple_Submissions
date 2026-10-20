@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Optional
 from app.database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Enum as SQLEnum, ForeignKey
-from app.enums import TaskPriority
+from app.utils.enums import TaskPriority
 from datetime import datetime
 from sqlalchemy.sql import func
 
