@@ -1,9 +1,8 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from app.database import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.utils.enums import ActivityLogAction
 from sqlalchemy import Enum as SQLEnum, String, ForeignKey
-from typing import Optional
 from datetime import datetime
 from sqlalchemy.sql import func
 
@@ -19,7 +18,7 @@ class ActivityLog(Base):
     __tablename__ = "activity_log"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    task_title: Mapped[str] = mapped_column(nullable=False)  # Included in the event that a task is deleted and no longer accessible via ID
+    task_title: Mapped[str] = mapped_column(String(200), nullable=False)  # Included in the event that a task is deleted and no longer accessible via ID
     action: Mapped[ActivityLogAction] = mapped_column(SQLEnum(ActivityLogAction), nullable=False)
     changes: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)  # Only applies to updates
     timestamp: Mapped[datetime] = mapped_column(server_default=func.now())    
@@ -32,5 +31,4 @@ class ActivityLog(Base):
 
     # Relationship to Tasks
     task_id: Mapped[int | None] = mapped_column(ForeignKey("tasks.id"), nullable=True)  # Can be nullable in the event that a task is deleted
-    task: Mapped["Task"] = relationship(back_populates="activity_log") 
-
+    task: Mapped["Task"] = relationship(back_populates="activity_log")

@@ -124,6 +124,8 @@ app.include_router(tasks.router)
 
 @app.get("/")
 def root():
+    """Root path - returns the API name and documentation URL."""
+    
     return {"app": app.title, "docs": "/docs"}
 
 

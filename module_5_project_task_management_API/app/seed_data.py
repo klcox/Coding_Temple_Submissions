@@ -23,18 +23,17 @@ def seed():
 
     session = SessionLocal()
 
-
-    # Check if the admin exists
-
-    existing_admin = (session.query(User).filter_by(username = "admin_one").first())
-
-    if existing_admin:
-        return {"message": "Seeding not needed. Admin already exists in the database."}
-
-
-    # If the admin does not already exist, proceed to add the user to the database
-
     try:
+        # Check if the admin exists
+
+        existing_admin = (session.query(User).filter_by(username = "admin_one").first())
+        
+        if existing_admin:
+            return {"message": "Seeding not needed. Admin already exists in the database."}
+        
+
+        # If the admin does not already exist, proceed to add the user to the database
+
         session.add(sample_admin)
         session.commit()
 
