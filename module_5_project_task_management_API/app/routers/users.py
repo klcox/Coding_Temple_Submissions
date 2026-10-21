@@ -286,10 +286,12 @@ def get_activity_logs(
         if user is None:     
             raise NotFoundException("User", f"ID {user_id}")  
 
-        query = query.filter(ActivityLog.user_id == user_id)      
+        query = query.filter(ActivityLog.user_id == user_id) 
+
 
     if action is not None:
         query = query.filter(ActivityLog.action == action) 
+
 
     if end_date < start_date:  # If end_date occurs before start_date
         raise BadRequestException("End date must occur on or after start date.")
@@ -301,6 +303,7 @@ def get_activity_logs(
         raise BadRequestException("End date must occur on or before 2100-01-01.")
 
     query = query.filter(ActivityLog.timestamp >= start_date, ActivityLog.timestamp <= end_date)
+
 
     if search is not None:
         query = query.filter(ActivityLog.task_title.ilike(f"%{search}%"))    
@@ -324,7 +327,7 @@ def get_activity_logs(
     num_pages = math.ceil(total_logs / limit)  # If the division results exceed a whole number (e.g. 3.1), round up to the next whole number (e.g. 3.1 becomes 4)
 
     if page > num_pages and total_logs > 0:  # If there are log results but the requested page exceeds the available pages to display
-        raise BadRequestException(f"Page must be between 1 and {num_pages}")
+        raise BadRequestException(f"Page must be between 1 and {num_pages}.")
     
 
     # Ordering

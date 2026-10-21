@@ -25,7 +25,7 @@ router = APIRouter(
 # ================
 
 
-def create_activity_log(user_id, task_id, task_title, action, changes = None):  
+def create_activity_log(user_id: int, task_id: int, task_title: str, action: str, changes: str = None):  
     """Background task - creates in the database an activity log associated with the logged-in user and a specific task."""     
     
     new_log = ActivityLog(
@@ -161,9 +161,9 @@ def get_all_tasks(
     sort_by: TaskSort = TaskSort.priority,
     sort_order: TaskSortOrder = TaskSortOrder.desc,
     page: int = Query(default=1, ge=1, description="On which page to begin for pagination results"),
-    limit: int = Query(default=10, ge=1, le=20, description="Max number of results per page"), 
-    db: Session = Depends(get_db), 
-    current_user: User = Depends(get_current_user)
+    limit: int = Query(default=10, ge=1, le=20, description="Max number of results per page"),     
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
     """
     Returns tasks for the logged-in user.
@@ -177,7 +177,7 @@ def get_all_tasks(
     - search: (task title content) must be between 1 and 200 characters; default is None
 
     Includes options for sorting:
-    - sort_by: one of "created_at", title = "title", "description", "completed", "priority"; default is "priority"
+    - sort_by: one of "created_at", "title", "completed", "priority"; default is "priority"
     - sort_order: one of "asc" (for ascending) or "desc" (for descending); default is "desc"
 
     Includes options for pagination:
@@ -235,7 +235,7 @@ def get_all_tasks(
     num_pages = math.ceil(total_tasks / limit)  # If the division results exceed a whole number (e.g. 3.1), round up to the next whole number (e.g. 3.1 becomes 4)
 
     if page > num_pages and total_tasks > 0:  # If there are task results but the requested page exceeds the available pages to display
-        raise BadRequestException(f"Page must be between 1 and {num_pages}")
+        raise BadRequestException(f"Page must be between 1 and {num_pages}.")
     
 
     # Sorting    
@@ -348,9 +348,9 @@ def update_task(
     request: Request, 
     background_tasks: BackgroundTasks,
     task_data: TaskUpdate,    
-    task_id: int = Path(gt=0, description="ID must be greater than 0"),    
-    db: Session = Depends(get_db), 
-    current_user: User = Depends(get_current_user)
+    task_id: int = Path(gt=0, description="ID must be greater than 0"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
     """
     Updates a specific task.  
@@ -479,7 +479,7 @@ def delete_task(
     task_title = task.title
 
     try:       
-        db.query(ActivityLog).filter(ActivityLog.task_id == task.id).update({ActivityLog.task_id: None})  # For data integrity, sets the task ID on associated ActivityLog  entries to None (NULL) before deleting
+        db.query(ActivityLog).filter(ActivityLog.task_id == task.id).update({ActivityLog.task_id: None})  # For data integrity, sets the task ID on associated ActivityLog  entries to None (NULL) before deleting the task
         
         db.delete(task)
         db.commit()        

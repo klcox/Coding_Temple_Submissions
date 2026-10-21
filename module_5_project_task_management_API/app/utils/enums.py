@@ -14,8 +14,7 @@ class TaskSort(str, Enum):
     """Options for sorting tasks."""
 
     created_at = "created_at"
-    title = "title"
-    description = "description"
+    title = "title"    
     completed = "completed"
     priority = "priority"
 
