@@ -53,7 +53,7 @@ def create_activity_log(user_id: int, task_id: int, task_title: str, action: str
 def get_task_or_raise(task_id: int, db: Session, current_user: User):
     """Helper function - attempts to locate a specific task in the database. Returns the task if successful; otherwise, raises an error."""
 
-    task = db.query(Task).filter(Task.id == task_id).first()
+    task = db.get(Task, task_id)
         
     if not task:
         raise NotFoundException("Task", f"ID {task_id}")

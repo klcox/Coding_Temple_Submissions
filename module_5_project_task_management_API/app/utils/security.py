@@ -52,7 +52,7 @@ def decode_access_token(token: str):
 
 
 def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Security(http_bearer),
+    credentials: HTTPAuthorizationCredentials = Security(http_bearer),  # HTTPBearer handles missing token scenario
     db: Session = Depends(get_db)
 ):
     """Extracts and validates a JWT. Returns the authenticated user if successful."""
