@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Request, Depends, Query, Path, BackgroundTasks
+import logging
 from app.models.activity import ActivityLog
-from app.database import get_db, SessionLocal
-from app.utils.exceptions import InternalError, NotFoundException, ForbiddenException, BadRequestException
+from app.database import SessionLocal, get_db
+from sqlalchemy.exc import SQLAlchemyError
+from app.utils.exceptions import InternalError, NotFoundException, BadRequestException
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.models.task import Task
@@ -20,12 +22,15 @@ router = APIRouter(
 )
 
 
+logger = logging.getLogger(__name__)  # Creates a logger for this module
+
+
 # ================
 # HELPER FUNCTIONS
 # ================
 
 
-def create_activity_log(user_id: int, task_id: int, task_title: str, action: str, changes: str = None):  
+def create_activity_log(user_id: int, task_id: int | None, task_title: str, action: str, changes: str | None = None):  
     """Background task - creates in the database an activity log associated with the logged-in user and a specific task."""     
     
     new_log = ActivityLog(
@@ -42,24 +47,28 @@ def create_activity_log(user_id: int, task_id: int, task_title: str, action: str
         db.add(new_log)
         db.commit()          
 
-    except Exception:  # Background task exception may be logged by the server but will not change the primary response already returned to the client
+    except SQLAlchemyError:
         db.rollback()
-        raise InternalError("Task was not logged.")
+        logger.exception(  # Records the original traceback
+            "Activity log failed: "
+            "user_id=%s task_id=%s action=%s",
+            user_id,
+            task_id,
+            action
+        )
+        raise
 
     finally: 
         db.close()
 
 
-def get_task_or_raise(task_id: int, db: Session, current_user: User):
+def get_task_or_404(task_id: int, db: Session, current_user: User):
     """Helper function - attempts to locate a specific task in the database. Returns the task if successful; otherwise, raises an error."""
 
     task = db.get(Task, task_id)
         
-    if not task:
+    if not task or task.user_id != current_user.id:
         raise NotFoundException("Task", f"ID {task_id}")
-
-    if task.user_id != current_user.id:
-        raise ForbiddenException("You do not have permission to access this task.")
 
     return task
 
@@ -128,8 +137,9 @@ def create_task(
         db.commit()
         db.refresh(new_task)   
 
-    except Exception:  
+    except SQLAlchemyError:
         db.rollback()
+        logger.exception("Failed to create task for user_id=%s", current_user.id)
         raise InternalError("New task was not created.")
     
     background_tasks.add_task(create_activity_log, current_user.id, new_task.id, new_task.title, action="created")
@@ -285,8 +295,8 @@ def get_all_tasks(
     responses = {
         200: {"description": "OK - Successfully returned task"},
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_raise
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_raise
+        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_404
+        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"}
     }
 )
@@ -322,7 +332,7 @@ def get_task_by_id(
     - 422 - Validation Error (the task ID is not an integer greater than 0)   
     """  
         
-    return get_task_or_raise(task_id, db, current_user)
+    return get_task_or_404(task_id, db, current_user)
     
 
 # ===========
@@ -337,8 +347,8 @@ def get_task_by_id(
         200: {"description": "OK - Successfully updated the task"},
         400: {"description": "Bad Request - Request is empty"},
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_raise
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_raise
+        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_404
+        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Check request body and/or Task ID is not an integer greater than 0"},
         500: {"description": "Internal Error - An error occurred while attempting to update the database"}
     }
@@ -392,7 +402,7 @@ def update_task(
     - 500 - Internal Error (an error occurred while attempting to update the task in the database)
     """    
 
-    task = get_task_or_raise(task_id, db, current_user)
+    task = get_task_or_404(task_id, db, current_user)
     
     update_data = {
         k: v
@@ -410,8 +420,13 @@ def update_task(
         db.commit()
         db.refresh(task)
     
-    except Exception:
+    except SQLAlchemyError:
         db.rollback()
+        logger.exception(
+            "Failed to update task_id=%s for user_id=%s", 
+            task_id,
+            current_user.id
+        )            
         raise InternalError(f"Task {task_id} was not updated.")
 
     changes = ", ".join(update_data.keys())    
@@ -430,8 +445,8 @@ def update_task(
     responses = {
         200: {"description": "OK - Successfully deleted the task"},       
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_raise
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_raise
+        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_404
+        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"},
         500: {"description": "Internal Error - An error occurred while attempting to delete the task from the database"}
     }
@@ -475,7 +490,7 @@ def delete_task(
     - 500 - Internal Error (an error occurred while attempting to delete the task from the database)
     """
 
-    task = get_task_or_raise(task_id, db, current_user)
+    task = get_task_or_404(task_id, db, current_user)
     task_title = task.title
 
     try:       
@@ -484,8 +499,13 @@ def delete_task(
         db.delete(task)
         db.commit()        
     
-    except Exception:
+    except SQLAlchemyError:
         db.rollback()
+        logger.exception(
+            "Failed to delete task_id=%s for user_id=%s", 
+            task_id,
+            current_user.id
+        )
         raise InternalError(f"Task {task_id} was not deleted.")
 
     background_tasks.add_task(create_activity_log, current_user.id, None, task_title, action="deleted")
@@ -497,13 +517,13 @@ def delete_task(
 # =================
 
 
-@router.post(
+@router.get(
     "/{task_id}/suggest",
     responses = {
         200: {"description": "OK - Successfully returned the sample AI suggestion"},       
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_raise
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_raise
+        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_404
+        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"}        
     }
 )
@@ -539,7 +559,7 @@ def suggest_task_action(
     - 422 - Validation Error (the task ID is not an integer greater than 0)    
     """
 
-    task = get_task_or_raise(task_id, db, current_user)
+    task = get_task_or_404(task_id, db, current_user)
     
     return {
         "task_id": task.id,

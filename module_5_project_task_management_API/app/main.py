@@ -8,7 +8,7 @@ from app.utils.limiter import limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi import _rate_limit_exceeded_handler
 
-from app.utils.exceptions import AppException, app_exception_handler, validation_exception_handler
+from app.utils.exceptions import AppException, app_exception_handler, general_exception_handler, validation_exception_handler
 from fastapi.exceptions import RequestValidationError
 
 from app.routers import auth, users, tasks
@@ -104,6 +104,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 app.add_exception_handler(AppException, app_exception_handler)
+app.add_exception_handler(Exception, general_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 
 

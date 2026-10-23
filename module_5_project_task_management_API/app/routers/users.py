@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Depends, Query
+import logging
 from app.schemas.user import UserUpdate, UserResponse
 from app.utils.limiter import limiter
 from app.models.user import User
@@ -7,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from sqlalchemy.exc import IntegrityError
 from app.utils.exceptions import DuplicateException, InternalError, NotFoundException, BadRequestException
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.schemas.activity import ActivityLogPaginationResponse
 from app.models.activity import ActivityLog
@@ -20,6 +22,9 @@ router = APIRouter(
     prefix = "/users",
     tags = ["Users"]
 )
+
+
+logger = logging.getLogger(__name__)  # Creates a logger for this module
 
 
 # ===========
@@ -144,8 +149,9 @@ def update_profile(
         db.rollback()
         raise DuplicateException("User", "email", f"{user_data.email}")
     
-    except Exception:
+    except SQLAlchemyError:
         db.rollback()
+        logger.exception("Failed to update user profile for user_id=%s", current_user.id)
         raise InternalError(f"Account for User {current_user.id} was not updated.")
 
     return current_user
@@ -200,11 +206,12 @@ def deactivate_account(
         current_user.is_active = False
         db.commit()        
     
-    except Exception:
+    except SQLAlchemyError:
         db.rollback()
+        logger.exception("Failed to deactivate user profile for user_id=%s", current_user.id)
         raise InternalError(f"Account for User {current_user.id} was not deactivated.")
 
-    return {"message": f"Account for User {current_user.id} deactivated successfully."}
+    return {"message": "Account deactivated successfully."}
 
 
 # =================

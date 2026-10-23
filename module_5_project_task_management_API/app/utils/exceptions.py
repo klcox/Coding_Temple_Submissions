@@ -1,6 +1,10 @@
 from fastapi import Request
 from fastapi.responses import JSONResponse
+import logging
 from fastapi.exceptions import RequestValidationError
+
+
+logger = logging.getLogger(__name__)
 
 
 # ==========
@@ -78,7 +82,7 @@ class InternalError(AppException):
 
 
 async def app_exception_handler(request: Request, exc: AppException):
-    """Convert all AppException classes to JSON responses."""
+    """Convert all AppException subclasses to JSON responses."""
 
     return JSONResponse(
         status_code = exc.status_code,
@@ -90,6 +94,28 @@ async def app_exception_handler(request: Request, exc: AppException):
         },
         headers = exc.headers
     )
+
+
+async def general_exception_handler(request: Request, exc: Exception):
+    """Log unexpected exceptions and return a generic 500 response."""
+
+    logger.error(
+        "Unhandled exception during %s %s",
+        request.method,
+        request.url.path,
+        exc_info=(type(exc), exc, exc.__traceback__)
+    )
+    
+
+    return JSONResponse(
+        status_code = 500,
+        content = {
+            "error_status": True,
+            "detail": "An unexpected internal server error occurred.",
+            "status_code": 500
+        }
+    )
+
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """Simplify Pydantic validation error formatting."""

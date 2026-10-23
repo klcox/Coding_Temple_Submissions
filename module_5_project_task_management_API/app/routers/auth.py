@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Depends
+import logging
 from app.schemas.user import UserCreate, UserResponse, TokenResponse
 from app.utils.limiter import limiter
 from sqlalchemy.orm import Session
@@ -6,6 +7,7 @@ from app.database import get_db
 from app.models.user import User
 from app.utils.exceptions import DuplicateException, InternalError, UnauthorizedException, ForbiddenException
 from app.utils.security import hash_password, verify_password, create_access_token
+from sqlalchemy.exc import SQLAlchemyError
 from fastapi.security import OAuth2PasswordRequestForm
 
 
@@ -13,6 +15,9 @@ router = APIRouter(
     prefix = "/auth",
     tags = ["Authentication"]
 )
+
+
+logger = logging.getLogger(__name__)  # Creates a logger for this module
 
 
 # ========
@@ -89,8 +94,9 @@ def register_user(request: Request, user: UserCreate, db: Session = Depends(get_
         db.commit()
         db.refresh(new_user)
 
-    except Exception:  # Catches unexpected errors encountered during database transaction
+    except SQLAlchemyError:
         db.rollback()
+        logger.exception("Failed to register new user, username=%s", user.username)
         raise InternalError("User account not created.")
 
     return new_user
@@ -150,7 +156,7 @@ def login_and_get_token(
         raise UnauthorizedException("Incorrect username or password.")
 
     if not user.is_active:
-        raise ForbiddenException("Unable to log-in. This account has been deactivated. Please contact admin or support.")
+        raise ForbiddenException("Unable to log-in. Please contact admin or support.")
 
     token = create_access_token({"sub": user.username})
     return TokenResponse(access_token=token)

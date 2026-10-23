@@ -73,7 +73,7 @@ def get_current_user(
         raise UnauthorizedException("Invalid token. User not found.")
 
     if not user.is_active:  # Token is valid, but user is deactivated
-        raise ForbiddenException("Cannot proceed. This account has been deactivated. Please contact admin or support.")
+        raise ForbiddenException("Cannot proceed. Please contact admin or support.")
 
     return user
 

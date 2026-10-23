@@ -1,10 +1,10 @@
-
 from sqlalchemy import create_engine
 from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
 import pytest
 from app.database import Base, get_db
 from app.main import app
+from app.routers import tasks as tasks_router
 from fastapi.testclient import TestClient
 from app.utils.limiter import limiter
 from app.models.user import User
@@ -29,10 +29,16 @@ TestingSessionLocal = sessionmaker(
 
 
 @pytest.fixture
-def client():
-    """Pytest fixture that provides a TestClient with an isolated in-memory DB."""
+def client(monkeypatch):
+    """
+    Pytest fixture that provides a TestClient with an isolated in-memory database.
 
-    Base.metadata.create_all(bind=test_engine)  # Create tables in the test DB
+    monkeypatch temporarily replaces SessionLocal with TestingSessionLocal in the tasks_router module.
+
+    Upon completion of a test, the test database tables are dropped, and monkeypatch restores SessionLocal.    
+    """
+
+    Base.metadata.create_all(bind=test_engine)  # Create tables in the test database
 
     def override_get_db():  # Yield a test session to the endpoints
         
@@ -42,15 +48,26 @@ def client():
             yield db
 
         finally:
-            db.close()
+            db.close()  # Close the test database session after the request
 
-    app.dependency_overrides[get_db] = override_get_db  # Override use of get_db in favor of override_get_db (utilizes test session and test DB)
+    app.dependency_overrides[get_db] = override_get_db  # Override use of get_db in favor of override_get_db (utilizes test session and test database)
 
-    yield TestClient(app)  # TestClient makes HTTP requests in-process, without running the server
+    monkeypatch.setattr(
+        tasks_router,
+        "SessionLocal",
+        TestingSessionLocal
+    )
 
-    Base.metadata.drop_all(bind=test_engine)  # Drop tables from the test DB once the test is complete
-    
-    app.dependency_overrides.clear()  # Remove the override
+    try: 
+        with TestClient(app) as test_client:  # TestClient makes HTTP requests in-process, without running the server
+
+            yield test_client
+
+    finally:
+        app.dependency_overrides.pop(get_db, None)  # Remove the dependency override
+        Base.metadata.drop_all(bind=test_engine)  # Drop tables from the test database once the test is complete
+        
+        test_engine.dispose()  # Close the engine's database connections
 
 
 # ================
@@ -127,7 +144,7 @@ def sample_admin_auth_headers(sample_admin_user):
     """Creates and returns a sample token for tests that require authentication; to be used with a sample admin user."""
 
     token = create_access_token(data={
-        "sub": sample_admin_user["username"]
+        "sub": sample_admin_user.username
     })
 
     return {"Authorization": f"Bearer {token}"}

@@ -5,6 +5,15 @@ from app.models.user import User
 from app.models.activity import ActivityLog
 
 
+def test_health_check(client):
+    """Test: Health check - root returns 200."""
+
+    response = client.get("/")
+
+    assert response.status_code == 200  # OK - Success
+    assert response.json()["docs"] == "/docs"
+
+
 # ===============
 # AUTH - REGISTER
 # ===============
@@ -247,7 +256,7 @@ def test_user_patch_duplicate_email(client, sample_auth_headers):
         "password": "password123"
     })
 
-    assert response.status_code == 200  # OK - Success
+    assert response.status_code == 201  # Created
     
     
     response = client.patch(  # Try to update the first user's email using the existing email from the second user
@@ -334,7 +343,7 @@ def test_get_specific_task_success(client, sample_auth_headers, sample_task):
 
 
 def test_task_not_found(client, sample_auth_headers, sample_task):
-    """Test: get_task_or_raise raises a 404 error when the requested task cannot be found."""
+    """Test: get_task_or_404 raises a 404 error when the requested task cannot be found."""
 
     response = client.get("/tasks/999", headers=sample_auth_headers)
 
@@ -342,15 +351,15 @@ def test_task_not_found(client, sample_auth_headers, sample_task):
     print(response.json())
 
 
-def test_forbidden_task(client, sample_auth_headers, sample_task, sample_admin_task):
-    """Test: get_task_or_raise raises a 403 error when the requested task does not belong to the logged-in user."""
+def test_task_belongs_to_other_user(client, sample_auth_headers, sample_task, sample_admin_task):
+    """Test: get_task_or_404 raises a 404 error when the requested task does not belong to the logged-in user."""
 
     response = client.get(
         f"/tasks/{sample_admin_task['id']}", 
         headers=sample_auth_headers
     )
 
-    assert response.status_code == 403  # Forbidden
+    assert response.status_code == 404  # Not Found
     print(response.json())
 
 
@@ -402,11 +411,10 @@ def test_ai_ready_endpoint_success(client, sample_auth_headers, sample_task):
 def test_background_task_created(client, sample_task, db_session):
     """Test: POST /tasks - when a new task is created successfully, the background task also runs successfully and creates an activity log ("created")."""
 
-    log = db_session.query(ActivityLog).filter(ActivityLog.task_id == sample_task["id"])
+    log = db_session.query(ActivityLog).filter(ActivityLog.task_id == sample_task["id"], ActivityLog.action == "created").first()
 
     assert log is not None
-    assert log.task_title == "Test Title"
-    assert log.action == "created"
+    assert log.task_title == "Test Title"    
 
 
 def test_background_task_updated(client, sample_auth_headers, sample_task, db_session):
@@ -422,11 +430,10 @@ def test_background_task_updated(client, sample_auth_headers, sample_task, db_se
     assert response.status_code == 200  # OK - Success
 
     
-    log = db_session.query(ActivityLog).filter(ActivityLog.task_id == sample_task["id"])
+    log = db_session.query(ActivityLog).filter(ActivityLog.task_id == sample_task["id"], ActivityLog.action == "updated").first()
 
     assert log is not None
-    assert log.task_title == "Test Title"
-    assert log.action == "updated"  
+    assert log.task_title == "Test Title"     
 
 
 def test_background_task_deleted(client, sample_auth_headers, sample_task, db_session):
@@ -437,11 +444,10 @@ def test_background_task_deleted(client, sample_auth_headers, sample_task, db_se
     assert response.status_code == 200  # OK - Success
 
     
-    log = db_session.query(ActivityLog).filter(ActivityLog.task_title == sample_task["title"])
+    log = db_session.query(ActivityLog).filter(ActivityLog.task_title == sample_task["title"], ActivityLog.action == "deleted").first()
     
     assert log is not None
-    assert log.task_id is None 
-    assert log.action == "deleted" 
+    assert log.task_id is None     
 
 
 # =========================================
