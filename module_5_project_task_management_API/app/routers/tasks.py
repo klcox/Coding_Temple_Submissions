@@ -295,8 +295,8 @@ def get_all_tasks(
     responses = {
         200: {"description": "OK - Successfully returned task"},
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_404
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_404
+        403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
+        404: {"description": "Not Found - Task not found using the provided ID or the requested task does not belong to the logged-in user"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"}
     }
 )
@@ -318,17 +318,16 @@ def get_task_by_id(
     3. If the user account is inactive, raises a 403 error. 
     4. Attempts to locate the task in the database using the provided ID.
     5. If the provided ID is not an integer greater than 0, raises a 422 error.
-    6. If the task cannot be found, raises a 404 error.
-    7. If the task does not belong to the logged-in user, raises a 403 error.
-    8. Otherwise, returns the requested task.    
+    6. If the task cannot be found or if the task does not belong to the logged-in user, raises a 404 error.    
+    7. Otherwise, returns the requested task.    
 
     Standard Response: 
     - 200 - OK (successfully returned the task)
     
     Possible Errors:
     - 401 - Unauthorized (the provided token is invalid or expired)
-    - 403 - Forbidden (the user account is inactive or the requested task does not belong to the logged-in user)
-    - 404 - Not Found (the task was not found using the provided ID)
+    - 403 - Forbidden (the user account is inactive)
+    - 404 - Not Found (the task was not found using the provided ID or the requested task does not belong to the logged-in user)
     - 422 - Validation Error (the task ID is not an integer greater than 0)   
     """  
         
@@ -346,9 +345,9 @@ def get_task_by_id(
     responses = {
         200: {"description": "OK - Successfully updated the task"},
         400: {"description": "Bad Request - Request is empty"},
-        401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_404
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_404
+        401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user        
+        403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
+        404: {"description": "Not Found - Task not found using the provided ID or the requested task does not belong to the logged-in user"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Check request body and/or Task ID is not an integer greater than 0"},
         500: {"description": "Internal Error - An error occurred while attempting to update the database"}
     }
@@ -379,13 +378,12 @@ def update_task(
     3. If the user account is inactive, raises a 403 error.
     4. Attempts to locate the task in the database using the provided ID.
     5. If the provided ID is not an integer greater than 0, raises a 422 error.
-    6. If the task cannot be found, raises a 404 error.
-    7. If the task does not belong to the logged-in user, raises a 403 error.
-    8. If the request is empty, raises a 400 error.    
-    9. If other validation constraints are violated, raises a 422 error.    
-    10. Otherwise, attempts to store the submitted updates in the database.
-    11. If SUCCESSFUL, returns the updated task. (**Background task**: creates an activity log for this user/task.)
-    12. If UNSUCCESSFUL, raises a 500 error and rolls back the database to its previous state.
+    6. If the task cannot be found or if the task does not belong to the logged-in user, raises a 404 error.
+    7. If the request is empty, raises a 400 error.    
+    8. If other validation constraints are violated, raises a 422 error.    
+    9. Otherwise, attempts to store the submitted updates in the database.
+    10. If SUCCESSFUL, returns the updated task. (**Background task**: creates an activity log for this user/task.)
+    11. If UNSUCCESSFUL, raises a 500 error and rolls back the database to its previous state.
 
     Returns:
     - The updated task
@@ -396,8 +394,8 @@ def update_task(
     Possible Errors:
     - 400 - Bad Request (the request is empty)
     - 401 - Unauthorized (the provided token is invalid or expired)
-    - 403 - Forbidden (the user account is inactive or the requested task does not belong to the logged-in user)    
-    - 404 - Not Found (the task was not found using the provided ID)
+    - 403 - Forbidden (the user account is inactive)    
+    - 404 - Not Found (the task was not found using the provided ID or the requested task does not belong to the logged-in user)
     - 422 - Validation Error (one or more of the validation requirements has been violated and/or the task ID is not an integer greater than 0)
     - 500 - Internal Error (an error occurred while attempting to update the task in the database)
     """    
@@ -445,8 +443,8 @@ def update_task(
     responses = {
         200: {"description": "OK - Successfully deleted the task"},       
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_404
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_404
+        403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
+        404: {"description": "Not Found - Task not found using the provided ID or the requested task does not belong to the logged-in user"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"},
         500: {"description": "Internal Error - An error occurred while attempting to delete the task from the database"}
     }
@@ -470,11 +468,10 @@ def delete_task(
     3. If the user account is inactive, raises a 403 error. 
     4. Attempts to locate the task in the database using the provided ID.
     5. If the provided ID is not an integer greater than 0, raises a 422 error.
-    6. If the task cannot be found, raises a 404 error.
-    7. If the task does not belong to the logged-in user, raises a 403 error.
-    8. Otherwise, attempts to delete the task from the database.
-    9. If SUCCESSFUL, returns a success message. (**Background task**: creates an activity log for this user/task.)
-    10. If UNSUCCESSFUL, raises a 500 error and rolls back the database to its previous state.   
+    6. If the task cannot be found or if the task does not belong to the logged-in user, raises a 404 error.    
+    7. Otherwise, attempts to delete the task from the database.
+    8. If SUCCESSFUL, returns a success message. (**Background task**: creates an activity log for this user/task.)
+    9. If UNSUCCESSFUL, raises a 500 error and rolls back the database to its previous state.   
 
     Returns:
     - A success message
@@ -484,8 +481,8 @@ def delete_task(
     
     Possible Errors:
     - 401 - Unauthorized (the provided token is invalid or expired)
-    - 403 - Forbidden (the user account is inactive or the requested task does not belong to the logged-in user)
-    - 404 - Not Found (the task was not found using the provided ID)
+    - 403 - Forbidden (the user account is inactive)
+    - 404 - Not Found (the task was not found using the provided ID or the requested task does not belong to the logged-in user)
     - 422 - Validation Error (the task ID is not an integer greater than 0)
     - 500 - Internal Error (an error occurred while attempting to delete the task from the database)
     """
@@ -522,8 +519,8 @@ def delete_task(
     responses = {
         200: {"description": "OK - Successfully returned the sample AI suggestion"},       
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive or the requested task does not belong to the logged-in user"},  # Stems from get_current_user, get_task_or_404
-        404: {"description": "Not Found - Task not found using the provided ID"},  # Stems from get_task_or_404
+        403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
+        404: {"description": "Not Found - Task not found using the provided ID or the requested task does not belong to the logged-in user"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"}        
     }
 )
@@ -545,17 +542,16 @@ def suggest_task_action(
     3. If the user account is inactive, raises a 403 error. 
     4. Attempts to locate the task in the database using the provided ID.
     5. If the provided ID is not an integer greater than 0, raises a 422 error.
-    6. If the task cannot be found, raises a 404 error.
-    7. If the task does not belong to the logged-in user, raises a 403 error.
-    8. Otherwise, returns the sample AI suggestion. 
+    6. If the task cannot be found or if the task does not belong to the logged-in user, raises a 404 error.    
+    7. Otherwise, returns the sample AI suggestion. 
   
     Standard Response: 
     - 200 - OK (successfully returned the sample AI suggestion)
     
     Possible Errors:
     - 401 - Unauthorized (the provided token is invalid or expired)
-    - 403 - Forbidden (the user account is inactive or the requested task does not belong to the logged-in user)
-    - 404 - Not Found (the task was not found using the provided ID)
+    - 403 - Forbidden (the user account is inactive)
+    - 404 - Not Found (the task was not found using the provided ID or the requested task does not belong to the logged-in user)
     - 422 - Validation Error (the task ID is not an integer greater than 0)    
     """
 
