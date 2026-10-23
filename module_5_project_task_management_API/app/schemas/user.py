@@ -54,13 +54,12 @@ class UserUpdate(BaseModel):
     )
 
 
-class UserResponse(BaseModel):  # Does not inherit from UserCreate so as to omit the password and admin status from the response schema
+class UserResponse(BaseModel):  # Does not inherit from UserCreate so as to omit the password, active status, and admin status from the response schema
     """Schema for returning a user."""
 
     id: int    
     username: str
-    email: str
-    is_active: bool    
+    email: str      
     created_at: datetime
 
     model_config = ConfigDict(
@@ -69,8 +68,7 @@ class UserResponse(BaseModel):  # Does not inherit from UserCreate so as to omit
             "example": {                
                 "id": 1,
                 "username": "username123",
-                "email": "email@test.com",
-                "is_active": True,
+                "email": "email@test.com",                
                 "created_at": "2026-10-12T10:30:00"
             }
         }            
