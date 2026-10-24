@@ -1,0 +1,148 @@
+/* --- Reset and Base Styles --- */
+
+* {
+    box-sizing: border-box;
+    margin: 0;               /* Remove default margins */
+    padding: 0;              /* Remove default padding */
+}
+
+body {
+    font-family: Garamond, Times New Roman, serif;
+    line-height: 1.6;        /* Space between lines of text */
+    color: #292929;
+    background-color: #f4f5f3;
+}
+
+
+/* --- Header --- */
+
+header {
+    text-align: center;
+    color: #f4f5f3;
+    background-color: #35493a; 
+    padding: 35px 0px 0px
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 6px;
+}
+
+header p {
+    font-size: 1.4rem;
+    font-weight: 400;
+    opacity: 0.85;
+}
+
+
+/* --- Navigation --- */
+
+nav {
+    background-color: #2b3a2e;
+    margin-top: 42px;
+    padding: 20px 0px; 
+}
+
+nav a {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #f4f5f3;
+    text-decoration: none;
+    transition: color 0.2s; 
+    margin: 0 12px;
+}
+
+nav a:hover {
+    color: #9e988c;
+}
+
+
+/* --- Main Content --- */
+
+main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;       /* 20px padding on left and right for small screens */
+}
+
+section {
+    margin-bottom: 35px;   /* Space between sections */
+}
+
+section h2 {
+    font-size: 1.8rem;
+    color: #66635d;
+    margin-bottom: 16px;
+    border-bottom: 5px double #2b3a2e;
+    padding-bottom: 8px;
+}
+
+#about p {
+    margin: 20px 0px;
+}
+
+p a {
+    font-weight: 600;
+    color: #2b3a2e;
+    transition: color 0.2s; 
+}
+
+p a:hover {
+    color: #9e988c;
+}
+
+
+/* --- Project Cards with Flexbox --- */
+
+.project-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.project-grid article {
+    flex: 1;
+    min-width: 250px;
+    background-color: #66635d;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);  /* Horizontal offset, vertical offset, blur radius, color/opacity */
+    transition: transform 0.2s;
+}
+
+.project-grid article:hover {
+    transform: translateY(-4px);  /* Lift the card slightly on hover */
+}
+
+.project-grid article h3 {
+    color: #f4f5f3;
+    text-decoration: underline;    
+    margin-bottom: 8px;
+}
+
+.project-grid p{
+    color: #f4f5f3;
+}
+
+
+/* --- Skills Flexbox --- */
+
+.skills-grid {
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 10px 30px;
+    padding: 0px 30px;
+}
+
+
+/* --- Footer --- */
+
+footer {        
+    text-align: center;
+    color: #f4f5f3;
+    background-color: #2b3a2e;       
+    margin-top: 40px;
+    padding: 30px 20px; 
+}
