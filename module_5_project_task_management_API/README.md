@@ -1,6 +1,7 @@
 # Task Management API
 
 **Version**: v1
+
 **Authentication**: JWT Bearer Token
 
 This project pertains to a task management app, where users register an account and create/manage their own tasks.
@@ -43,12 +44,12 @@ This project pertains to a task management app, where users register an account 
     is_admin                      created_at
     created_at                    updated_at
                                     
-    |                                |  
-    |                                |
-    | 	                             |
     |                                |
     |                                |
-    |                                | 
+    |                                |
+    |                                |
+    |                                |
+    |                                |
     |                                |
     ->        [Activity Log]        <-        
                PK id
@@ -163,24 +164,27 @@ requirements.txt          — Packages and dependencies
 ## Sample Response Schemas
 
 ### POST /auth/login (Response: 200, OK)
+``` json
 
 {                
 	"access_token": "SAMPLE_TOKEN",
 	"token_type": "bearer"
 }
+```
 
 ### GET /users/me (Response: 200, OK)
-***Note: password, is_active, and is_admin are excluded here for security purposes"
-
+***Note: password, is_active, and is_admin are excluded here for security purposes"***
+``` json
 {                
 	"id": 1,
 	"username": "username123",
 	"email": "email@test.com",                
 	"created_at": "2026-10-12T10:30:00"
 }
+```
 
 ### GET /tasks (Response: 200, OK)
-
+``` json
 {                
 	"data": [
 		{
@@ -210,12 +214,14 @@ requirements.txt          — Packages and dependencies
 			"limit": 10
                 }              
 }
+```
 
 ### DELETE /tasks/1 (Response: 200, OK)
-
+``` json
 {
 	"message": "Task 1 deleted successfully."
 }
+```
 
 ## Rate Limits
 | HTTP Method | URI (Prefix) | Number of Requests Per Minute |
