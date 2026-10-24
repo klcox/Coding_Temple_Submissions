@@ -10,8 +10,8 @@ This repo contains various assignments and projects submitted as part of my stud
 * REST API
 * Fast API (Pydantic, Uvicorn)
 * Pytest
-* HTML *(Upcoming)*
-* CSS *(Upcoming)*
+* HTML
+* CSS
 * JavaScript *(Upcoming)*
 * Streamlit *(Upcoming)*
 * RAG *(Upcoming)*
