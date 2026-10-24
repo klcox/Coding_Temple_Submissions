@@ -56,9 +56,9 @@ This project pertains to a task management app, where users register an account 
                FK user_id
                FK task_id (can be None [NULL] once a task is deleted)
                task_title
-	       action (enum)
-	       changes (intended for use with PATCH; otherwise can be None [NULL])
-	       timestamp
+               action (enum)
+               changes (intended for use with PATCH; otherwise can be None [NULL])
+               timestamp
 
 ## Project Structure
 ```text
@@ -136,7 +136,7 @@ requirements.txt          — Packages and dependencies
 - page (on which page to begin the results)
 - limit (max number of results to display per page)
 
-### Task
+### Tasks
 
 | HTTP Method | URI | Description | Auth Required? | Who Can Access? |
 |---|---|---|---|---|
@@ -173,7 +173,7 @@ requirements.txt          — Packages and dependencies
 ```
 
 ### GET /users/me (Response: 200, OK)
-***Note: password, is_active, and is_admin are excluded here for security purposes"***
+***Note: password, is_active, and is_admin are excluded here for security purposes***
 ``` json
 {                
 	"id": 1,
@@ -191,7 +191,7 @@ requirements.txt          — Packages and dependencies
 			"title": "Buy Groceries",
                         "description": "Apples, bananas, eggs, bread",
                         "priority": "medium",
-                        "completed": False,               
+                        "completed": False,
                         "id": 1,
                         "user_id": 1,
                         "created_at": "2026-10-13T12:00:00",
@@ -200,7 +200,7 @@ requirements.txt          — Packages and dependencies
 		{
                         "title": "Finish Homework",                        
                         "priority": "high",
-                        "completed": False,               
+                        "completed": False,
                         "id": 2,
                         "user_id": 1,
                         "created_at": "2026-10-13T12:30:00",
