@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+        Flashcard App
+    </title>
+
+    <style>        
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            color: white;
+            background-color: #333;
+            display: flex;
+            flex-direction: column;           
+            justify-content: center;  /* Horizontal */
+            align-items: center;   /* Vertical */     
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            text-decoration: underline;
+            margin: 40px 20px 30px;
+        }
+
+        #progress {
+            font-size: 1.8rem;
+            margin: 5px 0px 30px;
+        }
+
+        .card {
+            font-size: 1.8rem;
+            color: black;
+            background-color: #90d390;                 
+            border-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 0px 0px 25px;
+            width: 700px;
+            min-height: 250px;
+        }
+
+        .inner-card-front {
+            display: block;
+            background-color: #90d390;
+            border: 5px solid white;
+            border-radius: 8px;
+            padding: 60px;
+        }
+
+        #question-label {            
+            text-align: center;
+            margin: 0px 0px 20px;
+        }
+
+        #question {            
+            text-align: center;            
+        }
+
+        .inner-card-back {
+            display: none;
+            background-color: #699769;
+            border: 5px solid white;
+            border-radius: 8px;
+            padding: 60px;
+        }       
+       
+        #answer-label {            
+            text-align: center;
+            margin: 0px 0px 20px;
+        }
+
+        #answer {            
+            text-align: center;
+        }
+
+        button {
+            font-size: 1.2rem;
+            background-color: #848bf1;
+            border-radius: 3px; 
+            cursor: pointer;
+            padding: 10px;
+            margin: 15px;
+        }        
+  </style>
+</head>
+
+<body>
+
+    <h1>
+        Web Dev Flashcards
+    </h1>
+
+    <p id="progress">
+        Card 1 of 5
+    </p>
+    
+    <div id="outer-card" class="card"> 
+        <div id="inner-card-front" class="inner-card-front">
+            <div id="question-label">
+                Question:
+            </div>
+
+            <div id="question">
+                Loading…
+            </div>
+        </div>
+
+        <div id="inner-card-back" class="inner-card-back">
+            <div id="answer-label">
+                Answer:
+            </div>
+
+            <div id="answer">
+                Loading…
+            </div>  
+        </div> 
+    </div>
+
+    <div>
+        <button id="show-btn">
+            Show Answer
+        </button>
+
+        <button id="next-btn">
+            Next Card →
+        </button>
+    </div>
+
+    <script>
+        const cards = [
+            {
+                question: "What does HTTP stand for?",
+                answer: "HyperText Transfer Protocol"
+            },
+            {
+                question: "Which status code means 'Not Found'?",
+                answer: "404"
+            },
+            {
+                question: "What does CSS stand for?",
+                answer: "Cascading Style Sheets"
+            },
+            {
+                question: "What does DOM stand for?",
+                answer: "Document Object Model"
+            },
+            {
+                question: "What Python library do we use for HTTP requests?",
+                answer: "requests"
+            }
+        ];
+
+
+        let currentIndex = 0;
+        let answerVisible = false;
+
+        const progressEl = document.querySelector("#progress");
+        const outerCardDiv = document.querySelector("#outer-card")
+        const cardFrontDiv = document.querySelector("#inner-card-front");
+        const cardBackDiv = document.querySelector("#inner-card-back");
+        const questionLabel = document.querySelector("#question-label");
+        const questionEl = document.querySelector("#question");
+        const answerLabel = document.querySelector("#answer-label");
+        const answerEl   = document.querySelector("#answer");
+        const showBtn    = document.querySelector("#show-btn");
+        const nextBtn    = document.querySelector("#next-btn");
+
+
+        function renderCard() {
+            const currentCard = cards[currentIndex];
+
+            progressEl.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
+            questionEl.textContent = currentCard.question;
+            answerEl.textContent = currentCard.answer;
+
+            if (answerVisible) {
+                outerCardDiv.style.backgroundColor = "#699769";
+                
+                cardFrontDiv.style.display = "none";
+                cardBackDiv.style.display = "block";                
+
+                showBtn.textContent = "Hide Answer";
+            } else {
+                outerCardDiv.style.backgroundColor = "#90d390";
+
+                cardFrontDiv.style.display = "block";
+                cardBackDiv.style.display = "none";                
+
+                showBtn.textContent = "Show Answer";
+            }          
+        };
+
+
+        showBtn.addEventListener("click", function () {
+            answerVisible = !answerVisible;
+            renderCard();
+        });
+
+        nextBtn.addEventListener("click", function () {
+            currentIndex = (currentIndex + 1) % cards.length;
+            answerVisible = false;
+            renderCard();
+        });
+
+
+        renderCard();
+    </script>
+
+</body>
+
+</html>
