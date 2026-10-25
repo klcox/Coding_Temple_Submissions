@@ -5,13 +5,13 @@ This repo contains various assignments and projects submitted as part of my stud
 ## Concepts/Topics
 
 * Python
-* Pandas
+* Pandas (+ Matplotlib)
 * SQL (SQLite, SQLAlchemy)
 * REST API
-* Fast API (Pydantic, Uvicorn)
+* Fast API (Pydantic, Uvicorn, Swagger UI)
 * Pytest
-* HTML
-* CSS
+* HTML 5
+* CSS 3
 * JavaScript
 * Streamlit *(Upcoming)*
 * RAG *(Upcoming)*
@@ -26,5 +26,5 @@ This repo contains various assignments and projects submitted as part of my stud
 * API Exploration and Design
 * Task Management API
 
-(all other directories pertain to assignments)
+(all other files and directories pertain to assignments)
 
