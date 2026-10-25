@@ -12,7 +12,7 @@ This repo contains various assignments and projects submitted as part of my stud
 * Pytest
 * HTML
 * CSS
-* JavaScript *(Upcoming)*
+* JavaScript
 * Streamlit *(Upcoming)*
 * RAG *(Upcoming)*
 
