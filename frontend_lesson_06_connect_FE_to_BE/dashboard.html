@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>
+        Mini Task Dashboard
+    </title>
+
+    <style>        
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: #837b72;             
+        }
+
+        header {            
+            background: linear-gradient(
+                to bottom,
+                #435043 75%,
+                #1f271f 100%
+            );
+            padding: 35px 20px 20px;
+            box-shadow: 0 4px 20px rgba(31, 39, 31, 0.6);            
+        }
+
+        h1 { 
+            font-size: 2.7rem;
+            text-align: center;
+            text-decoration: underline;
+            color: #fcfcf3;
+            margin-bottom: 1.5rem;            
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 200px);  
+            justify-content: center;         
+        }
+
+        .stats-card-heading {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #fcfcf3;
+            text-align: center;
+            background-color: #4d4945;
+            border: 3px solid #302d2b;
+            border-radius: 5px;
+            width: 200px;
+            padding: 15px;
+            margin: 40px 0px 0px;
+        }
+
+        .stats-card-value {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #4d4945;
+            text-align: center;
+            background-color: #fcfcf3;
+            border: 3px solid #435043;
+            border-radius: 5px;            
+            width: 200px;
+            padding: 15px;
+            margin: 0px 0px 30px;
+        }
+
+        .panel { 
+            max-width: 600px; 
+            margin: 0 auto;
+        }
+
+       #task-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        #task-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+
+            font-size: 1.3rem;
+            color: #33302e;
+            background-color: #fcfcf3;
+            width: 90%;
+            max-width: 450px;
+            padding: 15px;            
+            border: 2px solid #435043;
+            border-radius: 5px;
+        }              
+
+        .strikethrough {
+            text-decoration: line-through;
+            text-decoration-thickness: 1.5px;
+        }
+
+        button {
+            font-size: 1rem;
+            color: #fcfcf3;
+            background-color: #435043;
+            padding: 0.6rem 1rem; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+        }         
+
+        #status, #error-msg {
+            margin: 0px 20px;
+        }
+
+        #error-msg {
+            display: none;
+        }
+
+        .update-container, #add-form {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        #timestamp {
+            color: #252322;
+        }
+
+        #new-task-input {
+            flex: 1;
+            font-size: 1rem;
+            min-width: 0;
+            padding: 12px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>    
+        <h1>Task Dashboard</h1>
+    </header>
+    
+    <div id="stats" class="stats-container">        
+        <div class="stats-card-heading">
+            Pending
+        </div>        
+
+        <div class="stats-card-heading">
+            Done
+        </div>
+
+        <div class="stats-card-heading">
+            Total
+        </div>
+
+        <div class="stats-card-value">
+            <span id="stat-pending">--</span>
+        </div>
+
+        <div class="stats-card-value">
+            <span id="stat-done">--</span>
+        </div>
+
+        <div class="stats-card-value">
+            <span id="stat-total">--</span>
+        </div>
+        
+    </div>
+    
+
+    <div class="panel">      
+        <div id="status">
+            Loading…
+        </div>
+
+        <div id="error-msg" style="color: #3f1414;">            
+        </div>
+        
+        <ul id="task-list">            
+        </ul>
+
+        <div class="update-container">       
+        
+            <button id="refresh-btn">
+                ↻ Refresh
+            </button>
+
+            <p id="timestamp"></p>
+        </div>
+
+        <form id="add-form">
+            <input type="text" id="new-task-input" placeholder="Add a new task…" required />
+
+            <button type="submit">
+                Add Task
+            </button>
+        </form> 
+    </div>
+
+    <script>
+        const API = "http://localhost:8000";
+
+
+        // DOM REFERENCES
+
+        
+        const statTotal    = document.querySelector('#stat-total');
+        const statDone     = document.querySelector('#stat-done');
+        const statPending  = document.querySelector('#stat-pending');
+        
+        const addForm      = document.querySelector('#add-form');
+        const newTaskInput = document.querySelector('#new-task-input');
+        const refreshBtn   = document.querySelector('#refresh-btn');
+        const timestamp    = document.querySelector('#timestamp');        
+        const statusDiv    = document.querySelector('#status');
+        const errorMsg     = document.querySelector('#error-msg');
+        const taskList     = document.querySelector('#task-list');
+
+        
+        // FUNCTIONS
+
+
+        async function fetchTasks() {
+            statusDiv.style.display = "block";
+            statusDiv.textContent = "Loading tasks...";
+            errorMsg.style.display= "none";
+
+            try {
+                const response = await fetch(`${API}/tasks`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`)
+                };
+
+                const tasks = await response.json();
+
+                statusDiv.style.display = "none";
+                renderTasks(tasks);
+                updateStats(tasks);
+                timestamp.textContent = `Last Updated: ${new Date().toLocaleTimeString()}`;
+            } catch (error) {
+                statusDiv.style.display = "none";
+                taskList.innerHTML = ""
+
+                statPending.textContent = "--";
+                statDone.textContent = "--";
+                statTotal.textContent = "--";
+
+                errorMsg.style.display= "block";
+                errorMsg.innerHTML = `
+                <p>
+                    Error. Could not load tasks. Check whether API is running.
+                </p>
+                `;
+            };
+        }
+
+        function renderTasks(tasks) {
+            taskList.innerHTML = "";
+
+            if (!tasks || tasks.length === 0) {
+                taskList.innerHTML = `
+                <li>
+                    No tasks to display. Add one below!
+                </li>
+                `;
+
+                return;
+            };            
+            
+            tasks.forEach(task => {
+                
+                if (!task.done) {
+                    taskList.innerHTML += `
+                    <li data-id="${task.id}">
+                        ${task.title}
+                        <button onclick="completeTask(${task.id})">Mark Done</button>
+                    </li>
+                    `;                   
+                } else {
+                    taskList.innerHTML += `
+                    <li class="strikethrough">
+                        ${task.title}                        
+                    </li>
+                    `;
+                };                
+                
+            });
+        }
+
+        async function updateStats() {
+            try {
+                const response = await fetch(`${API}/stats`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                };
+
+                const stats = await response.json();
+                              
+                statPending.textContent = `${stats.pending}`;
+                statDone.textContent = `${stats.done}`;
+                statTotal.textContent = `${stats.total}`;  
+            } catch (error) {
+                statusDiv.style.display = "none";
+
+                errorMsg.style.display = "block";
+                errorMsg.innerHTML = `
+                <p>
+                    Error. Could not update stats.
+                </p>
+                `;
+            };
+        }
+        
+        async function completeTask(id) {
+            try {
+                const response = await fetch(`${API}/tasks/${id}`, {method: "PATCH" });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                };
+
+                await fetchTasks();                
+            } catch (error) {
+                statusDiv.style.display = "none";
+                
+                errorMsg.style.display = "block";
+                errorMsg.innerHTML = `
+                <p>
+                    Error. Could not update task.
+                </p>
+                `;
+            };
+        }
+
+
+        // EVENT LISTENERS
+
+
+        addForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            
+            const title = newTaskInput.value.trim();
+
+            if (!title) {
+                return;
+            }
+
+            try{
+                const response = await fetch(
+                    `${API}/tasks`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({title})
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                };
+
+                newTaskInput.value = "";   // Clear the input
+
+                await fetchTasks();
+            } catch (error) {
+                statusDiv.style.display = "none";
+                errorMsg.style.display = "block";
+                errorMsg.innerHTML = `
+                <p>
+                    Error. Could not add task.
+                </p>
+                `;
+            };                     
+        });
+
+        refreshBtn.addEventListener("click", fetchTasks);
+
+        
+        fetchTasks();
+
+    </script>
+
+</body>
+
+</html>
