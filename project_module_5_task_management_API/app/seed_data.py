@@ -29,7 +29,8 @@ def seed():
         existing_admin = (session.query(User).filter_by(username = "admin_one").first())
         
         if existing_admin:
-            return {"message": "Seeding not needed. Admin already exists in the database."}
+            print("Seeding not needed. Admin already exists in the database.")
+            return
         
 
         # If the admin does not already exist, proceed to add the user to the database
@@ -37,11 +38,11 @@ def seed():
         session.add(sample_admin)
         session.commit()
 
-        print("Data seeded successfully.")
+        print("Data seeded successfully.")    
 
     except Exception:
-        session.rollback()
-        raise InternalError("Data could not be seeded. Please check the database and try again.")
+        session.rollback()        
+        raise InternalError("Data could not be seeded. Please check the database and try again.")        
 
     finally:
         session.close()   
