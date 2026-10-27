@@ -38,7 +38,8 @@ logger = logging.getLogger(__name__)  # Creates a logger for this module
     responses = {
         200: {"description": "OK - Successfully returned user's profile"},
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is inactive"}  # Stems from get_current_user
+        403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
+        429: {"description": "Too Many Requests - Rate limit exceeded"}
     }
 )
 @limiter.limit("60/minute")
@@ -59,7 +60,8 @@ def get_profile(request: Request, current_user: User = Depends(get_current_user)
     
     Possible Errors:
     - 401 - Unauthorized (the provided token is invalid or expired)
-    - 403 - Forbidden (the user account is inactive)    
+    - 403 - Forbidden (the user account is inactive)
+    - 429 - Too Many Requests (rate limit exceeded)
     """
 
     return current_user
@@ -80,6 +82,7 @@ def get_profile(request: Request, current_user: User = Depends(get_current_user)
         403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
         409: {"description": "Conflict - Unique identifier (email) already exists in the database"},
         422: {"description": "Validation Error - Check request body"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"},
         500: {"description": "Internal Error - An error occurred while attempting to update the database"}
     }
 )
@@ -123,6 +126,7 @@ def update_profile(
     - 403 - Forbidden (the user account is inactive)    
     - 409 - Conflict (the email is not unique [already exists in the database])
     - 422 - Validation Error (one or more of the validation requirements has been violated)
+    - 429 - Too Many Requests (rate limit exceeded)
     - 500 - Internal Error (an error occurred while attempting to update the user in the database)
     """
 
@@ -167,7 +171,8 @@ def update_profile(
     responses = {
         200: {"description": "OK - Successfully deactivated the user profile"},      
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
-        403: {"description": "Forbidden - User account is already deactivated"},  # Stems from get_current_user  
+        403: {"description": "Forbidden - User account is already deactivated"},  # Stems from get_current_user
+        429: {"description": "Too Many Requests - Rate limit exceeded"},
         500: {"description": "Internal Error - An error occurred while attempting to deactivate the user in the database"}
     }
 )       
@@ -198,7 +203,8 @@ def deactivate_account(
     
     Possible Errors:
     - 401 - Unauthorized (the provided token is invalid or expired)
-    - 403 - Forbidden (the user account is already deactivated)    
+    - 403 - Forbidden (the user account is already deactivated)
+    - 429 - Too Many Requests (rate limit exceeded) 
     - 500 - Internal Error (an error occurred while attempting to deactivate the user in the database)
     """
 
@@ -228,7 +234,8 @@ def deactivate_account(
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from verify_admin_status (and then get_current_user)
         403: {"description": "Forbidden - User account is inactive or not an admin"},  # Stems from verify_admin_status (and then get_current_user)
         404: {"description": "Not Found - user_id provided as a query parameter not found"},
-        422: {"description": "Validation Error - Check the query parameter constraints"}
+        422: {"description": "Validation Error - Check the query parameter constraints"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"}
     }
 )
 @limiter.limit("60/minute")
@@ -279,7 +286,8 @@ def get_activity_logs(
     - 401 - Unauthorized (the provided token is invalid or expired)
     - 403 - Forbidden (the user account is inactive or does not have admin status)
     - 404 - Not Found (the user ID provided as a query parameter was not found)
-    - 422 - Validation Error (one or more of the validation requirements has been violated)  
+    - 422 - Validation Error (one or more of the validation requirements has been violated)
+    - 429 - Too Many Requests (rate limit exceeded)
     """ 
 
     query = db.query(ActivityLog)
@@ -334,8 +342,11 @@ def get_activity_logs(
     num_pages = math.ceil(total_logs / limit)  # If the division results exceed a whole number (e.g. 3.1), round up to the next whole number (e.g. 3.1 becomes 4)
 
     if page > num_pages and total_logs > 0:  # If there are log results but the requested page exceeds the available pages to display
-        raise BadRequestException(f"Page must be between 1 and {num_pages}.")
-    
+        if num_pages == 1:
+            raise BadRequestException(f"Only 1 page of results to display. Page cannot exceed 1.")
+        else:        
+            raise BadRequestException(f"Page must be between 1 and {num_pages}.")
+            
 
     # Ordering
     

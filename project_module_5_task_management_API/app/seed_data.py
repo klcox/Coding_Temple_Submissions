@@ -37,15 +37,15 @@ def seed():
         session.add(sample_admin)
         session.commit()
 
+        print("Data seeded successfully.")
+
     except Exception:
         session.rollback()
         raise InternalError("Data could not be seeded. Please check the database and try again.")
 
     finally:
-        session.close()
+        session.close()   
     
-    return {"message": "Data seeded successfully."}
-
 
 # RUN
 if __name__ == "__main__":

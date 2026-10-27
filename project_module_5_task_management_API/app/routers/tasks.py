@@ -87,6 +87,7 @@ def get_task_or_404(task_id: int, db: Session, current_user: User):
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
         403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
         422: {"description": "Validation Error - Check request body"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"},
         500: {"description": "Internal Error - An error occurred while attempting to add the task to the database"}
     }
 )
@@ -127,6 +128,7 @@ def create_task(
     - 401 - Unauthorized (the provided token is invalid or expired)
     - 403 - Forbidden (the user account is inactive)        
     - 422 - Validation Error (one or more of the validation requirements has been violated)
+    - 429 - Too Many Requests (rate limit exceeded)
     - 500 - Internal Error (an error occurred while attempting to add the task to the database)
     """
 
@@ -159,7 +161,8 @@ def create_task(
         400: {"description": "Bad Request - Business rule violation"},
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
         403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
-        422: {"description": "Validation Error - Check the query parameter constraints"}
+        422: {"description": "Validation Error - Check the query parameter constraints"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"}
     }
 )
 @limiter.limit("60/minute")
@@ -208,8 +211,9 @@ def get_all_tasks(
     Possible Errors:
     - 400 - Bad Request (business rule violation)
     - 401 - Unauthorized (the provided token is invalid or expired)
-    - 403 - Forbidden (the user account is inactive)    
-    - 422 - Validation Error (one or more of the validation requirements has been violated)  
+    - 403 - Forbidden (the user account is inactive)       
+    - 422 - Validation Error (one or more of the validation requirements has been violated)
+    - 429 - Too Many Requests (rate limit exceeded)
     """
 
     query = db.query(Task).filter(Task.user_id == current_user.id)
@@ -245,7 +249,10 @@ def get_all_tasks(
     num_pages = math.ceil(total_tasks / limit)  # If the division results exceed a whole number (e.g. 3.1), round up to the next whole number (e.g. 3.1 becomes 4)
 
     if page > num_pages and total_tasks > 0:  # If there are task results but the requested page exceeds the available pages to display
-        raise BadRequestException(f"Page must be between 1 and {num_pages}.")
+        if num_pages == 1:
+            raise BadRequestException(f"Only 1 page of results to display. Page cannot exceed 1.")
+        else:        
+            raise BadRequestException(f"Page must be between 1 and {num_pages}.")
     
 
     # Sorting    
@@ -297,7 +304,8 @@ def get_all_tasks(
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
         403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
         404: {"description": "Not Found - Task not found using the provided ID or the requested task does not belong to the logged-in user"},  # Stems from get_task_or_404
-        422: {"description": "Validation Error - Task ID is not an integer greater than 0"}
+        422: {"description": "Validation Error - Task ID is not an integer greater than 0"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"}
     }
 )
 @limiter.limit("60/minute")
@@ -328,7 +336,8 @@ def get_task_by_id(
     - 401 - Unauthorized (the provided token is invalid or expired)
     - 403 - Forbidden (the user account is inactive)
     - 404 - Not Found (the task was not found using the provided ID or the requested task does not belong to the logged-in user)
-    - 422 - Validation Error (the task ID is not an integer greater than 0)   
+    - 422 - Validation Error (the task ID is not an integer greater than 0)
+    - 429 - Too Many Requests (rate limit exceeded)
     """  
         
     return get_task_or_404(task_id, db, current_user)
@@ -349,6 +358,7 @@ def get_task_by_id(
         403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
         404: {"description": "Not Found - Task not found using the provided ID or the requested task does not belong to the logged-in user"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Check request body and/or Task ID is not an integer greater than 0"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"},
         500: {"description": "Internal Error - An error occurred while attempting to update the database"}
     }
 )
@@ -397,6 +407,7 @@ def update_task(
     - 403 - Forbidden (the user account is inactive)    
     - 404 - Not Found (the task was not found using the provided ID or the requested task does not belong to the logged-in user)
     - 422 - Validation Error (one or more of the validation requirements has been violated and/or the task ID is not an integer greater than 0)
+    - 429 - Too Many Requests (rate limit exceeded)
     - 500 - Internal Error (an error occurred while attempting to update the task in the database)
     """    
 
@@ -446,6 +457,7 @@ def update_task(
         403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
         404: {"description": "Not Found - Task not found using the provided ID or the requested task does not belong to the logged-in user"},  # Stems from get_task_or_404
         422: {"description": "Validation Error - Task ID is not an integer greater than 0"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"},
         500: {"description": "Internal Error - An error occurred while attempting to delete the task from the database"}
     }
 )
@@ -484,6 +496,7 @@ def delete_task(
     - 403 - Forbidden (the user account is inactive)
     - 404 - Not Found (the task was not found using the provided ID or the requested task does not belong to the logged-in user)
     - 422 - Validation Error (the task ID is not an integer greater than 0)
+    - 429 - Too Many Requests (rate limit exceeded)
     - 500 - Internal Error (an error occurred while attempting to delete the task from the database)
     """
 
@@ -521,7 +534,8 @@ def delete_task(
         401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
         403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user
         404: {"description": "Not Found - Task not found using the provided ID or the requested task does not belong to the logged-in user"},  # Stems from get_task_or_404
-        422: {"description": "Validation Error - Task ID is not an integer greater than 0"}        
+        422: {"description": "Validation Error - Task ID is not an integer greater than 0"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"}  
     }
 )
 @limiter.limit("5/minute")
@@ -552,7 +566,8 @@ def suggest_task_action(
     - 401 - Unauthorized (the provided token is invalid or expired)
     - 403 - Forbidden (the user account is inactive)
     - 404 - Not Found (the task was not found using the provided ID or the requested task does not belong to the logged-in user)
-    - 422 - Validation Error (the task ID is not an integer greater than 0)    
+    - 422 - Validation Error (the task ID is not an integer greater than 0)
+    - 429 - Too Many Requests (rate limit exceeded)  
     """
 
     task = get_task_or_404(task_id, db, current_user)

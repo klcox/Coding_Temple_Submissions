@@ -255,7 +255,7 @@ requirements.txt          — Packages and dependencies
 2. Create a virtual environment (e.g. for Windows/Git Bash: `python -m venv venv`)
 3. Activate the virtual environment (e.g. for Windows/Git Bash: `source venv/Scripts/activate`)
 4. Install dependencies (e.g. for Windows/Git Bash: `pip install -r requirements.txt`)
-5. Copy .env.example to .env AND replace the Secret Key and Admin Password with values of your own choosing
+5. Copy `.env.example` to `.env` AND replace the Secret Key and Admin Password with values of your own choosing
 6. THEN:
 
 ### To Interact with the Documentation
@@ -264,10 +264,15 @@ requirements.txt          — Packages and dependencies
 - In a browser, visit `http://127.0.0.1:8000/docs`
 - Register at: `/auth/register`
 - Enter your username and password at `/auth/login` **(Note the access token received in the response.)**
-- Click the lock icon at the far-right of the endpoint (or the 'Authorize' button at the top of the page)
+- Click the lock icon at the far-right of the endpoint you would like to test (or the 'Authorize' button at the top of the page)
 - Paste the access token into the dialog box and click 'Authorize'
 - Close the dialog box
 - Click 'Try it out' and 'Execute' on the endpoints to test and view the responses
+
+#### To Test the Admin User
+- No need to register as the admin user is seeded in the initial steps above.
+- Simply log-in at `/auth/login` using the admin username in `seed_data.py` and the admin password set-up in `.env`.
+- Then, continue the steps above to test the endpoints.
 
 ### To Run Pytest Tests
 - Run `python -m pytest tests/ -v` (or `python -m pytest tests/ -v -s` to see the full JSON responses where included)

@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)  # Creates a logger for this module
         201: {"description": "Created - User created successfully"},      
         409: {"description": "Conflict - Unique identifier (username or email) already exists in the database"},
         422: {"description": "Validation Error - Check request body"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"},
         500: {"description": "Internal Error - An error occurred while attempting to add the user to the database"}
     }
 )
@@ -64,6 +65,7 @@ def register_user(request: Request, user: UserCreate, db: Session = Depends(get_
     Possible Errors:
     - 409 - Conflict (the username and/or email is not unique [already exists in the database])
     - 422 - Validation Error (one or more of the validation requirements has been violated)
+    - 429 - Too Many Requests (rate limit exceeded)
     - 500 - Internal Error (an error occurred while attempting to add the user to the database)
     """
 
@@ -114,7 +116,8 @@ def register_user(request: Request, user: UserCreate, db: Session = Depends(get_
         200: {"description": "OK - User verified successfully, token provided"},      
         401: {"description": "Unauthorized - Username and/or password is incorrect"},
         403: {"description": "Forbidden - User account is inactive"},
-        422: {"description": "Validation Error - Check form data"}            
+        422: {"description": "Validation Error - Check form data"},
+        429: {"description": "Too Many Requests - Rate limit exceeded"}        
     }
 )
 @limiter.limit("5/minute")
@@ -147,7 +150,8 @@ def login_and_get_token(
     Possible Errors:
     - 401 - Unauthorized (the username and/or password could not be verified)
     - 403 - Forbidden (the user account is deactivated)
-    - 422 - Validation Error (one or more of the validation requirements has been violated)  
+    - 422 - Validation Error (one or more of the validation requirements has been violated)
+    - 429 - Too Many Requests (rate limit exceeded)
     """
 
     user = db.query(User).filter(User.username == form_data.username).first()
