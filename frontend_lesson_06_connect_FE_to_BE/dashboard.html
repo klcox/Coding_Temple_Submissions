@@ -42,8 +42,14 @@
 
         .stats-container {
             display: grid;
-            grid-template-columns: repeat(3, 200px);  
-            justify-content: center;         
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 0;
+            max-width: 900px;
+            margin: 25px auto;
+        }
+
+        .stats-card {
+            flex: 1 1 200px;            
         }
 
         .stats-card-heading {
@@ -54,9 +60,9 @@
             background-color: #4d4945;
             border: 3px solid #302d2b;
             border-radius: 5px;
-            width: 200px;
+            width: 100%;
             padding: 15px;
-            margin: 40px 0px 0px;
+            
         }
 
         .stats-card-value {
@@ -67,9 +73,9 @@
             background-color: #fcfcf3;
             border: 3px solid #435043;
             border-radius: 5px;            
-            width: 200px;
+            width: 100%;
             padding: 15px;
-            margin: 0px 0px 30px;
+            
         }
 
         .panel { 
@@ -118,6 +124,7 @@
         }         
 
         #status, #error-msg {
+            text-align: center;
             margin: 0px 20px;
         }
 
@@ -153,31 +160,36 @@
         <h1>Task Dashboard</h1>
     </header>
     
-    <div id="stats" class="stats-container">        
-        <div class="stats-card-heading">
-            Pending
-        </div>        
+    <div id="stats" class="stats-container">
+        <div class="stats-card">
+            <div class="stats-card-heading">
+                Pending
+            </div>
 
-        <div class="stats-card-heading">
-            Done
+            <div class="stats-card-value">
+                <span id="stat-pending">--</span>
+            </div>
         </div>
 
-        <div class="stats-card-heading">
-            Total
+        <div class="stats-card">
+            <div class="stats-card-heading">
+                Done
+            </div>
+
+            <div class="stats-card-value">
+                <span id="stat-done">--</span>
+            </div>
         </div>
 
-        <div class="stats-card-value">
-            <span id="stat-pending">--</span>
-        </div>
+        <div class="stats-card">
+            <div class="stats-card-heading">
+                Total
+            </div>
 
-        <div class="stats-card-value">
-            <span id="stat-done">--</span>
+            <div class="stats-card-value">
+                <span id="stat-total">--</span>
+            </div>
         </div>
-
-        <div class="stats-card-value">
-            <span id="stat-total">--</span>
-        </div>
-        
     </div>
     
 
