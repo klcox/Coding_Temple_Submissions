@@ -37,7 +37,7 @@ This project pertains to a task management app, where users register an account 
 
     [User]         ----->         [Task]
     PK id                         PK id
-    username (unique)		  FK user_id
+    username (unique)             FK user_id
     email (unique)                title
     hashed_password               description (optional)
     is_active                     priority (enum)
