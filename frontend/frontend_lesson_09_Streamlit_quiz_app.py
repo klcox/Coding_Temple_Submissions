@@ -15,6 +15,11 @@ st.set_page_config(
 st.title("🤯 Test Your Knowledge")
 
 
+# ==============
+# QUIZ QUESTIONS
+# ==============
+
+
 QUESTIONS = [
     {
         "question": "What does HTTP stand for?",
