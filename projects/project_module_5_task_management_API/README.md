@@ -245,7 +245,7 @@ requirements.txt          — Packages and dependencies
 | 404 | Not Found | A resource cannot be found; a user attempts to access a task that does not belong to them *(404 instead of 403 for security purposes)* | 
 | 409 | Conflict | A uniqueness constraint is violated for username or email |
 | 422 | Validation Error | One or more of the validation requirements has been violated (e.g. a username longer than 50 characters or an empty task title) |
-| 429 | Too Many Requests | A rate limit was exceeded within the designated timeframe (e.g. more then X requests per minute) |
+| 429 | Too Many Requests | A rate limit was exceeded within the designated timeframe (e.g. more than X requests per minute) |
 | 500 | Internal Server Error | A database action such as POST, PATCH, or DELETE could not be performed due to a server/database error; unexpected exceptions |
 
 ## Special Note
