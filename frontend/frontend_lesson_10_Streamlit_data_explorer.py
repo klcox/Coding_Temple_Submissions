@@ -112,6 +112,7 @@ with st.sidebar:
 # TABBED DATA DISPLAY
 # ===================
 
+
 tab_dataframe, tab_bar = st.tabs([
     "Interactive DataFrame",
     "Bar Chart"
