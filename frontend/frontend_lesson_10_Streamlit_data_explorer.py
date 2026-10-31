@@ -93,7 +93,7 @@ with st.sidebar:
     st.header("⚙️ Controls")
     st.caption("*For DataFrame Tab Only*")
 
-    name_filter = st.text_input("User Name Contains")
+    name_filter = st.text_input("User Name Contains").strip()
 
     sort_by = st.selectbox(
         "Sort By",
