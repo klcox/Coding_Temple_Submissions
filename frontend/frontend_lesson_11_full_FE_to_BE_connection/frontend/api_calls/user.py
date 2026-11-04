@@ -10,8 +10,9 @@ def get_profile(headers: dict):
         headers=headers        
     )
 
+
 def update_profile(headers: dict, profile_updates: dict):
-    """Update the logged-in user's profile (email and/or passsword)"""
+    """Update the logged-in user's profile (email and/or passsword)."""
 
     return api_request(
         "PATCH",
@@ -19,6 +20,7 @@ def update_profile(headers: dict, profile_updates: dict):
         headers=headers,
         json=profile_updates       
     )
+
 
 def deactivate_account(headers: dict):
     """Deactivate the logged-in user's account."""

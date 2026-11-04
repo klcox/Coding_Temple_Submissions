@@ -2,19 +2,25 @@ import streamlit as st
 
 
 def logout():
+    """Log out a user. Clear session state variables and return to the Welcome screen."""
+
     st.session_state.clear()
     st.session_state["current_view"] = "welcome"
     st.rerun()
 
 
 def handle_validation_errors(response):
+    """Format validation errors from API response."""
+
     errors = response["error_data"]["detail"]
     
     for error in errors:
-        st.error(f"{error['field']}: {error['message']}")
+        st.toast(f"{error['field']}: {error['message']}")
 
 
 def handle_api_errors(response):
+    """Handle API error responses and display them to the user. If 401 or 403, log out the user."""
+
     if response["status_code"] in [401, 403]:
         st.toast(f"{response['error_data']['detail']} Logging out.", icon="⚠️")
         logout()
@@ -24,6 +30,8 @@ def handle_api_errors(response):
 
 
 def validate_username(username):
+    """Validate username for form input."""
+
     if not username.strip():
         return "Username required"
 
@@ -37,6 +45,8 @@ def validate_username(username):
 
 
 def validate_email(email):
+    """Validate email for form input."""
+
     if not email.strip():
         return "Email required"
 
@@ -50,6 +60,7 @@ def validate_email(email):
 
 
 def validate_password(password, confirm_password):
+    """Validate password for form input."""
 
     if not password:
         return "Password required"
@@ -61,12 +72,13 @@ def validate_password(password, confirm_password):
         return "Password cannot exceed 200 characters"
 
     elif password != confirm_password:
-        return "Passwords do not match."
+        return "Passwords do not match"
 
     return None
 
 
 def validate_task_title(title):
+    """Validate the task title when creating or editing a task."""
 
     if not title.strip():
         return "Please enter a task title"

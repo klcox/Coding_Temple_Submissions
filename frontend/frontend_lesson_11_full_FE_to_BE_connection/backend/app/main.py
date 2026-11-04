@@ -43,7 +43,7 @@ app = FastAPI(  # App info; appears at the top of the documentation
         - User registration, JWT authentication, and Admin verification
         - CORS Middleware configuration
         - Rate limiting
-        - Full CRUD for tasks, including filtering, sorting, and pagination
+        - Full CRUD for tasks, including metrics, filtering, sorting, and pagination
         - Background task processing related to user activity logs
         - Validation and error handling
         - An AI-ready endpoint

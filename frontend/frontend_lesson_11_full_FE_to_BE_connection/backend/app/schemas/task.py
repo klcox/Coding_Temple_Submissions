@@ -65,6 +65,27 @@ class TaskResponse(TaskCreate):
     )
 
 
+class TaskMetricResponse(BaseModel):
+    """Schema for returning metrics regarding all of a user's tasks."""
+
+    total: int
+    completed: int
+    pending: int
+    urgent: int
+
+    model_config = ConfigDict(
+        from_attributes = True,
+        json_schema_extra = {
+            "example": { 
+                "total": 10,
+                "completed": 3,
+                "pending": 7,
+                "urgent": 2              
+            }
+        }    
+    )
+
+
 class TaskPaginationMeta(BaseModel):
     """Schema for task pagination metadata."""
 

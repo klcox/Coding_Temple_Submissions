@@ -50,11 +50,22 @@ def api_request(method: str, endpoint: str, **kwargs):
         }
         
     except requests.HTTPError as err:  # Includes the possible errors as outlined on the backend
-        return {
-            "success": False,
-            "status_code": err.response.status_code,
-            "error_data": err.response.json()
-        }   
+        
+        if err.response.status_code  == 429:
+            return {
+                "success": False,
+                "status_code": 429,
+                "error_data": {
+                    "detail": "Too many attempts. Please try again in few moments."
+                }
+            }
+        
+        else:        
+            return {
+                "success": False,
+                "status_code": err.response.status_code,
+                "error_data": err.response.json()
+            }   
                    
     except requests.RequestException as err_msg:  # Catches any errors not caught above
         err_msg = f"Error: Request failed. {err_msg}"

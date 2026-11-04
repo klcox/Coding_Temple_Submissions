@@ -1,11 +1,6 @@
 from frontend.api_calls.client import api_request
 
 
-# ==============
-# AUTH ENDPOINTS
-# ==============
-
-
 def register_user(username: str, email: str, password: str):
     """Register a new user."""
 

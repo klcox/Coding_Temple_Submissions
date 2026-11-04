@@ -7,7 +7,7 @@ from backend.app.utils.exceptions import InternalError, NotFoundException, BadRe
 from sqlalchemy.orm import Session
 from backend.app.models.user import User
 from backend.app.models.task import Task
-from backend.app.schemas.task import TaskCreate, TaskUpdate, TaskResponse, TaskPaginationResponse
+from backend.app.schemas.task import TaskCreate, TaskUpdate, TaskResponse, TaskMetricResponse, TaskPaginationResponse
 from backend.app.utils.limiter import limiter
 from backend.app.utils.security import get_current_user
 from typing import Optional
@@ -288,6 +288,63 @@ def get_all_tasks(
             "page": page,
             "limit": limit
         }
+    }
+
+
+# ================
+# GET TASK METRICS
+# ================
+
+
+@router.get(
+    "/metrics",
+    response_model=TaskMetricResponse,
+    responses = {
+        200: {"description": "OK - Successfully returned task metrics"},
+        401: {"description": "Unauthorized - Invalid or expired token"},  # Stems from get_current_user
+        403: {"description": "Forbidden - User account is inactive"},  # Stems from get_current_user       
+        429: {"description": "Too Many Requests - Rate limit exceeded"}
+    }
+)
+@limiter.limit("60/minute")
+def get_task_metrics(
+    request: Request,      
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Returns metrics for a user's tasks.
+
+    Rate Limit:
+    - 60 requests per minute
+
+    1. Utilizes the imported get_current_user function to validate the provided token.
+    2. If the token cannot be validated or has expired, raises a 401 error.
+    3. If the user account is inactive, raises a 403 error. 
+    4. Gathers all tasks for the logged-in user.
+    5. Determines and returns the total tasks, number of completed tasks, number of pending tasks, and number of urgent tasks.
+
+    Standard Response: 
+    - 200 - OK (successfully returned the task metrics)
+    
+    Possible Errors:
+    - 401 - Unauthorized (the provided token is invalid or expired)
+    - 403 - Forbidden (the user account is inactive)    
+    - 429 - Too Many Requests (rate limit exceeded)
+    """  
+
+    query = db.query(Task).filter(Task.user_id == current_user.id)
+
+    total = query.count()
+    completed = query.filter(Task.completed == True).count()
+    pending = query.filter(Task.completed == False).count()
+    urgent = query.filter(Task.completed == False, Task.priority == TaskPriority.urgent).count()
+
+    return{
+        "total": total,
+        "completed": completed,
+        "pending": pending,
+        "urgent": urgent
     }
 
 
