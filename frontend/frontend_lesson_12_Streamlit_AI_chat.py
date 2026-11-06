@@ -79,8 +79,11 @@ def mock_stream(prompt, contexts):
 
     # Format context string for response
 
-    if len(contexts) > 1:
+    if len(contexts) >= 3:
         context_str = ", ".join(contexts[:-1]) + ", and " + contexts[-1]
+    
+    elif len(contexts) == 2:
+        context_str = "".join(contexts[:-1]) + " and " + contexts[-1]
 
     elif len(contexts) == 1:
         context_str = contexts[0]
@@ -93,7 +96,7 @@ def mock_stream(prompt, contexts):
     
     for word in response.split():  # Split the response by word and generate one at a time to simulate streaming from a real AI model
         yield word + " "
-        time.sleep(0.5)
+        time.sleep(0.3)
 
 
 # ==============
