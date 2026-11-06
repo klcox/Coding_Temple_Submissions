@@ -339,7 +339,7 @@ screens/
 │
 utils/
 │   ├── __init__.py           — Designates the directory as a Python package
-│   ├── helper_functions.py   — Functions reused throughout the app (logout, validation, error handling, header rendering, pagination buttons)
+│   ├── helper_functions.py   — Reusable functions (logout, validation, error handling, header, pagination)
 │   └── modals.py             — Modal dialog boxes (Edit Task, Add Task, Update Profile, Delete Profile)
 │
 __init__.py                   — Designates the directory as a Python package
@@ -348,12 +348,17 @@ requirements.txt              — Packages and dependencies
 ```
 
 ### Screenshots
+
+#### Welcome Screen
 ![Welcome Screen](screenshots/welcome_screen.jpg)
 
+#### Main Dashboard Tab
 ![Main Dashboard](screenshots/main_dashboard.jpg)
 
+#### Raw Data Dashboard Tab (DataFrame)
 ![DataFrame with Pagination](screenshots/dashboard_dataframe_pagination.jpg)
 
+#### Edit Task Modal
 ![Edit Task Modal](screenshots/edit_task_modal.jpg)
 
 ### Setup
