@@ -29,12 +29,12 @@ defaults = {
     "username": None,
     "current_view": "welcome",
     "metrics_loaded": None,
-    "metrics": None,
-    "selected_sort": "Priority (Highest first)",
+    "metrics": None,    
     "tasks_loaded": False,
     "tasks": None,
     "task_page": 1,
     "task_limit": 10,
+    "selected_sort": "Priority (Highest first)",
     "previous_sort": None,
     "profile": None
 }
@@ -50,7 +50,7 @@ if st.session_state["access_token"]:  # If the user is logged in, store their au
     }
 
 
-if "sort_options" not in st.session_state:
+if "sort_options" not in st.session_state:  # Sorting options for selectbox dropdown
     st.session_state["sort_options"] = {
         "Priority (Highest first)": ("priority", "desc"),
         "Priority (Lowest first)": ("priority", "asc"),
@@ -62,10 +62,10 @@ if "sort_options" not in st.session_state:
         "Pending first": ("completed", "asc"),
     }
 
-if "main_selected_sort" not in st.session_state:
+if "main_selected_sort" not in st.session_state:  # Keeps dropdown display consistent across the app
     st.session_state["main_selected_sort"] = st.session_state["selected_sort"]
 
-if "df_selected_sort" not in st.session_state:
+if "df_selected_sort" not in st.session_state:  # Keeps dropdown display consistent across the app
     st.session_state["df_selected_sort"] = st.session_state["selected_sort"]
 
         

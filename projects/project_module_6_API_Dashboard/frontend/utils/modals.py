@@ -1,10 +1,10 @@
 import streamlit as st
-from frontend.api_calls.tasks import update_task_details, add_new_task
+from frontend.api_calls.tasks import get_ai_suggestion, update_task_details, add_new_task
 from frontend.api_calls.user import update_profile, deactivate_account
 from frontend.utils.helper_functions import logout, handle_validation_errors, handle_api_errors, validate_task_title, validate_email, validate_password
 
 
-@st.dialog("Edit Task Details")
+@st.dialog("Edit Task Details", width="medium")
 def edit_task_modal(headers: dict, task: dict):
     """Modal for editing an existing task. Runs when the 'Edit' button is clicked from the Main Dashboard."""
 
@@ -24,6 +24,31 @@ def edit_task_modal(headers: dict, task: dict):
 
         st.markdown(f"**:blue[Priority]**")
         st.write(task["priority"].capitalize())
+
+        st.write("")
+
+        st.markdown(f"**:violet[Need Help?]**")
+        st.write("Use AI to provide suggestions for this task.")
+        with st.popover("Get Suggestions"):
+
+            if st.button("Generate Suggestions", key=f"ai_suggestion_{task['id']}"):
+            
+                # API Request
+                
+                with st.spinner(
+                    "Reviewing the current task...",
+                    show_time=False
+                ):                    
+                    ai_suggestion_response = get_ai_suggestion(headers, task["id"])
+
+                
+                # Evaluate API response
+
+                if ai_suggestion_response["success"]:
+                    st.info(ai_suggestion_response["data"]["suggestion"])
+                    
+                else:
+                    handle_api_errors(ai_suggestion_response)
 
 
     with col_edits:

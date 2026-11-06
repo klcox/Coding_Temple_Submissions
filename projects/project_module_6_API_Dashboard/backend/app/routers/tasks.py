@@ -342,6 +342,7 @@ def get_task_metrics(
     total = query.count()
     completed = query.filter(Task.completed == True).count()
     pending = query.filter(Task.completed == False).count()
+    
     pending_urgent = query.filter(Task.completed == False, Task.priority == TaskPriority.urgent).count()
     pending_high = query.filter(Task.completed == False, Task.priority == TaskPriority.high).count()
     pending_medium = query.filter(Task.completed == False, Task.priority == TaskPriority.medium).count()

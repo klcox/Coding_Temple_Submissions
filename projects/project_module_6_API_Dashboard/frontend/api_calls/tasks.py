@@ -57,6 +57,16 @@ def update_task_details(headers: dict, task_id: int, task_updates: dict):
     )
 
 
+def get_ai_suggestion(headers: dict, task_id: int):
+    """Get an AI-generated suggestion for a task. (Currently a placeholder response.)"""
+
+    return api_request(
+        "GET",
+        f"/tasks/{task_id}/suggest",
+        headers=headers
+    )
+
+
 def delete_task(headers: dict, task_id: int):
     """Delete a specific task."""    
 

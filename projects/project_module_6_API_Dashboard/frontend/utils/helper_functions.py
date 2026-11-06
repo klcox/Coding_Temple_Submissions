@@ -104,8 +104,7 @@ def render_header(headers, key_prefix):
         selected_sort = st.selectbox(
             "Sort by:",            
             list(st.session_state["sort_options"].keys()),  # Options for dropdown
-            label_visibility="collapsed",
-            index=list(st.session_state["sort_options"].keys()).index(st.session_state["selected_sort"]),  # Defaults to the selection currently in state
+            label_visibility="collapsed",            
             key=f"{key_prefix}_selected_sort",  # Unique widget key
             on_change=update_sort,  # When the selection changes, run this function and pass the args below
             args=(f"{key_prefix}_selected_sort",)

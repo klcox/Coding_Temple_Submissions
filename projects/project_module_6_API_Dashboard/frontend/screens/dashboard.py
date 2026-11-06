@@ -297,43 +297,44 @@ def render_dashboard(headers):
 
     with tab_dataframe:
 
-         with st.spinner(
+        with st.spinner(
             "Refreshing data...",
             show_time=False
         ):
 
             render_header(headers, key_prefix="df")
 
-            st.space("small")
+
+        st.space("small")
 
 
-            if tasks["data"]:  # If there are tasks to display
+        if tasks["data"]:  # If there are tasks to display
 
-                # Filter and standardize data
+            # Filter and standardize data
 
-                filtered_df = df.copy()
+            filtered_df = df.copy()
 
-                filtered_df = filtered_df[["title", "description", "priority", "completed", "created_at", "updated_at"]]  # Pull only these columns for display                    
+            filtered_df = filtered_df[["title", "description", "priority", "completed", "created_at", "updated_at"]]  # Pull only these columns for display                    
 
-                filtered_df["priority"] = filtered_df["priority"].map(priority_icons)  # Replace priority levels with the same icons in the header
+            filtered_df["priority"] = filtered_df["priority"].map(priority_icons)  # Replace priority levels with the same icons as in the header
 
-                filtered_df["created_at"] = pd.to_datetime(filtered_df["created_at"], utc=True).dt.tz_convert("America/Chicago").dt.strftime("%m/%d/%Y, %I:%M %p")  # Convert to a readable format and timezone
+            filtered_df["created_at"] = pd.to_datetime(filtered_df["created_at"], utc=True).dt.tz_convert("America/Chicago").dt.strftime("%m/%d/%Y, %I:%M %p")  # Convert to a readable format and timezone
 
-                filtered_df["updated_at"] = pd.to_datetime(filtered_df["updated_at"], utc=True).dt.tz_convert("America/Chicago").dt.strftime("%m/%d/%Y, %I:%M %p")  # Convert to a readable format and timezone
+            filtered_df["updated_at"] = pd.to_datetime(filtered_df["updated_at"], utc=True).dt.tz_convert("America/Chicago").dt.strftime("%m/%d/%Y, %I:%M %p")  # Convert to a readable format and timezone
 
-                filtered_df.columns = filtered_df.columns.str.replace("_", " ").str.title()  # Standardize case and remove underscores
-                            
+            filtered_df.columns = filtered_df.columns.str.replace("_", " ").str.title()  # Standardize case and remove underscores
+                        
 
-                # Display the dataframe with pagination buttons
+            # Display the dataframe with pagination buttons
 
-                st.dataframe(filtered_df, hide_index=True)
+            st.dataframe(filtered_df, hide_index=True)
 
-                render_pagination(tasks, key_prefix="df")
+            render_pagination(tasks, key_prefix="df")
 
-                st.caption("*Timestamps reflect CST*")
+            st.caption("*Timestamps reflect CST*")
 
-            else:  # If there are no tasks to display
-                st.info("*No tasks yet. Click **Add Task** above to create your first task!*")
+        else:  # If there are no tasks to display
+            st.info("*No tasks yet. Click **Add Task** above to create your first task!*")
 
 
     # -------------
@@ -343,12 +344,15 @@ def render_dashboard(headers):
 
     with tab_chart:
 
-        st.space("medium")
+        st.subheader("Pending Tasks by Priority")
+        
+        
+        st.space("small")
 
 
         if tasks["data"]:  # If there are tasks to display
 
-            chart_df = pd.DataFrame(list(metrics["pending_by_priority"].items()), columns=["Priority", "Count"])      
+            chart_df = pd.DataFrame(list(metrics["pending_by_priority"].items()), columns=["Priority", "Count"])  # Convert simple metrics dict to a dataframe
 
             chart_df["Priority"] = chart_df["Priority"].str.capitalize()  # Standardize case
             
