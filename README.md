@@ -14,6 +14,7 @@ This repo contains various assignments and projects submitted as part of my stud
 | CSS3 | [frontend](frontend/) | N/A |
 | JavaScript | [frontend](frontend/) | N/A |
 | Streamlit | [frontend](frontend/) | [Task Management Dashboard (Full Frontend to Backend Connection)](projects/project_module_6_API_Dashboard) |
+| Semantic Search (Embeddings) | [semantic_search](semantic_search/) | *TBD*
 | Retrieval-Augmented Generation (RAG) | *TBD* | *TBD* |
 
-*Note: `fastapi` and `frontend` contain assignments; `projects` contains projects*
+*Note: `fastapi`, `frontend`, and `semantic_search` contain assignments; `projects` contains projects*
