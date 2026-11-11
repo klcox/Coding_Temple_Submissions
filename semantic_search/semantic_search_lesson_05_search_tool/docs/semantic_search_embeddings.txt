@@ -1,0 +1,29 @@
+Imagine you're organizing a massive library. You could alphabetize every book: "Algorithms" next to "Algebra," "Zebras" next to "Zen." That's easy to maintain, but it means a book about cooking Italian pasta sits nowhere near a book about making ramen, even though they're about the same thing.
+
+Now imagine a different system: you arrange books so that similar topics are physically close together. Cookbooks cluster in one area, programming books in another, and within the programming section, Python books are near Ruby books because they're both dynamic scripting languages. In this system, you don't need to know the exact title, you can just walk to the "area" that matches what you're interested in.
+
+That's what embeddings do for AI. They take text (words, sentences, entire documents) and convert it into a list of numbers - a vector - that represents the meaning of that text. Texts with similar meanings get similar vectors, placing them close together in a mathematical space. This is the foundation of how modern AI systems find, compare, and retrieve information.
+
+From Words to Numbers
+Computers don't understand language. They understand numbers. So every AI system that works with text needs a way to convert words into numbers. The question is how.
+
+The naive approach: Assign each word a unique number. "cat" = 1, "dog" = 2, "pizza" = 3. Simple, but useless. The number 1 (cat) is closer to 2 (dog) than to 3 (pizza) purely by accident of ordering. The numbers carry no meaning.
+
+The one-hot approach: Create a vector with one slot per word in the vocabulary. "cat" = [1, 0, 0], "dog" = [0, 1, 0], "pizza" = [0, 0, 1]. Better, but every word is equally distant from every other word. "Cat" and "dog" are just as far apart as "cat" and "pizza," which doesn't reflect reality.
+
+The embedding approach: Train a model to learn that "cat" and "dog" are more similar than "cat" and "pizza," and encode that understanding in the numbers themselves. The result might look like: "cat" = [0.82, -0.34, 0.15, ...], "dog" = [0.79, -0.31, 0.18, ...], "pizza" = [-0.12, 0.67, 0.44, ...]. Notice how "cat" and "dog" have similar values, while "pizza" is very different.
+
+Real embedding vectors have hundreds or thousands of dimensions (not just 3), and each dimension captures some aspect of meaning - sentiment, formality, topic, concreteness, and many more that don't have simple human labels.
+
+From Words to Sentences (and Documents)
+Word embeddings are useful, but in practice you often need to embed entire sentences or paragraphs. Sentence embeddings work the same way: a model takes a full sentence and produces a single vector that represents the overall meaning of that sentence.
+
+"How do I create a REST API in Python?" and "Building a Python web API from scratch" would have very similar embeddings, even though they share almost no words. The model understands that both sentences are about the same topic.
+
+This is the key difference between keyword search and semantic search:
+
+Keyword search: Match exact words. Searching for "build API Python" only finds documents containing those specific words. Misses documents that say "create a web service using Python", even though the meaning is identical.
+
+Semantic search: Match meaning. Convert the query to an embedding, compare it to document embeddings, return the closest matches by meaning. Finds relevant results regardless of specific wording.
+
+Semantic search is what you'll build in this module. It's what powers ChatGPT's knowledge retrieval, Google's search improvements, and every modern AI assistant that can find relevant information from a knowledge base.

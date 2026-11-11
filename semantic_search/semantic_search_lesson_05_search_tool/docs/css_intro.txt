@@ -1,0 +1,42 @@
+Remember that house analogy from the HTML lesson? HTML is the frame - the walls, the roof, the rooms. CSS is everything that makes it look like a home: the paint, the flooring, the furniture arrangement, the lighting.
+
+CSS stands for Cascading Style Sheets. It's the language that controls how HTML elements look - colors, fonts, spacing, sizes, and layout. Without CSS, every website would look like the plain, unstyled HTML page you built in the last lesson. With CSS, you can make that same content look professional, modern, and polished.
+
+The word "cascading" is key: CSS rules can overlap and override each other in a predictable order, flowing down like a waterfall. We'll get to that shortly.
+
+How CSS Connects to HTML
+There are three ways to add CSS to an HTML page. For this course, we'll use the most common and cleanest approach: an external stylesheet.
+
+You create a separate .css file and link it in your HTML's <head>:
+
+<head>
+    <link rel="stylesheet" href="styles.css">  <!-- Connect the CSS file -->
+</head>
+
+This keeps your structure (HTML) and your styling (CSS) in separate files - a practice called separation of concerns. You can change the look of your entire site by editing one CSS file without touching the HTML.
+
+Selectors: Targeting Elements
+A CSS rule has two parts: a selector (what to style) and a declaration block (how to style it):
+
+h1 {
+    color: navy;        /* Change the text color */
+    font-size: 2rem;    /* Set the font size */
+}
+
+Here, h1 is the selector (targets all <h1> elements), and the declarations inside the curly braces are the styles to apply.
+
+There are several types of selectors:
+
+Element selectors target all elements of a type:
+
+p { color: #333; }           /* ALL paragraphs */
+Class selectors target elements with a specific class attribute. Classes start with a dot:
+
+.highlight { background-color: yellow; }   /* Any element with class="highlight" */
+ID selectors target one specific element with a unique id. IDs start with a hash:
+
+#about { padding: 20px; }    /* The element with id="about" */
+Descendant selectors target elements inside other elements:
+
+nav a { color: white; }      /* Only <a> tags that are inside <nav> */
+A quick specificity rule: if two rules conflict, ID beats class beats element. This is the "cascading" part - more specific selectors win.

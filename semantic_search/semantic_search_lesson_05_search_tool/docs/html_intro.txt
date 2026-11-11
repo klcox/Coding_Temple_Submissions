@@ -1,0 +1,39 @@
+Imagine you're building a house. Before you pick paint colors or install smart light switches, you need a frame - walls, a roof, rooms, a foundation. Without the frame, there's nothing to paint and nowhere to install switches.
+
+HTML is the frame of every webpage. It defines the structure: "This is a heading. This is a paragraph. This is a navigation menu. This is an image." It doesn't say anything about colors, fonts, or what happens when you click something - that's CSS and JavaScript, which you'll learn in the next two lessons. HTML just says what's there and how it's organized.
+
+Every single webpage you've ever visited - Google, YouTube, your bank's website, your FastAPI docs at /docs - is built on HTML. It's the foundation of the web.
+
+How HTML Works: Tags and Elements
+HTML uses tags to mark up content. A tag is a keyword wrapped in angle brackets:
+
+<p>This is a paragraph.</p>
+
+Most tags come in pairs: an opening tag (<p>) and a closing tag (</p> - notice the forward slash). Everything between them is the content of that element. The whole unit - opening tag + content + closing tag - is called an element.
+
+Some tags are self-closing because they don't wrap around content:
+
+<img src="photo.jpg" alt="A description of the photo">
+<br>  <!-- Line break — no closing tag needed -->
+
+Tags can also have attributes - extra information inside the opening tag. In the <img> example above, src tells the browser where to find the image, and alt provides a text description for screen readers and for when the image fails to load.
+
+The HTML Document Skeleton
+Every HTML page starts with the same basic structure. Think of it as the blueprint every house needs before you add rooms:
+
+<!DOCTYPE html>       <!-- Tells the browser: "This is modern HTML" -->
+<html lang="en">      <!-- The root element. lang="en" says it's in English -->
+<head>
+    <!-- Metadata that doesn't appear on the page itself -->
+    <meta charset="UTF-8">                 <!-- Character encoding -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page Title</title>           <!-- Shows in the browser tab -->
+</head>
+<body>
+    <!-- Everything visible on the page goes here -->
+    <h1>Hello, World!</h1>
+    <p>This is my first webpage.</p>
+</body>
+</html>
+
+The <head> section is like the paperwork for a house — the deed, the building permit, the address. It's important but you don't see it when you walk inside. The <body> is the house itself — everything the visitor sees and interacts with.
