@@ -18,4 +18,4 @@ This repo contains a selection of assignments and projects submitted as part of 
 | Retrieval-Augmented Generation (RAG) | <ul><li>[RAG](RAG/)</li></ul> | *TBD* |
 | Docker | *TBD* | *TBD* |
 
-*Note: `fastapi`, `frontend`, and `semantic_search` contain assignments; `projects` contains projects*
+*Note: `fastapi`, `frontend`, `semantic_search`, and `RAG` contain assignments; `projects` contains projects*
