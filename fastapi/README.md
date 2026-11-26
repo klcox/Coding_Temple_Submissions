@@ -3,7 +3,7 @@
 | Lesson | Topic | Details \& Endpoints |
 |---|---|---|
 | 01 | Intro to FastAPI | Sample basic GET and POST endpoints |
-| 02 | Sample API File Structure | File/folder placeholders; Schemas and GET, POST endpoints for recipes and ingredients |
+| 02 | Sample API File Structure | File placeholders; Schemas and GET, POST endpoints for recipes and ingredients |
 | 03 | Pydantic Validation | Schemas and GET, POST, PATCH endpoints for Contacts |
 | 04 | Query Parameters and Filtering | GET endpoints for Books |
 | 05 | SQLAlchemy Integration | Models, Schemas, and GET, POST, DELETE endpoints for Notes |
