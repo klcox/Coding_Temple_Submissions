@@ -1,4 +1,4 @@
-# Grade Tracker
+# Student Grade Tracker
 
 This Python project reads a CSV file containing student data (name and grade by subject [math, science, english, history]) and produces a grade report/class summary as a text file (.txt), including:
 

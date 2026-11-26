@@ -1,5 +1,5 @@
 # Library Management System
-This project mimics a library management system, utilizing Python and SQLAlchemy to create and enable the user to interact with a database (library.db) via a CLI.
+This project simulates a library management system, utilizing Python and SQLAlchemy to create and enable the user to interact with a database (library.db) via a CLI.
 
 ## Database Design
 The database consists of (4) underlying models: Author, Book, Borrower, and Checkout.

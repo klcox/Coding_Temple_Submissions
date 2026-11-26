@@ -1,4 +1,4 @@
-# Task Management API Dashboard (Full Frontend to Backend Connection)
+# Full Stack Task Management Dashboard
 
 **Version**: v1
 
