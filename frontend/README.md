@@ -1,6 +1,6 @@
 # Frontend Assignments
 
-| Lesson | Topic | Details \& Endpoints |
+| Lesson | Topic | Details |
 |---|---|---|
 | 02, 03 | HTML & CSS | Sample portfolio HTML file with CSS styling |
 | 04 | JavaScript Basics & DOM Manipulation | Flashcard App |
