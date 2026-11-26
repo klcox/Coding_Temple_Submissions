@@ -1,7 +1,7 @@
 # Projects
 
 | Module | Primary Topic(s) | Project | Details |
-|---|---|---|
+|---|---|---|---|
 | Pre-Work C | Python | Student Grade Tracker | Command-line script that reads student grade data from a CSV file, calculates averages, assigns letter grades, and writes a formatted summary report to a text file |
 | 02 | Python \& Pandas | Data Cleaning Pipeline | Command-line script that reads a CSV file containing employee survey data; cleans and analyzes the data; produces visualizations from the analyses, stored as an image file; and exports the cleaned data to a new CSV file |
 | 03 | Databases \& SQLAlchemy | Library Management System | Database-backed CLI application for managing a small library |
