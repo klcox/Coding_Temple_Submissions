@@ -1,7 +1,7 @@
 # FastAPI Assignments
 
 | Lesson | Topic | Description |
-|---|---|
+|---|---|---|
 | 01 | Intro to FastAPI | Sample basic GET and POST endpoints |
 | 02 | Sample API file structure | Schemas and GET, POST endpoints for recipes and ingredients |
 | 03 | Pydantic Validation | Schemas and GET, POST, PATCH endpoints for Contacts |
@@ -14,3 +14,4 @@
 | 10 | Security Basics | CORS Middleware, Rate Limiting, Data Sanitization against XSS attacks |
 | 11 | Pytest Testing | Test Client and testing of multiple endpoint responses |
 | 12 | Detailed Documentation | App-level metadata, example Schemas, endpoint responses, detailed docstrings |
+
