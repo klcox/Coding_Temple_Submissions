@@ -2,7 +2,7 @@
 
 | Lesson | Topic | Details |
 |---|---|---|
-| 02, 03 | HTML & CSS | Sample portfolio HTML file with CSS styling |
+| 02, 03 | HTML & CSS | Sample portfolio HTML file with CSS stylesheet |
 | 04 | JavaScript Basics & DOM Manipulation | Flashcard App |
 | 05 | JavaScript API Integration | Live contact search using JSONPlaceholder API |
 | 06 | Full Stack Connection (HTML, CSS, JavaScript, FastAPI) | Mini Task Dashboard |
